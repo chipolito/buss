@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Forma impresion ticket</title>
+
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+
+        .fsp-14 {
+            font-size: 14px !important;
+        }
+
+        .fsp-12 {
+            font-size: 12px !important;
+        }
+
+        .fsp-10 {
+            font-size: 10px !important;
+        }
+
+        .fsp-9 {
+            font-size: 9px !important;
+        }
+
+        .mb-0 {
+            margin-bottom: 0;
+        }
+
+        .mt-0 {
+            margin-top: 0;
+        }
+
+        .my-0 {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        .mb-5 {
+            margin-bottom: 5px;
+        }
+        .pr-5 {
+            padding-right: 5px;
+        }
+
+        .p3 {
+            padding: 3px;
+        }
+
+        .pl-3 {
+            padding-left: 3px;
+        }
+
+        .pt-1{
+            padding-top: 1px;
+        }
+
+        .bg-gray {
+            background-color:#e7e7e7;
+        }
+
+        tr.border_bottom td {
+            border-bottom: 1px solid black;
+        }
+
+        tr.border_top td {
+            border-top: 1px solid black;
+        }
+
+        tr.border_bottom-f td {
+            border-bottom: 1px dashed  black;
+        }
+
+        tr.border_top-f td {
+            border-top: 1px dashed  black;
+        }
+
+        .v-top {
+            vertical-align: top;
+        }
+    </style>
+</head>
+<body>
+    <input type="hidden" id="registro_id" value="0"/>
+    <input type="hidden" id="boleto_id" value="0"/>
+
+    <table width="100%" cellspacing="0" cellpadding="0" border="0" class="mb-5">
+        <tbody>
+            <tr>
+                <td  width="50%">
+                    <img class="align-self-start mr-3" src="http://localhost:3000/resources/images/general/ASA-Logotipo-sm.png"  width="80" alt="Logo ASA">
+                </td>
+                <td  width="50%" align="right">
+                    <img class="align-self-start mr-3" src="http://localhost:3000/resources/images/general/AIFA-AICM-Logotipo.png" width="80" alt="Logo AIFA-ASA">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div align='center' class="fsp-12">
+        <h4 class="mb-0 mt-0" id="lblRazonSocialEmpresa">-</h4>
+        <h4 class="mb-0 mt-0" id="lblNombreEmpresa">-</h4>
+        <h4 class="mb-0 mt-0" id="lblDomicilioEmpresa">-</h4>
+        <h4 class="mt-0" id="lblRfcEmpresa"> - </h4>
+    </div>
+
+    <p class="fsp-10 mb-0"><b>Folio:</b> <texto id="lblFolio"></texto></p>
+    <p class="fsp-10 my-0"><b>Origen:</b> <text id="lblOrigen"></text></p>
+    <p class="fsp-10 my-0"><b>Destino:</b> <text id="lblDestino"></text></p>
+    <p class="fsp-10 mt-0"><b>Fecha:</b> <text id="lblFechaCorrida"></text> <b>Hora:</b> <text id="lblHoraCorrida"></text></p>
+
+    <table width="100%" cellspacing="0" cellpadding="0" border="0" class="mb-5 fsp-10">
+        <tbody id="tblDetalle">
+            <tr class="bg-gray border_bottom">
+                <td class="p3">
+                    Cantidad
+                </td>
+                <td  width="70%" class="p3">
+                    Tipo
+                </td>
+                <td class="p3">
+                    Importe
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p class="fsp-10 mt-0"><b>Método de pago:</b> <text id="lblMetodoPago"></text></p>
+
+
+    <table width="100%" cellspacing="0" cellpadding="0" border="0" class="fsp-10">
+        <tbody>
+            <tr class="border_bottom-f border_top-f">
+                <td>Fecha y lugar de emisión</td>
+                <td align="right"><text id="lblFechaEmision"></text> | <tex id="lblHoraEmision"></tex> | <text id="lblLugarEmision"></text></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+<script src="http://localhost:3000/resources/plugins/global/bootstrap/jquery-3.3.1.slim.min.js"></script>
+
+<script>
+
+    $( async function() {
+        let currency = function(money){
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD', 
+                minimumFractionDigits: 2
+            }).format(money);
+        },
+        venta_id = $('#registro_id').val(),
+        options = {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+
+        await fetch(`http://localhost:3000/Pos/GetVentaForTicket/${venta_id}`, options)
+        .then(response => response.json())
+        .then(data => {
+            if(data.success){
+                let venta           = data.data,
+                    strHora         = venta.horario_salida.split(':'),
+                    fechaCorrida    = new Date(`${venta.venta_fecha}T${parseInt(strHora[0]) < 10 ? '0' + strHora[0] : strHora[0]}:${strHora[1]}:00`),
+                    fechaVenta      = new Date(`${venta.venta_fecha}T${venta.venta_hora}`),
+                    configuracion   = JSON.parse( venta.configuracion );
+
+                $('#lblRazonSocialEmpresa').html( configuracion.inputGeneralRazon );
+                $('#lblNombreEmpresa').html( configuracion.inputGeneralNombre );
+                $('#lblDomicilioEmpresa').html( `${configuracion.inputGeneralDir1} ${configuracion.inputGeneralDir2}` );
+                $('#lblRfcEmpresa').html( `RFC ${configuracion.inputGeneralRfc}` );
+                $('#lblLugarEmision').html( configuracion.inputGeneralSucursal == '01' ? 'AICM' : 'AIFA');
+
+                $('#lblFolio').html( venta.venta_folio );
+                $('#lblOrigen').html( venta.corrida_origen );
+                $('#lblDestino').html( venta.corrida_destino );
+
+                let options = {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'short',
+                    day: '2-digit'
+                };
+
+                $('#lblFechaCorrida').html( fechaCorrida.toLocaleDateString('es-MX', options) );
+                $('#lblFechaEmision').html(fechaVenta.toLocaleDateString('es-MX', {day: '2-digit', month: '2-digit', year: 'numeric',}));
+
+                $('#lblHoraEmision').html( `${fechaVenta.getHours()}:${(fechaVenta.getMinutes() < 10 ? '0' : '') + fechaVenta.getMinutes()}` );
+                $('#lblHoraCorrida').html(venta.horario_salida);
+
+                if(venta.venta_efectivo > 0){
+                    $('#lblMetodoPago').html('Efectivo');
+                } else if(venta.venta_tarjeta > 0){
+                    $('#lblMetodoPago').html(`Tarjeta | ${venta.venta_tipo} / ${venta.venta_marca} | AUT: ${venta.venta_autorizacion} | OPER: ${venta.venta_operacion}`);
+                } else {
+                    $('#lblMetodoPago').html('No aplica');
+                }
+
+                let detalle = JSON.parse( venta.detalle_venta ),
+                    tableRows = {};
+                
+                detalle.forEach(function(boleto, index) {
+                    if(boleto.descuento_id in tableRows) {
+                        tableRows[boleto.descuento_id]['qty'] += 1;
+                    } else {
+                        if(boleto.descuento_id == '0') {
+                            tableRows[boleto.descuento_id] = {qty: 1, descripcion: 'Boleto Tradicional', costo: parseFloat(boleto.venta_precio_base)};
+                        } else {
+                            tableRows[boleto.descuento_id] = {qty: 1, descripcion: `Boleto ${boleto.venta_descuento_nombre}`, costo: parseFloat(boleto.venta_precio_venta)};
+                        }
+                    }
+                });
+
+                for (const row in tableRows) {
+                    let importe = parseInt(tableRows[row]['qty']) * parseFloat(tableRows[row]['costo']);
+
+                    let file = `
+                        <tr>
+                            <td align="center" class="pt-1 v-top">${tableRows[row]['qty']}</td>
+                            <td class="pl-3 pt-1">${tableRows[row]['descripcion']}</td>
+                            <td align="right" class="pt-1 v-top">${currency( importe )}</td>
+                        </tr>
+                    `;
+
+                    $('#tblDetalle').append( file );
+                }
+
+                $('#tblDetalle').append(`
+                    <tr class="border_top">
+                        <td  colspan="2" class="p3" align="right">
+                            <b>TOTAL</b>
+                        </td>
+                        <td align="right" class="fsp-12">
+                            ${currency(venta.venta_total)}
+                        </td>
+                    </tr>
+                `);
+            }
+        })
+        .catch(( error ) => {
+            $('#registro_id').val('Error al tratar de generar el documento, contacte con soporte técnico.');
+        });
+    });
+</script>
+
+</html>

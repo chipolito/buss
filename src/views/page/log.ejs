@@ -1,0 +1,83 @@
+<!--begin::Subheader-->
+<div class="subheader py-4 pt-lg-0 pb-lg-10 " id="kt_subheader">
+    <div class=" container-fluid  d-flex align-items-center justify-content-between flex-wrap">
+		<!--begin::Info-->
+        <div class="d-flex align-items-center py-2 mr-1">
+            <!--begin::Icon page-->
+            <button class="btn btn-icon btn-hover-icon-success mr-5 pl-0 justify-content-start d-none d-lg-flex">
+                <i class="flaticon2-rocket-1 text-muted icon-3x"></i>
+            </button>
+            <!--end::Icon page-->
+
+			<div class="d-flex flex-column mr-5">
+				<!--begin::Page Title-->
+	            <h4 class="text-dark font-weight-bold py-1 mr-5 my-0">
+                    Registro de movimientos
+                    <small class="text-muted">Historial de actividad de usuarios</small>
+	            </h4>
+				<!--end::Page Title-->
+
+	            <!--begin::Breadcrumb-->
+	            <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 m-0 font-size-sm">
+                    <li class="breadcrumb-item">
+                        <a href="/" class="text-muted">
+                            Disse tickets
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="javascript:void(0);" class="text-muted">
+                            Administración
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="javascript:void(0);" class="text-muted">
+                            Log
+                        </a>
+                    </li>
+                </ul>
+				<!--end::Breadcrumb-->
+	        </div>
+        </div>
+		<!--end::Info-->
+    </div>
+</div>
+
+<!--begin::Entry-->
+<div class="d-flex flex-column-fluid">
+    <!--begin::Container-->
+    <div class="container-fluid">
+        <div class="card card-custom">
+            <div class="card-header flex-wrap border-0 pt-0 pb-0">
+                <div class="card-title">
+                    <h3 class="card-label">
+                        Eventos
+                        <span class="d-block text-muted pt-2 font-size-sm">Historia de movimiento</span>
+                    </h3>
+                </div>
+            </div>
+
+            <div class="card-body pt-0">
+                <div class="mb-7">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 col-xl-6">
+                            <div class="row align-items-center">
+                                <div class="col-md-12 my-2 my-md-0">
+                                    <div class="input-icon">
+                                        <input type="text" class="form-control" placeholder="Buscar en la tabla..." id="kt_datatable_search_query" />
+                                        <span><i class="flaticon2-search-1 text-muted"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--begin: Datatable-->
+                <div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable"></div>
+                <!--end: Datatable-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="resources/js/pages/log.script.js?v=1.1.1"></script>

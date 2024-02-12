@@ -1,0 +1,31 @@
+# Template
+https://preview.keenthemes.com/keen-v2/demo2/features/icons/flaticon.html
+https://keenthemes.com/keen2/?page=docs&section=html-components-datatable
+
+# Parametros de la tabla permisos
+Insert into permiso (permiso_nombre, permiso_clave, permiso_descripcion) values 
+('Procesar ventas', 'p1', 'El usuario con este permiso, podrá efectuar todas las funciones que las ventas le permitan.'),
+('Historial de ventas', 'p2', 'El usuario podrá ver todas las transacciones que se han realizado en el turno.'),
+('Movimiento de efectivo', 'p3', 'El usuario podrá efectuar entradas y salidas de efectivo directo de caja.'),
+('Corte de caja | Cierre de turno', 'p4', 'El usuario podrá realizar el corte de caja del turno actual, dicho turno puede o no a ver sido abierto por el usuario.'),
+('Catalogo de autobuses', 'p5', 'El usuario podrá registrar autobuses nuevos, así como eliminarlos del catálogo'),
+('Catalogo de descuentos', 'p6', 'El usuario podrá registrar y eliminar conceptos de descuentos aplicables en las ventas'),
+('Catalogo de corridas', 'p7', 'El usuario podrá registrar, editar y eliminar corridas, así como los horarios de este.'),
+('Catalogo de usuarios', 'p8', 'El usuario podrá registrar, editar y remover cuentas de usuarios que tengan acceso a Disse Tickets, así como otorgar o remover permisos sobre dichas cuentas'),
+('Cortes de caja | Administración', 'p9', 'El usuario con este permiso, podrá acceder a la información de ventas y cierre del turno corriente, así como el detalle y reimpresión de cortes de caja históricos'),
+('Configuración del sistema', 'p10', 'El usuario podrá modificar los datos de la empresa que hace uso de Disse Tickets, así como reconfigurar parámetros de impresoras, métodos de cobro');
+
+# Parametros de la tabla usuario
+Insert into usuario (usuario_nombre, usuario_contrasenia, usuario_propietario, usuario_telefono, usuario_tipo, usuario_estatus)
+values ('admin', '$2b$10$FafrpK5lDZOwXNFC7mmgR..WdFCjZA9AzBUV80Z7MMtSsKonmjUba', 'Administrador del sistema', '0000000000', 1, 1);
+
+# Una vez insertado el usuario de sistema, se debe registrar sus permisos
+INSERT INTO usuario_permiso (usuario_id, permiso_id) VALUES (1, 1),(1, 2),(1, 3),(1, 4),(1, 5),(1, 6),(1, 1),(1, 8),(1, 9),(1, 10);
+
+# Parametros para tabla descuento
+INSERT INTO descuento (descuento_id, descuento_nombre, descuento_descripcion,  descuento_porcentaje, descuento_estatus) VALUES (0, 'Default', 'Comodin para indicar que no tiene descuento', 0, 0);
+
+# Tirar servicio
+netstat -aon | findstr 3000
+
+# Instalar en C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp

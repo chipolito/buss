@@ -1,0 +1,233 @@
+<!--begin::Subheader-->
+<div class="subheader py-4 pt-lg-0 pb-lg-10 " id="kt_subheader">
+    <div class=" container-fluid  d-flex align-items-center justify-content-between flex-wrap">
+		<!--begin::Info-->
+        <div class="d-flex align-items-center py-2 mr-1">
+            <!--begin::Icon page-->
+            <button class="btn btn-icon btn-hover-icon-success mr-2 pl-0 justify-content-start d-none d-lg-flex">
+                <span class="svg-icon svg-icon-3x">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <rect x="0" y="0" width="24" height="24"/>
+                            <path d="M16.5428932,17.4571068 L11,11.9142136 L11,4 C11,3.44771525 11.4477153,3 12,3 C12.5522847,3 13,3.44771525 13,4 L13,11.0857864 L17.9571068,16.0428932 L20.1464466,13.8535534 C20.3417088,13.6582912 20.6582912,13.6582912 20.8535534,13.8535534 C20.9473216,13.9473216 21,14.0744985 21,14.2071068 L21,19.5 C21,19.7761424 20.7761424,20 20.5,20 L15.2071068,20 C14.9309644,20 14.7071068,19.7761424 14.7071068,19.5 C14.7071068,19.3673918 14.7597852,19.2402148 14.8535534,19.1464466 L16.5428932,17.4571068 Z" fill="#000000" fill-rule="nonzero"/>
+                            <path d="M7.24478854,17.1447885 L9.2464466,19.1464466 C9.34021479,19.2402148 9.39289321,19.3673918 9.39289321,19.5 C9.39289321,19.7761424 9.16903559,20 8.89289321,20 L3.52893218,20 C3.25278981,20 3.02893218,19.7761424 3.02893218,19.5 L3.02893218,14.136039 C3.02893218,14.0034307 3.0816106,13.8762538 3.17537879,13.7824856 C3.37064094,13.5872234 3.68722343,13.5872234 3.88248557,13.7824856 L5.82567301,15.725673 L8.85405776,13.1631936 L10.1459422,14.6899662 L7.24478854,17.1447885 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"/>
+                        </g>
+                    </svg>
+                </span>
+            </button>
+            <!--end::Icon page-->
+
+			<div class="d-flex flex-column mr-5">
+				<!--begin::Page Title-->
+	            <h4 class="text-dark font-weight-bold py-1 mr-5 my-0">
+                    Administración de corridas
+                    <small class="text-muted">Registra el catálogo de origenes y destinos</small>
+	            </h4>
+				<!--end::Page Title-->
+
+	            <!--begin::Breadcrumb-->
+	            <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 m-0 font-size-sm">
+                    <li class="breadcrumb-item">
+                        <a href="/" class="text-muted">
+                            Disse tickets
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="javascript:void(0);" class="text-muted">
+                            Administración
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="javascript:void(0);" class="text-muted">
+                            Corrida
+                        </a>
+                    </li>
+                </ul>
+				<!--end::Breadcrumb-->
+	        </div>
+        </div>
+		<!--end::Info-->
+
+        <!--begin::Toolbar-->
+        <!-- <div class="d-flex align-items-center flex-wrap py-2">
+            <button type="button" id="kt_general_actions_toggle" class="flex-shrink-0 btn btn-fixed-height btn-primary font-weight-bolder font-size-sm px-5">
+                <i class="flaticon2-add-1 icon-sm"></i> Nuevo
+            </button>
+        </div> -->
+        <!--end::Toolbar-->
+    </div>
+</div>
+
+<!--begin::Entry-->
+<div class="d-flex flex-column-fluid">
+    <!--begin::Container-->
+    <div class="container-fluid">
+        <div class="card card-custom">
+            <div class="card-header flex-wrap border-0 pt-0 pb-0">
+                <div class="card-title">
+                    <h3 class="card-label">
+                        Corridas
+                        <span class="d-block text-muted pt-2 font-size-sm">Catálogo de corridas disponibles</span>
+                    </h3>
+                </div>
+                <div class="card-toolbar">
+                    <a href="javascript:void(0);" class="btn btn-primary font-weight-bolder" id="kt_general_actions_toggle">
+                        <span class="svg-icon svg-icon-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <rect x="0" y="0" width="24" height="24"/>
+                                    <circle fill="#000000" cx="9" cy="15" r="6"/>
+                                    <path d="M8.8012943,7.00241953 C9.83837775,5.20768121 11.7781543,4 14,4 C17.3137085,4 20,6.6862915 20,10 C20,12.2218457 18.7923188,14.1616223 16.9975805,15.1987057 C16.9991904,15.1326658 17,15.0664274 17,15 C17,10.581722 13.418278,7 9,7 C8.93357256,7 8.86733422,7.00080962 8.8012943,7.00241953 Z" fill="#000000" opacity="0.3"/>
+                                </g>
+                            </svg>
+                        </span>	Nueva corrida
+                    </a>
+                </div>
+            </div>
+
+            <div class="card-body pt-0">
+                <div class="mb-7">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 col-xl-6">
+                            <div class="row align-items-center">
+                                <div class="col-md-12 my-2 my-md-0">
+                                    <div class="input-icon">
+                                        <input type="text" class="form-control" placeholder="Buscar en la tabla..." id="kt_datatable_search_query" />
+                                        <span><i class="flaticon2-search-1 text-muted"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--begin: Datatable-->
+                <div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable"></div>
+                <!--end: Datatable-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--begin::General actions Panel-->
+<div id="kt_general_actions" class="offcanvas offcanvas-lg offcanvas-lg-right p-10">
+    <div class="offcanvas-header d-flex align-items-center justify-content-between pb-10">
+        <h3 class="font-weight-bold m-0">Información de la corrida</h3>
+        <a href="javascript:void(0);" class="btn btn-xs btn-icon btn-light btn-hover-warning" id="kt_general_actions_close">
+            <i class="ki ki-close icon-xs text-muted"></i>
+        </a>
+    </div>
+
+    <div class="offcanvas-content ">
+        <div class="offcanvas-wrapper mb-5 scroll-pull">
+            <form class="form" id="formCorrida" novalidate="novalidate">
+                <input type="text" class="d-none" id="inputIdCorrida" name="inputIdCorrida" value="0">
+
+                <div class="form-group row">
+                    <div class="col-12">
+                        <label for="inputNombreOrigen"><span class="text-danger">*</span> Origen</label>
+                        <input type="text" id="inputNombreOrigen" name="inputNombreOrigen" class="form-control"  placeholder="Punto de origen" autocomplete="off"/>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-12">
+                        <label for="inputNombreDestino"><span class="text-danger">*</span> Destino</label>
+                        <input type="text" id="inputNombreDestino" name="inputNombreDestino" class="form-control"  placeholder="Punto de destino" autocomplete="off"/>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-6">
+                        <label for="inputTiempo"> Tiempo estimado de viaje</label>
+                        <div class="input-group timepicker">
+                            <input class="form-control" id="inputTiempo" name="inputTiempo" readonly placeholder="Seleccionar hora" type="text"/>
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-clock-o"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <label for="inputPrecio"><span class="text-danger">*</span> Precio base del viaje</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-text">$</span></div>
+                            <input type="number" id="inputPrecio" name="inputPrecio" class="form-control"  placeholder="Precio viaje" autocomplete="off" onkeyup="if(this.value<0){this.value= this.value * -1}"/>
+                        </div>
+                    </div>
+                </div>
+
+                <label class=""><span class="text-danger">*</span> Configuración de horarios:</label>
+                <div class="separator separator-dashed mb-2"></div>
+
+                <div class="row mb-2">
+                    <div class="col-4 font-weight-bold">Hora de salida</div>
+                    <div class="col-8 font-weight-bold">Autobus</div>
+                </div>
+
+                <div id="kt_repeat_horarios">
+                    <div class="form-group">
+                        <div data-repeater-list="horarios">
+                            <div data-repeater-item>
+                                <div class="form-group row mb-2">
+                                    <input type="hidden" data-kt-repeater name="horario_id" value="0" class="horario_id">
+
+                                    <input type="hidden" data-kt-repeater name="boleto_permitido" value="0" class="boleto_permitido">
+
+                                    <input type="hidden" data-kt-repeater name="boleto_vendido" value="0" class="boleto_vendido">
+
+                                    <div class="col-md-4">
+                                        <div class="input-group timepicker">
+                                            <input class="form-control inputHoraSalida" data-kt-repeater name="inputHoraSalida" readonly placeholder="Selecciona hora" type="text"/>
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <i class="la la-clock-o"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <select class="form-control inputAutobusSalida" data-kt-repeater name="inputAutobusSalida" title="Selecciona una opcion">
+                                            <% if(autobuses.success) {
+                                                    for (let i = 0; i < autobuses.data.length; i++) {
+                                                        let autobusId = autobuses.data[i].autobus_id; 
+                                                        let autobbusNombre = autobuses.data[i].autobus_nombre; 
+                                                        let autobusCapacidad = autobuses.data[i].autobus_capacidad; %>
+                                                        <option value="<%= autobusId %>" data-capacidad="<%= autobusCapacidad %>">- <%= autobbusNombre %> -</option>
+                                                    <% } %>
+                                            <% } else { %>
+                                                <option value="">- Sin autobus -</option>
+                                            <% } %>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <a href="javascript:;" data-repeater-delete class="btn btn-sm font-weight-bolder btn-light-danger">
+                                            <i class="la la-trash-o"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group mt-5 d-flex flex-stack">
+                        <a href="javascript:;" data-repeater-create="" class="btn btn-sm font-weight-bolder btn-outline-dark">
+                            <i class="la la-plus"></i> Agregar nuevo horario
+                        </a>                        
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="offcanvas-footer">
+            <button type="button" class="btn btn-primary btn-block" id="btnGuardar">
+                ¡Guardar datos de la corrida!
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="resources/js/pages/corrida.script.js?v=1.1.1"></script>

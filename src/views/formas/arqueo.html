@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="http://localhost:3000/resources/plugins/global/bootstrap/bootstrap.min.css">
+    <title>Forma arqueo diario</title>
+
+    <style>
+        .fsp-14 {
+            font-size: 14px !important;
+        }
+
+        .fsp-12 {
+            font-size: 12px !important;
+        }
+
+        .fsp-10 {
+            font-size: 10px !important;
+        }
+
+        .fsp-9 {
+            font-size: 9px !important;
+        }
+
+        @page { 
+            size: A4 portrait;
+            margin-left: 0;
+            margin-right: 0;
+            margin-top: 10;
+            margin-bottom: 10;
+        }
+    </style>
+</head>
+<body>
+    <p id="turno_id" class="d-none">0</p>
+    <div class="container">
+        <div class="media">
+            <img class="align-self-start mr-3" src="http://localhost:3000/resources/images/general/ASA-Logotipo.png" width="160" alt="Logo ASA">
+            <div class="media-body">
+                <h6 class="my-0 lbl-info-corte">REPORTE DE CORTE DE CAJA DIARIO</h6>
+                <p class="fsp-12 lblNombreSucursal mb-1"></p>
+                <div class="row">
+                    <div class="col">
+                        <blockquote class="blockquote mb-0">
+                            <p class="mb-0 fsp-12">Apertura del turno.</p>
+                            <footer class="blockquote-footer fsp-10 lbl-nombre-cajero">Cuauhtemoc hipolito | 21-09-2023 13:00</footer>
+                        </blockquote>
+                    </div>
+                    <div class="col">
+                        <blockquote class="blockquote mb-0">
+                            <p class="mb-0 fsp-12">Cierre del turno.</p>
+                            <footer class="blockquote-footer fsp-10 lbl-nombre-cajero-cierre">Cuauhtemoc hipolito | 21-09-2023 23:00</footer>
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-2">
+
+        <div class="card mb-2">
+            <div class="card-header p-1 fsp-14">
+                Saldos
+            </div>
+            <div class="card-body">
+                <div class="row fsp-12">
+                    <div class="col-4">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center  p-0">
+                                Total efectivo en caja
+                                <span class="badge badge-danger badge-pill lbl-total-efectivo">$0.00</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center p-0">
+                                Fondo inicial
+                                <span class="badge badge-dark badge-pill lbl-fondo-inicial">$0.00</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center  p-0">
+                                Total real
+                                <span class="badge badge-danger badge-pill lbl-total-efectivo-real">$0.00</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="col-4">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center  p-0">
+                                Total por venta de boletos
+                                <span class="badge badge-dark badge-pill lbl-total-venta-general">$0.00</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center  p-0">
+                                Total venta en efectivo
+                                <span class="badge badge-dark badge-pill lbl-total-venta-efectivo">$0.00</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center p-0">
+                                Total venta en tarjetas
+                                <span class="badge badge-dark badge-pill lbl-entrada-tarjeta">$0.00</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="col-4">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center p-0">
+                                Entradas de efectivo
+                                <span class="badge badge-dark badge-pill lbl-entrada-efectivo">$0.00</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center p-0">
+                                Salidas de efectivo
+                                <span class="badge badge-dark badge-pill lbl-salida-efectivo">$0.00</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center p-0">
+                                Devoluciones
+                                <span class="badge badge-dark badge-pill lbl-salida-devoluciones">$0.00</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col">
+                <div class="row">
+                    <div class="col-12 mb-2">
+                        <div class="card">
+                            <div class="card-header p-1 fsp-14">
+                                Entradas de efectivo
+                            </div>
+                            <div class="card-body p-1">
+                                <table class="table table-sm fsp-9 mb-0">
+                                    <tbody id="tblEntradas">
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header p-1 fsp-14">
+                                Venta por tipo de boletos
+                            </div>
+                            <div class="card-body p-1">
+                                <table class="table table-sm fsp-9 mb-0">
+                                    <tbody id="tblCategoria">
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="row">
+                    <div class="col-12 mb-2">
+                        <div class="card">
+                            <div class="card-header p-1 fsp-14">
+                                Salidas de efectivo
+                            </div>
+                            <div class="card-body p-1">
+                                <table class="table table-sm fsp-9 mb-0">
+                                    <tbody id="tblSalidas">
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header p-1 fsp-14">
+                                Devoluciones
+                            </div>
+                            <div class="card-body p-1">
+                                <table class="table table-sm fsp-9 mb-0">
+                                    <tbody id="tblDevolucion">
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header p-1 fsp-14">
+                        Historial de ventas concretadas
+                    </div>
+                    <div class="card-body p-1">
+                        <table class="table table-sm fsp-9 mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Folio</th>
+                                    <th>Fecha</th>
+                                    <th>Cantidad</th>
+                                    <th>Importe</th>
+                                    <th>Sucursal</th>
+                                    <th>Cajero</th>
+                                    <th>Pago</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tblCorteHistorialVenta">
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="http://localhost:3000/resources/plugins/global/bootstrap/jquery-3.3.1.slim.min.js"></script>
+    <script src="http://localhost:3000/resources/plugins/global/bootstrap/popper.min.js"></script>
+    <script src="http://localhost:3000/resources/plugins/global/bootstrap/bootstrap.min.js"></script>
+
+    <script>
+
+        $( async function() {
+            let currency = function(money){
+                return new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD', 
+                    minimumFractionDigits: 2
+                }).format(money);
+            },
+            turno_id = $('#turno_id').html(),
+            options = {
+                method: 'GET',
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            };
+
+            await fetch(`http://localhost:3000/Pos/GetTurno/${turno_id}`, options)
+            .then(response => response.json())
+            .then(data => {
+                if(data.success){
+                    let turnoActual = data.data;
+
+                    var today = new Date();
+                    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+
+                    $('.lbl-info-corte').append(` #${turnoActual.turno_id} | ${new Date().toJSON().slice(0, 10)} ${time}` );
+                    $('.lbl-nombre-cajero').html(`${turnoActual.nombre_usuario_apertura} | ${turnoActual.turno_fecha_apertura}`);
+
+                    if(turnoActual.turno_estatus == 2){
+                        $('.lbl-nombre-cajero-cierre').html(`${turnoActual.nombre_usuario_cierre} | ${turnoActual.turno_fecha_cierre}`);
+                    } else {
+                        $('.lbl-nombre-cajero-cierre').parent().addClass('d-none');
+                    }
+
+                    let totalCaja = ( turnoActual.turno_efectivo_inicial + turnoActual.venta_efectivo + turnoActual.entrada_efectivo ) - turnoActual.salida_efectivo;
+
+                    $('.lbl-total-efectivo').html( currency( totalCaja ));
+                    $('.lbl-fondo-inicial').html( currency(turnoActual.turno_efectivo_inicial) );
+                    $('.lbl-total-venta-efectivo').html( currency(turnoActual.venta_efectivo) );
+                    $('.lbl-total-efectivo-real').html( currency(turnoActual.turno_efectivo_real) );
+
+                    $('.lbl-entrada-efectivo').html( currency(turnoActual.entrada_efectivo) );
+                    $('.lbl-salida-efectivo').html( currency(turnoActual.salida_efectivo) );
+                    $('.lbl-entrada-tarjeta').html( currency(turnoActual.venta_tarjeta) );
+                    $('.lbl-total-venta-general').html( currency(turnoActual.total_venta_boletos) );
+
+                    let movimiento_efectivo = JSON.parse( turnoActual.movimiento_efectivo );
+    
+                    $('#tblEntradas').html('');
+                    $('#tblSalidas').html('');
+    
+                    $.each(movimiento_efectivo, function(index, item){
+                        let row = `
+                            <tr>
+                                <td>${item.fecha}</td>
+                                <td>${item.comentario}</td>
+                                <td>${currency(item.importe)}</td>
+                            </tr>
+                        `;
+    
+                        $(row).appendTo(item.tipo == 'E' ? '#tblEntradas' : '#tblSalidas');
+                    });
+
+                    let detalle_tipo_descuento = JSON.parse(turnoActual.detalle_tipo_descuento);
+    
+                    $('#tblCategoria').html('');
+    
+                    $.each(detalle_tipo_descuento, function(index, item){                    
+                        if(item.descuento_estatus == 1 || item.descuento_id == 0) {
+                            let row = `
+                                <tr>
+                                    <td>(${item.total_pasajeros}) - Boleto ${item.descuento_nombre}</td>
+                                    <td>Total recaudado <b>${currency(item.total_venta)}</b></td>
+                                </tr>
+                            `;
+    
+                            $(row).appendTo('#tblCategoria');
+                        }
+                    });
+            
+                    fetch(`http://localhost:3000/Pos/GetHistorialVenta/${turnoActual.turno_id}`, options)
+                    .then(response => response.json())
+                    .then(async data => {
+                        if(data.success) {
+                            $.each(data.data, function(index, item){
+                                let row = `
+                                    <tr>
+                                        <td>#${item.venta_folio}</td>
+                                        <td>${item.venta_fecha} / ${item.venta_hora}</td>
+                                        <td>${item.venta_cantidad}</td>
+                                        <td>${currency(item.venta_total)}</td>
+                                        <td>${item.venta_sucursal}</td>
+                                        <td>${item.cajero}</td>
+                                        <td>${item.venta_tarjeta > 0 ? 'Tarjeta' : 'Efectivo'}</td>
+                                    </tr>
+                                `;
+
+                                $(row).appendTo("#tblCorteHistorialVenta");
+
+                                $('.lblNombreSucursal').html( item.venta_sucursal == '01' ? 'Sucursal AICM - Aeropuerto Internacional de la Ciudad de México' : 'Sucursal AIFA - Aeropuerto Internacional Felipe Ángeles');
+                            });
+                        }
+                    });
+                    
+                    
+                    // // Dibujar tabla de historial de ventas
+                    // $("#tblCorteHistorialVenta").html("");
+
+                    // if(turnoActual.ventasTurno.success){
+                    
+                    // }
+                }
+            })
+            .catch(( error ) => {
+                $('#turno_id').html('Error al tratar de generar el documento, contacte con soporte técnico.').addClass('text-danger');
+            });
+        });
+
+
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!--begin::Subheader-->
+<div class="subheader py-4 pt-lg-0 pb-lg-10 " id="kt_subheader">
+    <div class=" container-fluid  d-flex align-items-center justify-content-between flex-wrap">
+		<!--begin::Info-->
+        <div class="d-flex align-items-center py-2 mr-1">
+            <!--begin::Icon page-->
+            <button class="btn btn-icon btn-hover-icon-success mr-2 pl-0 justify-content-start d-none d-lg-flex">
+                <span class="svg-icon svg-icon-3x">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <rect x="0" y="0" width="24" height="24"/>
+                            <path d="M4,22 L2,22 C2,19.2385763 4.23857625,18 7,18 L17,18 C19.7614237,18 22,19.2385763 22,22 L20,22 C20,20.3431458 18.6568542,20 17,20 L7,20 C5.34314575,20 4,20.3431458 4,22 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"/>
+                            <rect fill="#000000" x="1" y="14" width="22" height="6" rx="1"/>
+                            <path d="M13,13 L11,13 L11,12 C11,11.4477153 10.5522847,11 10,11 L6,11 C5.44771525,11 5,11.4477153 5,12 L5,13 L4,13 C3.44771525,13 3,12.5522847 3,12 L3,8 C3,6.8954305 3.8954305,6 5,6 L19,6 C20.1045695,6 21,6.8954305 21,8 L21,12 C21,12.5522847 20.5522847,13 20,13 L19,13 L19,12 C19,11.4477153 18.5522847,11 18,11 L14,11 C13.4477153,11 13,11.4477153 13,12 L13,13 Z" fill="#000000" opacity="0.3"/>
+                        </g>
+                    </svg>
+                </span>
+            </button>
+            <!--end::Icon page-->
+
+			<div class="d-flex flex-column mr-5">
+				<!--begin::Page Title-->
+	            <h4 class="text-dark font-weight-bold py-1 mr-5 my-0">
+                    Administración de autobuses
+                    <small class="text-muted">Registra todos los autobuses que forman parte de tu flota</small>
+	            </h4>
+				<!--end::Page Title-->
+
+	            <!--begin::Breadcrumb-->
+	            <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 m-0 font-size-sm">
+                    <li class="breadcrumb-item">
+                        <a href="/" class="text-muted">
+                            Disse tickets
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="javascript:void(0);" class="text-muted">
+                            Administración
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="javascript:void(0);" class="text-muted">
+                            Autobus
+                        </a>
+                    </li>
+                </ul>
+				<!--end::Breadcrumb-->
+	        </div>
+        </div>
+		<!--end::Info-->
+
+        <!--begin::Toolbar-->
+        <!-- <div class="d-flex align-items-center flex-wrap py-2">
+            <button type="button" id="kt_general_actions_toggle" class="flex-shrink-0 btn btn-fixed-height btn-primary font-weight-bolder font-size-sm px-5">
+                <i class="flaticon2-add-1 icon-sm"></i> Nuevo
+            </button>
+        </div> -->
+        <!--end::Toolbar-->
+    </div>
+</div>
+
+<!--begin::Entry-->
+<div class="d-flex flex-column-fluid">
+    <!--begin::Container-->
+    <div class="container-fluid">
+        <div class="card card-custom">
+            <div class="card-header flex-wrap border-0 pt-0 pb-0">
+                <div class="card-title">
+                    <h3 class="card-label">
+                        Autobuses
+                        <span class="d-block text-muted pt-2 font-size-sm">Listado de autobuses activos y disponibles</span>
+                    </h3>
+                </div>
+                <div class="card-toolbar">
+                    <a href="javascript:void(0);" class="btn btn-primary font-weight-bolder" id="kt_general_actions_toggle">
+                        <span class="svg-icon svg-icon-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <rect x="0" y="0" width="24" height="24"/>
+                                    <circle fill="#000000" cx="9" cy="15" r="6"/>
+                                    <path d="M8.8012943,7.00241953 C9.83837775,5.20768121 11.7781543,4 14,4 C17.3137085,4 20,6.6862915 20,10 C20,12.2218457 18.7923188,14.1616223 16.9975805,15.1987057 C16.9991904,15.1326658 17,15.0664274 17,15 C17,10.581722 13.418278,7 9,7 C8.93357256,7 8.86733422,7.00080962 8.8012943,7.00241953 Z" fill="#000000" opacity="0.3"/>
+                                </g>
+                            </svg>
+                        </span>	Nuevo autobus
+                    </a>
+                </div>
+            </div>
+
+            <div class="card-body pt-0">
+                <div class="mb-7">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 col-xl-6">
+                            <div class="row align-items-center">
+                                <div class="col-md-12 my-2 my-md-0">
+                                    <div class="input-icon">
+                                        <input type="text" class="form-control" placeholder="Buscar en la tabla..." id="kt_datatable_search_query" />
+                                        <span><i class="flaticon2-search-1 text-muted"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--begin: Datatable-->
+                <div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable"></div>
+                <!--end: Datatable-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--begin::General actions Panel-->
+<div id="kt_general_actions" class="offcanvas offcanvas-lg offcanvas-lg-right p-10">
+    <div class="offcanvas-header d-flex align-items-center justify-content-between pb-10">
+        <h3 class="font-weight-bold m-0">Información del autobus</h3>
+        <a href="javascript:void(0);" class="btn btn-xs btn-icon btn-light btn-hover-warning" id="kt_general_actions_close">
+            <i class="ki ki-close icon-xs text-muted"></i>
+        </a>
+    </div>
+
+    <div class="offcanvas-content ">
+        <div class="offcanvas-wrapper mb-5 scroll-pull">
+            <form class="form" id="formAutobus" novalidate="novalidate">
+                <input type="text" class="d-none" id="inputIdAutobus" value="0">
+
+                <div class="form-group">
+                    <label for="inputNombreAutobus"><span class="text-danger">*</span> Nombre</label>
+                    <input type="text" id="inputNombreAutobus" name="inputNombreAutobus" class="form-control"  placeholder="Nombre del autobus" autocomplete="off"/>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-6">
+                        <label for="inputCapacidadAutobus"><span class="text-danger">*</span> Capacidad</label>
+                        <input type="number" id="inputCapacidadAutobus" name="inputCapacidadAutobus" class="form-control"  placeholder="Asientos" autocomplete="off"/>
+                    </div>
+
+                    <div class="col-6">
+                        <label for="inputSillaRuedaAutobus"><span class="text-danger">*</span> Plaza silla de ruedas</label>
+                        <input type="number" id="inputSillaRuedaAutobus" name="inputSillaRuedaAutobus" class="form-control"  placeholder="Espacio" autocomplete="off"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputDescripcionAutobus">Descripción</label>
+                    <input type="text" id="inputDescripcionAutobus" name="inputDescripcionAutobus" class="form-control"  placeholder="Descripción del autobus" autocomplete="off"/>
+                </div>
+            </form>
+        </div>
+
+        <div class="offcanvas-footer">
+            <button type="button" class="btn btn-primary btn-block" id="btnGuardar">
+                ¡Guardar datos del autobus!
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="resources/js/pages/autobus.script.js?v=1.1.2"></script>

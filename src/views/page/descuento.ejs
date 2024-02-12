@@ -1,0 +1,192 @@
+<!--begin::Subheader-->
+<div class="subheader py-4 pt-lg-0 pb-lg-10 " id="kt_subheader">
+    <div class=" container-fluid  d-flex align-items-center justify-content-between flex-wrap">
+		<!--begin::Info-->
+        <div class="d-flex align-items-center py-2 mr-1">
+            <!--begin::Icon page-->
+            <button class="btn btn-icon btn-hover-icon-success mr-2 pl-0 justify-content-start d-none d-lg-flex">
+                <span class="svg-icon svg-icon-3x">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <rect x="0" y="0" width="24" height="24"/>
+                            <polygon fill="#000000" opacity="0.3" points="12 20.0218549 8.47346039 21.7286168 6.86905972 18.1543453 3.07048824 17.1949849 4.13894342 13.4256452 1.84573388 10.2490577 5.08710286 8.04836581 5.3722735 4.14091196 9.2698837 4.53859595 12 1.72861679 14.7301163 4.53859595 18.6277265 4.14091196 18.9128971 8.04836581 22.1542661 10.2490577 19.8610566 13.4256452 20.9295118 17.1949849 17.1309403 18.1543453 15.5265396 21.7286168"/>
+                            <polygon fill="#000000" points="14.0890818 8.60255815 8.36079737 14.7014391 9.70868621 16.049328 15.4369707 9.950447"/>
+                            <path d="M10.8543431,9.1753866 C10.8543431,10.1252593 10.085524,10.8938719 9.13585777,10.8938719 C8.18793881,10.8938719 7.41737243,10.1252593 7.41737243,9.1753866 C7.41737243,8.22551387 8.18793881,7.45690126 9.13585777,7.45690126 C10.085524,7.45690126 10.8543431,8.22551387 10.8543431,9.1753866" fill="#000000" opacity="0.3"/>
+                            <path d="M14.8641422,16.6221564 C13.9162233,16.6221564 13.1456569,15.8535438 13.1456569,14.9036711 C13.1456569,13.9520555 13.9162233,13.1851857 14.8641422,13.1851857 C15.8138085,13.1851857 16.5826276,13.9520555 16.5826276,14.9036711 C16.5826276,15.8535438 15.8138085,16.6221564 14.8641422,16.6221564 Z" fill="#000000" opacity="0.3"/>
+                        </g>
+                    </svg>
+                </span>
+            </button>
+            <!--end::Icon page-->
+
+			<div class="d-flex flex-column mr-5">
+				<!--begin::Page Title-->
+	            <h4 class="text-dark font-weight-bold py-1 mr-5 my-0">
+                    Administración de descuentos
+                    <small class="text-muted">Registra el catálogo de descuentos</small>
+	            </h4>
+				<!--end::Page Title-->
+
+	            <!--begin::Breadcrumb-->
+	            <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 m-0 font-size-sm">
+                    <li class="breadcrumb-item">
+                        <a href="/" class="text-muted">
+                            Disse tickets
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="javascript:void(0);" class="text-muted">
+                            Administración
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="javascript:void(0);" class="text-muted">
+                            Descuento
+                        </a>
+                    </li>
+                </ul>
+				<!--end::Breadcrumb-->
+	        </div>
+        </div>
+		<!--end::Info-->
+
+        <!--begin::Toolbar-->
+        <!-- <div class="d-flex align-items-center flex-wrap py-2">
+            <button type="button" id="kt_general_actions_toggle" class="flex-shrink-0 btn btn-fixed-height btn-primary font-weight-bolder font-size-sm px-5">
+                <i class="flaticon2-add-1 icon-sm"></i> Nuevo
+            </button>
+        </div> -->
+        <!--end::Toolbar-->
+    </div>
+</div>
+
+<!--begin::Entry-->
+<div class="d-flex flex-column-fluid">
+    <!--begin::Container-->
+    <div class="container-fluid">
+        <div class="card card-custom">
+            <div class="card-header flex-wrap border-0 pt-0 pb-0">
+                <div class="card-title">
+                    <h3 class="card-label">
+                        Descuentos
+                        <span class="d-block text-muted pt-2 font-size-sm">Catalogo de descuentos disponibles y aplicables</span>
+                    </h3>
+                </div>
+                <div class="card-toolbar">
+                    <a href="javascript:void(0);" class="btn btn-primary font-weight-bolder" id="kt_general_actions_toggle">
+                        <span class="svg-icon svg-icon-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <rect x="0" y="0" width="24" height="24"/>
+                                    <circle fill="#000000" cx="9" cy="15" r="6"/>
+                                    <path d="M8.8012943,7.00241953 C9.83837775,5.20768121 11.7781543,4 14,4 C17.3137085,4 20,6.6862915 20,10 C20,12.2218457 18.7923188,14.1616223 16.9975805,15.1987057 C16.9991904,15.1326658 17,15.0664274 17,15 C17,10.581722 13.418278,7 9,7 C8.93357256,7 8.86733422,7.00080962 8.8012943,7.00241953 Z" fill="#000000" opacity="0.3"/>
+                                </g>
+                            </svg>
+                        </span>	Nuevo descuento
+                    </a>
+                </div>
+            </div>
+
+            <div class="card-body pt-0">
+                <div class="mb-7">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 col-xl-6">
+                            <div class="row align-items-center">
+                                <div class="col-md-12 my-2 my-md-0">
+                                    <div class="input-icon">
+                                        <input type="text" class="form-control" placeholder="Buscar en la tabla..." id="kt_datatable_search_query" />
+                                        <span><i class="flaticon2-search-1 text-muted"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--begin: Datatable-->
+                <div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable"></div>
+                <!--end: Datatable-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--begin::General actions Panel-->
+<div id="kt_general_actions" class="offcanvas offcanvas-lg offcanvas-lg-right p-10">
+    <div class="offcanvas-header d-flex align-items-center justify-content-between pb-10">
+        <h3 class="font-weight-bold m-0">Información del descuento</h3>
+        <a href="javascript:void(0);" class="btn btn-xs btn-icon btn-light btn-hover-warning" id="kt_general_actions_close">
+            <i class="ki ki-close icon-xs text-muted"></i>
+        </a>
+    </div>
+
+    <div class="offcanvas-content ">
+        <div class="offcanvas-wrapper mb-5 scroll-pull">
+            <form class="form" id="formDescuentos" novalidate="novalidate">
+                <input type="text" class="d-none" id="inputIdDescuento" value="0">
+
+                <div class="form-group row">
+                    <div class="col-8">
+                        <label for="inputNombreDescuento"><span class="text-danger">*</span> Nombre</label>
+                        <input type="text" id="inputNombreDescuento" name="inputNombreDescuento" class="form-control"  placeholder="Nombre del descuento" autocomplete="off"/>
+                    </div>
+                    <div class="col-4">
+                        <label for="inputPorcentajeDescuento"><span class="text-danger">*</span> Porcentaje</label>
+                        <input type="number" min="0" max="100" oninput="validity.valid||(value='');" id="inputPorcentajeDescuento" name="inputPorcentajeDescuento" class="form-control"  placeholder="Porcentaje" autocomplete="off"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputDescripcionDescuento">Descripción</label>
+                    <input type="text" id="inputDescripcionDescuento" name="inputDescripcionDescuento" class="form-control"  placeholder="Descripción aplicable" autocomplete="off"/>
+                </div>
+
+                <label><span class="text-danger">*</span> Ajustes adicionales:</label>
+
+                <div class="form-group row mb-0">
+                    <div class="col-md-4">
+                        <div class="checkbox-inline">
+                            <label class="checkbox checkbox-primary">
+                                <input type="checkbox" name="inputAjuste" id="inputBypassPlaza"/>
+                                <span></span>
+                                No ocupa asiento
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8">
+                        <div class="checkbox-inline">
+                            <label class="checkbox checkbox-primary">
+                                <input type="checkbox" name="inputAjuste" id="inputPlazaEspecial" disabled/>
+                                <span></span>
+                                Requiere plaza para silla de ruedas
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="separator separator-solid my-3"></div>
+
+                <div class="form-group row">
+                    <div class="col-md-12">
+                        <div class="checkbox-inline">
+                            <label class="checkbox checkbox-primary">
+                                <input type="checkbox" name="inputAjuste" id="inputCredencial"/>
+                                <span></span>
+                                Solicitar credencial para aplicar descuento
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="offcanvas-footer">
+            <button type="button" class="btn btn-primary btn-block" id="btnGuardar">
+                ¡Guardar datos del descuento!
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="resources/js/pages/descuento.script.js?v=1.1.1"></script>

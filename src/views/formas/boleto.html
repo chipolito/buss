@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Forma impresion ticket</title>
+
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+
+        .fsp-14 {
+            font-size: 14px !important;
+        }
+
+        .fsp-12 {
+            font-size: 12px !important;
+        }
+
+        .fsp-10 {
+            font-size: 10px !important;
+        }
+
+        .fsp-9 {
+            font-size: 9px !important;
+        }
+
+        .mb-0 {
+            margin-bottom: 0;
+        }
+
+        .mt-0 {
+            margin-top: 0;
+        }
+
+        .my-0 {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        .mb-5 {
+            margin-bottom: 5px;
+        }
+        .pr-5 {
+            padding-right: 5px;
+        }
+
+        .p3 {
+            padding: 3px;
+        }
+
+        .pl-3 {
+            padding-left: 3px;
+        }
+
+        .pt-1{
+            padding-top: 1px;
+        }
+
+        .bg-gray {
+            background-color:#e7e7e7;
+        }
+
+        tr.border_bottom td {
+            border-bottom: 1px solid black;
+        }
+
+        tr.border_top td {
+            border-top: 1px solid black;
+        }
+
+        tr.border_bottom-f td {
+            border-bottom: 1px dashed  black;
+        }
+
+        tr.border_top-f td {
+            border-top: 1px dashed  black;
+        }
+
+        .v-top {
+            vertical-align: top;
+        }
+
+        .fw-b {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <input type="hidden" id="registro_id" value="0"/>
+    <input type="hidden" id="boleto_id" value="0"/>
+
+    <table width="100%" cellspacing="0" cellpadding="0" border="0" class="mb-5">
+        <tbody>
+            <tr>
+                <td  width="50%">
+                    <img class="align-self-start mr-3" src="http://localhost:3000/resources/images/general/ASA-Logotipo-sm.png"  width="80" alt="Logo ASA">
+                </td>
+                <td  width="50%" align="right">
+                    <img class="align-self-start mr-3" src="http://localhost:3000/resources/images/general/AIFA-AICM-Logotipo.png" width="80" alt="Logo AIFA-ASA">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div align='center' class="fsp-12">
+        <h4 class="mb-0 mt-0">Transporte Terrestre ASA</h4>
+        <h4 class="mt-0">PASE DE ABORDAR</h4>
+    </div>
+    
+    <div id="qrcode" style="float: right;"></div>
+
+    <p class="my-0 fsp-10"><b>Folio:</b> <text id="lblFolio"></text></p>
+    <p class="my-0 fsp-10"><b>Origen:</b> <text id="lblOrigen"></text></p>
+    <p class="my-0 fsp-10"><b>Destino:</b> <text id="lblDestino"></text></p>
+    <p class="my-0 fsp-10"><b>Fecha:</b> <text id="lblFechaCorrida"></text></p>
+    <p class="my-0 fsp-10"><b>Hora:</b> <text id="lblHoraCorrida"></text></p>
+    <p class="my-0 fsp-10"><b>Pasajero:</b> <text id="lblPasajero"></text></p>
+    <p class="mt-0 fsp-10"><b>Tipo boleto:</b> <text id="lblTipoBoleto"></text></p>
+
+    <p class="fsp-10 mt-0 fw-b" align="center">
+        Su boleto es su seguro de viajero. Válido para la fecha y hora indicada.
+    </p>
+
+    <p class="fsp-12 fw-b mb-0">Aviso de Privacidad </p>
+    <p class="fsp-10 mt-0" align="justify">
+        ASA es responsable del tratamiento de los datos personales proporcionados para identificación, 
+        seguimiento del servicio contratado y facturación. Estos no serán publicados ni transferidos 
+        sin su consentimiento, salvo excepciones de Ley. Consulte el aviso de privacidad integral 
+        en: www.gob.mx/asa. Fecha de actualización. 26 de septiembre de 2023. 
+    </p>
+
+    <p class="fsp-12 fw-b mb-0">Términos y Condiciones </p>
+    <p class="fsp-10 mt-0" align="justify">
+        Cualquier derecho u obligación directa e indirectamente con la prestación de este servicio incluyendo 
+        pago e indemnizaciones se regirán y resolverán conforme la legislación civil federal y ante los tribunales 
+        competentes del fuero federal ubicados en Ciudad de México. Renunciando a cualquier otra Ley o jurisdicción 
+        o competencia nacional o extranjera, que pudiese corresponder por domicilio de las partes, nacionalidad u 
+        otra causa, el transportista no responderá por culpa o negligencia de la víctima, caso fortuito, 
+        ni fuerza mayor, ni por culpa de terceros. Domicilio para todos los efectos Av.602 Zona Federal AICM, 
+        CP 15620 CDMX. Dudas y sugerencias escribe a: asatransporte@asa.gob.mx. Factura con tus datos fiscales: https:// www.asa.gob.mx/ es/ ASA/ Factura_electronica
+    </p>
+    
+    <script src="http://localhost:3000/resources/plugins/global/bootstrap/jquery-3.3.1.slim.min.js"></script>
+    <script type="text/javascript" src="http://localhost:3000/resources/plugins/custom/qrCode/qrcode.js"></script>
+
+<script>
+
+    $( async function() {
+        let currency = function(money){
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD', 
+                minimumFractionDigits: 2
+            }).format(money);
+        },
+        venta_id = $('#registro_id').val(),
+        boleto_id = $('#boleto_id').val(),
+        options = {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+
+        await fetch(`http://localhost:3000/Pos/GetVentaForTicket/${venta_id}`, options)
+        .then(response => response.json())
+        .then(data => {
+            if(data.success){
+                let venta   = data.data,
+                    strHora = venta.horario_salida.split(':'),
+                    fecha   = new Date(`${venta.venta_fecha}T${parseInt(strHora[0]) < 10 ? '0' + strHora[0] : strHora[0]}:${strHora[1]}:00`);
+
+                $('#lblOrigen').html( venta.corrida_origen );
+                $('#lblDestino').html( venta.corrida_destino );
+
+                let options = {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'short',
+                    day: '2-digit'
+                };
+
+                $('#lblFechaCorrida').html( fecha.toLocaleDateString('es-MX', options) );
+                $('#lblHoraCorrida').html(venta.horario_salida);
+
+                let detalle = JSON.parse( venta.detalle_venta );
+                detalle.forEach(function(boleto, index) {
+                    if(boleto.detalle_id == boleto_id) {
+                        let nombrePasajero = boleto.detalle_beneficiario;
+
+                        $('#lblFolio').html( boleto.detalle_folio );
+                        $('#lblPasajero').html( nombrePasajero );
+
+                        nombrePasajero = nombrePasajero.split(' ');
+
+                        var qrcode = new QRCode(document.getElementById('qrcode'), {
+                            text: `${ boleto.detalle_folio } | ${ nombrePasajero[0] } | ${ venta.venta_fecha } ${ venta.horario_salida}`,
+                            width: 70,
+                            height: 70,
+                            colorDark : "#000000",
+                            colorLight : "#ffffff",
+                            correctLevel : QRCode.CorrectLevel.L
+                        });
+
+                        let tipoBoleto = boleto.venta_descuento;
+
+                        let complementoBoleto = tipoBoleto == 0 ? '' : boleto.detalle_credencial.length == 0 ? '' : `<b>Folio Credencial:</b> ${boleto.detalle_credencial}`;
+
+                        $('#lblTipoBoleto').html( tipoBoleto == 0 ? 'Tradicional' : `${boleto.venta_descuento_nombre} ${complementoBoleto}` );
+                    }
+                });
+            }
+        })
+        .catch(( error ) => {
+            $('#registro_id').val('Error al tratar de generar el documento, contacte con soporte técnico.');
+        });
+    });
+</script>
+</body>
+</html>

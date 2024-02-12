@@ -1,0 +1,194 @@
+<!--begin::Subheader-->
+<div class="subheader py-4 pt-lg-0 pb-lg-10 " id="kt_subheader">
+    <div class=" container-fluid  d-flex align-items-center justify-content-between flex-wrap">
+		<!--begin::Info-->
+        <div class="d-flex align-items-center py-2 mr-1">
+            <!--begin::Icon page-->
+            <button class="btn btn-icon btn-hover-icon-success mr-2 pl-0 justify-content-start d-none d-lg-flex">
+                <span class="svg-icon svg-icon-3x">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <rect x="0" y="0" width="24" height="24"/>
+                            <path d="M15.9497475,3.80761184 L13.0246125,6.73274681 C12.2435639,7.51379539 12.2435639,8.78012535 13.0246125,9.56117394 L14.4388261,10.9753875 C15.2198746,11.7564361 16.4862046,11.7564361 17.2672532,10.9753875 L20.1923882,8.05025253 C20.7341101,10.0447871 20.2295941,12.2556873 18.674559,13.8107223 C16.8453326,15.6399488 14.1085592,16.0155296 11.8839934,14.9444337 L6.75735931,20.0710678 C5.97631073,20.8521164 4.70998077,20.8521164 3.92893219,20.0710678 C3.1478836,19.2900192 3.1478836,18.0236893 3.92893219,17.2426407 L9.05556629,12.1160066 C7.98447038,9.89144078 8.36005124,7.15466739 10.1892777,5.32544095 C11.7443127,3.77040588 13.9552129,3.26588995 15.9497475,3.80761184 Z" fill="#000000"/>
+                            <path d="M16.6568542,5.92893219 L18.0710678,7.34314575 C18.4615921,7.73367004 18.4615921,8.36683502 18.0710678,8.75735931 L16.6913928,10.1370344 C16.3008685,10.5275587 15.6677035,10.5275587 15.2771792,10.1370344 L13.8629656,8.7228208 C13.4724413,8.33229651 13.4724413,7.69913153 13.8629656,7.30860724 L15.2426407,5.92893219 C15.633165,5.5384079 16.26633,5.5384079 16.6568542,5.92893219 Z" fill="#000000" opacity="0.3"/>
+                        </g>
+                    </svg>
+                </span>
+            </button>
+            <!--end::Icon page-->
+
+			<div class="d-flex flex-column mr-5">
+				<!--begin::Page Title-->
+	            <h4 class="text-dark font-weight-bold py-1 mr-5 my-0">
+                    Ajustar configuración del sistema
+                    <small class="text-muted">Actualización de parámetros para operar el sistema</small>
+	            </h4>
+				<!--end::Page Title-->
+
+	            <!--begin::Breadcrumb-->
+	            <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 m-0 font-size-sm">
+                    <li class="breadcrumb-item">
+                        <a href="/" class="text-muted">
+                            Disse tickets
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="javascript:void(0);" class="text-muted">
+                            Administración
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="javascript:void(0);" class="text-muted">
+                            Ajustes
+                        </a>
+                    </li>
+                </ul>
+				<!--end::Breadcrumb-->
+	        </div>
+        </div>
+		<!--end::Info-->
+
+        <!--begin::Toolbar-->
+        <!-- <div class="d-flex align-items-center flex-wrap py-2">
+            <button type="button" id="kt_general_actions_toggle" class="flex-shrink-0 btn btn-fixed-height btn-primary font-weight-bolder font-size-sm px-5">
+                <i class="flaticon2-add-1 icon-sm"></i> Nuevo
+            </button>
+        </div> -->
+        <!--end::Toolbar-->
+    </div>
+</div>
+
+<!--begin::Entry-->
+<div class="d-flex flex-column-fluid">
+    <!--begin::Container-->
+    <div class="container-fluid">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-2x nav-bolder justify-content-end">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#tabGeneral">Información de la empresa</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#tabBasico">Información base</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content mt-5">
+                    <div class="tab-pane fade show active" id="tabGeneral" role="tabpanel" aria-labelledby="tabBasico">
+                        <form class="form" id="formGenerales">
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label><span class="text-danger">*</span> Nombre:</label>
+                                    <input type="text" class="form-control" placeholder="Nombre del comercio" id="inputGeneralNombre" name="inputGeneralNombre"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <label><span class="text-danger">*</span> RFC:</label>
+                                    <input type="text" class="form-control" placeholder="Registro del comercio" id="inputGeneralRfc" name="inputGeneralRfc"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <label><span class="text-danger">*</span> Razón social:</label>
+                                    <input type="text" class="form-control" placeholder="Razón social del comercio" id="inputGeneralRazon" name="inputGeneralRazon"/>
+                                </div>
+                            </div>
+    
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label><span class="text-danger">*</span> Contacto:</label>
+                                    <input type="text" class="form-control" placeholder="Nombre del comerciante" id="inputGeneralContacto" name="inputGeneralContacto"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <label><span class="text-danger">*</span> E-mail:</label>
+                                    <input type="email" class="form-control" placeholder="Correo electronico" id="inputGeneralEmail" name="inputGeneralEmail"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <label><span class="text-danger">*</span> Teléfono:</label>
+                                    <input type="number" class="form-control" placeholder="Teléfono de contacto" id="inputGeneralTel" name="inputGeneralTel"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label><span class="text-danger">*</span> Dirección 1:</label>
+                                    <input type="text" class="form-control" placeholder="Dirección principal" id="inputGeneralDir1" name="inputGeneralDir1"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Dirección 2:</label>
+                                    <input type="text" class="form-control" placeholder="Dirección complementario" id="inputGeneralDir2" name="inputGeneralDir2"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="inputGeneralSucursal"><span class="text-danger">*</span> Sucursal:</label>
+                                    <select class="form-control selectpicker" id="inputGeneralSucursal" name="inputGeneralSucursal" >
+                                        <option value="01">AICM - Aeropuerto Internacional de la Ciudad de México</option>
+                                        <option value="02">AIFA - Aeropuerto Internacional Felipe Ángeles</option>
+                                    </select>
+                                    <!-- <span class="form-text text-muted">Se usara para imprimir vouchers</span> -->
+                                </div>
+                            </div>
+    
+                            <div class="card-footer px-0 text-right">
+                                <button type="button" class="btn btn-primary" id="btnGuardarEmpresa">
+                                    ¡Guardar cambios!
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="tab-pane fade" id="tabBasico" role="tabpanel" aria-labelledby="tabTicket">
+                        <form class="form" id="formBase">
+                            <div class="form-group row mb-5">
+                                <div class="col-md-4">
+                                    <label for="inputBaseImpresora"><span class="text-danger">*</span> Impresora de tickets:</label>
+                                    <select class="form-control" id="inputBaseImpresora" name="inputBaseImpresora" >
+                                        <option value="0">- Sin impresora -</option>
+                                    </select>
+                                    <!-- <span class="form-text text-muted">Se usara para imprimir vouchers</span> -->
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label for="inputBaseImpresoraTamanio"><span class="text-danger">*</span> Configuración de la Impresora:</label>
+                                    <select class="form-control selectpicker" id="inputBaseImpresoraTamanio" name="inputBaseImpresoraTamanio" >
+                                        <option value="5.0cm">- Impresora de 50 MM -</option>
+                                        <option value="7.2cm">- Impresora de 80 MM -</option>
+                                    </select>
+                                    <!-- <span class="form-text text-muted">Se usara para imprimir vouchers</span> -->
+                                </div>
+                            </div>
+    
+                            <div class="separator separator-dashed mb-5"></div>
+    
+                            <div class="form-group row">
+                                <div class="col-md-7">
+                                    <label><span class="text-danger">*</span> Formas de pago:</label>
+                                    <div class="checkbox-inline">
+                                        <label class="checkbox checkbox-primary">
+                                            <input type="checkbox" name="inputBaseFormaPago" id="inputBaseEfectivo"/>
+                                            <span></span>
+                                            Efectivo
+                                        </label>
+                                        <label class="checkbox checkbox-primary">
+                                            <input type="checkbox" name="inputBaseFormaPago" id="inputBaseTarjeta"/>
+                                            <span></span>
+                                            Tarjeta presente
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <div class="card-footer px-0 text-right">
+                                <button type="button" class="btn btn-primary" id="btnGuardarBase">
+                                    ¡Guardar cambios!
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end::Notice-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Entry-->
+
+<!-- Script principal -->
+<script src="resources/js/pages/ajuste.script.js?v=1.1.1"></script>

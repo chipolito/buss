@@ -1,0 +1,689 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<!--begin::Head-->
+<head>
+    <meta charset="utf-8"/>
+    <title>Disse Tickets | <%= pageName %></title>
+    <meta name="description" content="Punto de venta para boletos de autobus"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+    <!--begin::Fonts-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700"/>
+    <!--end::Fonts-->
+
+    <!--begin::Global Theme Styles(used by all pages)-->    
+    <link href="resources/plugins/global/plugins.bundle1036.css?v=2.1.1" rel="stylesheet" type="text/css" />
+    <link href="resources/plugins/custom/prismjs/prismjs.bundle1036.css?v=2.1.1" rel="stylesheet" type="text/css" />
+    <link href="resources/css/style.bundle1036.css?v=2.1.1" rel="stylesheet" type="text/css" />
+    <!--end::Global Theme Styles-->
+    
+    <link rel="shortcut icon" href="resources/images/general/favicon.ico"/>
+
+    <script src="resources/plugins/global/plugins.bundle1036.js?v=2.1.1"></script>
+</head>
+<!--end::Head-->
+
+<style type="text/css">
+    .popover{
+        max-width:350px;
+    }
+</style>
+
+<!--begin::Body-->
+<body  id="kt_body" data-sidebar="<%= sidebarState %>"  class="page-loading-enabled page-loading header-fixed header-mobile-fixed subheader-enabled sidebar-enabled page-loading"  >
+    <!--begin::Page loader-->
+    <div class="page-loader page-loader-logo">
+        <img alt="Logo" class="max-h-75px" src="resources/images/general/ASA-Logotipo.png" alt="ASA-Logotipo"/>
+        <div class="spinner spinner-primary spinner-left pl-13 mt-3"> Espere un momento por favor</div> 
+    </div>
+    <!--end::Page Loader-->
+        
+    <!--begin::Main-->
+	<!--begin::Header Mobile-->
+    <div id="kt_header_mobile" class="header-mobile  header-mobile-fixed " >
+        <!--begin::Logo-->
+        <a href="javascript:void(0);">
+            <img alt="Logo" src="resources/images/general/ASA-Logotipo-w.png" class="max-h-30px"/>
+        </a>
+        <!--end::Logo-->
+
+	    <!--begin::Toolbar-->
+	    <div class="d-flex align-items-center">		
+			<button class="btn btn-hover-icon-primary p-0" id="kt_aside_mobile_toggle">
+                <span class="svg-icon svg-icon-2x">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <rect x="0" y="0" width="24" height="24"/>
+                            <path d="M6,7 C7.1045695,7 8,6.1045695 8,5 C8,3.8954305 7.1045695,3 6,3 C4.8954305,3 4,3.8954305 4,5 C4,6.1045695 4.8954305,7 6,7 Z M6,9 C3.790861,9 2,7.209139 2,5 C2,2.790861 3.790861,1 6,1 C8.209139,1 10,2.790861 10,5 C10,7.209139 8.209139,9 6,9 Z" fill="#000000" fill-rule="nonzero"/>
+                            <path d="M7,11.4648712 L7,17 C7,18.1045695 7.8954305,19 9,19 L15,19 L15,21 L9,21 C6.790861,21 5,19.209139 5,17 L5,8 L5,7 L7,7 L7,8 C7,9.1045695 7.8954305,10 9,10 L15,10 L15,12 L9,12 C8.27142571,12 7.58834673,11.8052114 7,11.4648712 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"/>
+                            <path d="M18,22 C19.1045695,22 20,21.1045695 20,20 C20,18.8954305 19.1045695,18 18,18 C16.8954305,18 16,18.8954305 16,20 C16,21.1045695 16.8954305,22 18,22 Z M18,24 C15.790861,24 14,22.209139 14,20 C14,17.790861 15.790861,16 18,16 C20.209139,16 22,17.790861 22,20 C22,22.209139 20.209139,24 18,24 Z" fill="#000000" fill-rule="nonzero"/>
+                            <path d="M18,13 C19.1045695,13 20,12.1045695 20,11 C20,9.8954305 19.1045695,9 18,9 C16.8954305,9 16,9.8954305 16,11 C16,12.1045695 16.8954305,13 18,13 Z M18,15 C15.790861,15 14,13.209139 14,11 C14,8.790861 15.790861,7 18,7 C20.209139,7 22,8.790861 22,11 C22,13.209139 20.209139,15 18,15 Z" fill="#000000" fill-rule="nonzero"/>
+                        </g>
+                    </svg>
+                </span>
+            </button>
+		
+			<button class="btn btn-hover-icon-primary p-0 ml-5" id="kt_sidebar_mobile_toggle">
+                <span class="svg-icon svg-icon-2x">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <rect x="0" y="0" width="24" height="24"/>
+                            <path d="M10,4 L21,4 C21.5522847,4 22,4.44771525 22,5 L22,7 C22,7.55228475 21.5522847,8 21,8 L10,8 C9.44771525,8 9,7.55228475 9,7 L9,5 C9,4.44771525 9.44771525,4 10,4 Z M10,10 L21,10 C21.5522847,10 22,10.4477153 22,11 L22,13 C22,13.5522847 21.5522847,14 21,14 L10,14 C9.44771525,14 9,13.5522847 9,13 L9,11 C9,10.4477153 9.44771525,10 10,10 Z M10,16 L21,16 C21.5522847,16 22,16.4477153 22,17 L22,19 C22,19.5522847 21.5522847,20 21,20 L10,20 C9.44771525,20 9,19.5522847 9,19 L9,17 C9,16.4477153 9.44771525,16 10,16 Z" fill="#000000"/>
+                            <rect fill="#000000" opacity="0.3" x="2" y="4" width="5" height="16" rx="1"/>
+                        </g>
+                    </svg>
+                </span>
+            </button>
+		</div>
+	    <!--end::Toolbar-->
+    </div>
+    <!--end::Header Mobile-->		   
+	
+	<div class="d-flex flex-column flex-root">
+		<!--begin::Page-->
+		<div class="d-flex flex-row flex-column-fluid page">
+            <!--begin::Aside-->
+            <div class="aside aside-left d-flex flex-column  " id="kt_aside">
+                <!--begin::Brand-->
+                <div class="aside-brand d-none d-lg-flex flex-column align-items-center flex-column-auto pt-10 pb-5">
+                    <!--begin::Logo-->
+                    <a href="javascript:void(0);">
+                        <img alt="Logo" src="resources/images/general/ASA-Logotipo-w.png" class="max-w-100px"/>
+                    </a>
+                    <!--end::Logo-->
+                </div>
+                <!--end::Brand-->
+
+                <!--begin::Nav Wrapper-->
+                <div class="aside-nav d-flex flex-column justify-content-lg-center align-items-center flex-column-fluid py-5 pt-lg-0 pb-lg-20">
+                    <!--begin::Nav-->
+                    <ul class="nav flex-column">
+                        <!--begin::Item-->
+                        <li class="nav-item mb-3" data-toggle="tooltip" data-placement="right" data-container="body" data-boundary="window" title="Inicio | Board">
+                            <a href="/" class="nav-link btn btn-icon-white btn-hover-primary btn-lg asideMenu asideMenuHome">
+                                <i class="flaticon2-protection" style="font-size: 2rem; padding-right: 0px; margin-left: 5px;"></i>
+                            </a>
+                        </li>
+                        <!--end::Item-->
+
+                        <!--begin::Item-->
+                        <li class="nav-item mb-3" data-toggle="tooltip" data-placement="right" data-container="body" data-boundary="window" title="Punto de venta">
+                            <a href="/Venta" class="nav-link btn btn-icon-white btn-hover-primary btn-lg asideMenu asideMenuVenta">
+                                <i class="flaticon2-shopping-cart-1" style="font-size: 2rem; padding-right: 0px; margin-left: 5px;"></i>
+                            </a>
+                        </li>
+						<!--end::Item-->
+
+                        <!--begin::Item-->
+                        <li class="nav-item mb-3" data-toggle="tooltip" data-placement="right" data-container="body" data-boundary="window" title="Cortes de caja">
+                            <a href="/HistorialCorte" class="nav-link btn btn-icon-white btn-hover-primary btn-lg asideMenu asideMenuCorte">
+                                <i class="flaticon2-line-chart" style="font-size: 2rem; padding-right: 0px; margin-left: 5px;"></i>
+                            </a>
+                        </li>
+						<!--end::Item-->
+
+                        <!--begin::Item-->
+                        <li class="nav-item mb-3" data-toggle="tooltip" data-placement="right" data-container="body" data-boundary="window" title="Pantalla completa">
+                            <a href="javascript:void(0);" class="nav-link btn btn-icon-white btn-hover-primary btn-lg" id="btnFullScreen">
+                                <i class="flaticon-arrows" style="font-size: 2rem; padding-right: 0px; margin-left: 5px;"></i>
+                            </a>
+                        </li>
+						<!--end::Item-->
+                    </ul>
+                    <!--end::Nav-->
+                </div>
+                <!--end::Nav Wrapper-->
+
+			    <!--begin::Footer-->
+		        <div class="aside-footer d-flex flex-column align-items-center flex-column-auto pb-5 pb-lg-8">
+                    <!--begin::User-->
+                    <div class="mb-7">
+                        <a href="javascript:void(0);" id="formUserInfo" class="symbol symbol-circle symbol-40" data-form="userdata">
+                            <!-- <img alt="Avatar" src="https://preview.keenthemes.com/keen-v2/theme/demo2/dist/assets/media/users/150-3.jpg" class="h-75 align-self-end"/> -->
+                            <span class="symbol-label font-size-h1" id="labelLetraUsuario">#</span>
+                        </a>
+                    </div>
+                    <!--end::User-->                    
+			
+					<!--begin::Quick Actions-->
+				    <a href="javascript:void(0);" class="btn btn-icon btn-icon-white btn-hover-icon-primary btn-lg asideMenu asideMenuOptions" id="kt_quick_actions_toggle" data-toggle="tooltip" data-placement="right" data-container="body" data-boundary="window" title="Administración">
+					    <span class="svg-icon svg-icon-3x" >
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <rect x="0" y="0" width="24" height="24"/>
+                                    <rect fill="#000000" opacity="0.3" x="4" y="4" width="4" height="4" rx="1"/>
+                                    <path d="M5,10 L7,10 C7.55228475,10 8,10.4477153 8,11 L8,13 C8,13.5522847 7.55228475,14 7,14 L5,14 C4.44771525,14 4,13.5522847 4,13 L4,11 C4,10.4477153 4.44771525,10 5,10 Z M11,4 L13,4 C13.5522847,4 14,4.44771525 14,5 L14,7 C14,7.55228475 13.5522847,8 13,8 L11,8 C10.4477153,8 10,7.55228475 10,7 L10,5 C10,4.44771525 10.4477153,4 11,4 Z M11,10 L13,10 C13.5522847,10 14,10.4477153 14,11 L14,13 C14,13.5522847 13.5522847,14 13,14 L11,14 C10.4477153,14 10,13.5522847 10,13 L10,11 C10,10.4477153 10.4477153,10 11,10 Z M17,4 L19,4 C19.5522847,4 20,4.44771525 20,5 L20,7 C20,7.55228475 19.5522847,8 19,8 L17,8 C16.4477153,8 16,7.55228475 16,7 L16,5 C16,4.44771525 16.4477153,4 17,4 Z M17,10 L19,10 C19.5522847,10 20,10.4477153 20,11 L20,13 C20,13.5522847 19.5522847,14 19,14 L17,14 C16.4477153,14 16,13.5522847 16,13 L16,11 C16,10.4477153 16.4477153,10 17,10 Z M5,16 L7,16 C7.55228475,16 8,16.4477153 8,17 L8,19 C8,19.5522847 7.55228475,20 7,20 L5,20 C4.44771525,20 4,19.5522847 4,19 L4,17 C4,16.4477153 4.44771525,16 5,16 Z M11,16 L13,16 C13.5522847,16 14,16.4477153 14,17 L14,19 C14,19.5522847 13.5522847,20 13,20 L11,20 C10.4477153,20 10,19.5522847 10,19 L10,17 C10,16.4477153 10.4477153,16 11,16 Z M17,16 L19,16 C19.5522847,16 20,16.4477153 20,17 L20,19 C20,19.5522847 19.5522847,20 19,20 L17,20 C16.4477153,20 16,19.5522847 16,19 L16,17 C16,16.4477153 16.4477153,16 17,16 Z" fill="#000000"/>
+                                </g>
+                            </svg>
+                        </span>
+                    </a>
+                </div>
+		        <!--end::Footer-->
+	        </div>
+            <!--end::Aside-->
+			
+			<!--begin::Wrapper-->
+			<div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
+				<!--begin::Content-->
+				<div class="content  d-flex flex-column flex-column-fluid" id="kt_content">
+                    <%- include(`${childPage}.ejs`) %>
+                </div>
+				<!--end::Content-->
+
+				<!--begin::Footer-->
+                <div class="footer py-2 py-lg-0 my-5 my-lg-0  d-flex flex-lg-column " id="kt_footer">
+                    <!--begin::Container-->
+                    <div class=" container  d-flex flex-column flex-md-row align-items-center justify-content-between">
+                        <!--begin::Copyright-->
+                        <div class="text-dark order-2 order-md-1">
+                            <span class="text-muted font-weight-bold mr-2">2023&copy;</span>
+                            <a href="https://tkpos.com" target="_blank" class="text-dark-50 text-hover-success">N10 Consulting</a>
+                        </div>
+                        <!--end::Copyright-->
+
+                        <!--begin::Nav-->
+                        <div class="nav nav-dark order-1 order-md-2">
+                            <a href="javascript:void(0);" class="nav-link pr-3 pl-0 text-hover-success" data-toggle="modal" data-target="#mdlAcercaDe">Acerca de disse ticket</a>
+                            <a href="javascript:void(0);" class="nav-link pr-3 pl-0 text-hover-success">Terminos</a>
+							<a href="javascript:void(0);" class="nav-link px-3 text-hover-success">Condiciones</a>
+							<a href="javascript:void(0);" class="nav-link pl-3 pr-0 text-hover-success">Contacto</a>
+                        </div>
+                        <!--end::Nav-->
+                    </div>
+                    <!--end::Container-->
+                </div>
+                <!--end::Footer-->
+			</div>
+			<!--end::Wrapper-->
+
+            <!--begin::Sidebar-->
+            <div class="sidebar sidebar-right d-flex flex-row-auto flex-column bg-white " id="kt_sidebar">
+                <!--begin::Sidebar Header-->
+                <div class="sidebar-header flex-column-auto pt-5 pb-5 px-5 pt-lg-14 px-lg-15">
+                   
+                </div>
+                <!--end::Sidebar Header-->
+
+                <!--begin::Sidebar Content-->
+                <div class="sidebar-content flex-column-fluid pb-10 pt-7 px-5 px-lg-15">
+                    <div class="sidebar-wrapper scroll-pull h-100">
+                        <!-- Pantalla principal -->
+                        <div id="seccionWelcome" class="d-flex flex-column h-100 justify-content-center pnlSeccion">
+                            <img class="mx-auto mb-10 w-75" src="resources/images/general/ASA-Logotipo.png" style="width: fit-content;">
+                        </div>
+                    </div>
+                </div>
+                <!--end::Sidebar Content-->
+            </div>
+            <!--end::Sidebar-->
+		</div>
+		<!--end::Page-->
+	</div>
+    <!--end::Main-->
+
+    <!--begin::Panel botonera de administracion-->
+    <div id="kt_quick_actions" class="offcanvas offcanvas-left p-10">
+        <!--begin::Header-->
+        <div class="offcanvas-header d-flex align-items-center justify-content-between pb-10">
+            <h3 class="font-weight-bold m-0">
+                Administración
+                <small class="text-muted font-size-sm ml-2">Catálogos y más</small>
+            </h3>
+            <a href="#" class="btn btn-xs btn-icon btn-light btn-hover-danger" id="kt_quick_actions_close">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </a>
+        </div>
+        <!--end::Header-->
+
+        <!--begin::Content-->
+        <div class="offcanvas-content pr-5 mr-n5">
+            <div class="row gutter-b">
+                <!--begin::Item-->
+                <div class="col-6">
+                    <a href="/CatalogoAutobus" class="btn btn-block btn-light btn-hover-primary text-dark-50 text-center py-10 px-5 asideMenuAutobus">
+                        <span class="svg-icon svg-icon-primary svg-icon-3x m-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <rect x="0" y="0" width="24" height="24"/>
+                                    <path d="M4,22 L2,22 C2,19.2385763 4.23857625,18 7,18 L17,18 C19.7614237,18 22,19.2385763 22,22 L20,22 C20,20.3431458 18.6568542,20 17,20 L7,20 C5.34314575,20 4,20.3431458 4,22 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"/>
+                                    <rect fill="#000000" x="1" y="14" width="22" height="6" rx="1"/>
+                                    <path d="M13,13 L11,13 L11,12 C11,11.4477153 10.5522847,11 10,11 L6,11 C5.44771525,11 5,11.4477153 5,12 L5,13 L4,13 C3.44771525,13 3,12.5522847 3,12 L3,8 C3,6.8954305 3.8954305,6 5,6 L19,6 C20.1045695,6 21,6.8954305 21,8 L21,12 C21,12.5522847 20.5522847,13 20,13 L19,13 L19,12 C19,11.4477153 18.5522847,11 18,11 L14,11 C13.4477153,11 13,11.4477153 13,12 L13,13 Z" fill="#000000" opacity="0.3"/>
+                                </g>
+                            </svg>
+                        </span>
+                        <span class="d-block font-weight-bold font-size-h6 mt-2">Autobuses</span>
+                    </a>
+                </div>
+                <!--end::Item-->
+
+                <!--begin::Item-->
+                <div class="col-6">
+                    <a href="/CatalogoCorrida" class="btn btn-block btn-light btn-hover-primary text-dark-50 text-center py-10 px-5 asideMenuCorrida">
+                        <span class="svg-icon svg-icon-primary svg-icon-3x m-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <rect x="0" y="0" width="24" height="24"/>
+                                    <path d="M16.5428932,17.4571068 L11,11.9142136 L11,4 C11,3.44771525 11.4477153,3 12,3 C12.5522847,3 13,3.44771525 13,4 L13,11.0857864 L17.9571068,16.0428932 L20.1464466,13.8535534 C20.3417088,13.6582912 20.6582912,13.6582912 20.8535534,13.8535534 C20.9473216,13.9473216 21,14.0744985 21,14.2071068 L21,19.5 C21,19.7761424 20.7761424,20 20.5,20 L15.2071068,20 C14.9309644,20 14.7071068,19.7761424 14.7071068,19.5 C14.7071068,19.3673918 14.7597852,19.2402148 14.8535534,19.1464466 L16.5428932,17.4571068 Z" fill="#000000" fill-rule="nonzero"/>
+                                    <path d="M7.24478854,17.1447885 L9.2464466,19.1464466 C9.34021479,19.2402148 9.39289321,19.3673918 9.39289321,19.5 C9.39289321,19.7761424 9.16903559,20 8.89289321,20 L3.52893218,20 C3.25278981,20 3.02893218,19.7761424 3.02893218,19.5 L3.02893218,14.136039 C3.02893218,14.0034307 3.0816106,13.8762538 3.17537879,13.7824856 C3.37064094,13.5872234 3.68722343,13.5872234 3.88248557,13.7824856 L5.82567301,15.725673 L8.85405776,13.1631936 L10.1459422,14.6899662 L7.24478854,17.1447885 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"/>
+                                </g>
+                            </svg>
+                        </span>
+                        <span class="d-block font-weight-bold font-size-h6 mt-2">Corridas</span>
+                    </a>
+                </div>
+                <!--end::Item-->
+            </div>
+            <div class="row gutter-b">
+                <!--begin::Item-->
+                <div class="col-6">
+                    <a href="/CatalogoDescuento" class="btn btn-block btn-light btn-hover-primary text-dark-50 text-center py-10 px-5 asideMenuDescuento">
+                        <span class="svg-icon svg-icon-primary svg-icon-3x m-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <rect x="0" y="0" width="24" height="24"/>
+                                    <polygon fill="#000000" opacity="0.3" points="12 20.0218549 8.47346039 21.7286168 6.86905972 18.1543453 3.07048824 17.1949849 4.13894342 13.4256452 1.84573388 10.2490577 5.08710286 8.04836581 5.3722735 4.14091196 9.2698837 4.53859595 12 1.72861679 14.7301163 4.53859595 18.6277265 4.14091196 18.9128971 8.04836581 22.1542661 10.2490577 19.8610566 13.4256452 20.9295118 17.1949849 17.1309403 18.1543453 15.5265396 21.7286168"/>
+                                    <polygon fill="#000000" points="14.0890818 8.60255815 8.36079737 14.7014391 9.70868621 16.049328 15.4369707 9.950447"/>
+                                    <path d="M10.8543431,9.1753866 C10.8543431,10.1252593 10.085524,10.8938719 9.13585777,10.8938719 C8.18793881,10.8938719 7.41737243,10.1252593 7.41737243,9.1753866 C7.41737243,8.22551387 8.18793881,7.45690126 9.13585777,7.45690126 C10.085524,7.45690126 10.8543431,8.22551387 10.8543431,9.1753866" fill="#000000" opacity="0.3"/>
+                                    <path d="M14.8641422,16.6221564 C13.9162233,16.6221564 13.1456569,15.8535438 13.1456569,14.9036711 C13.1456569,13.9520555 13.9162233,13.1851857 14.8641422,13.1851857 C15.8138085,13.1851857 16.5826276,13.9520555 16.5826276,14.9036711 C16.5826276,15.8535438 15.8138085,16.6221564 14.8641422,16.6221564 Z" fill="#000000" opacity="0.3"/>
+                                </g>
+                            </svg>
+                        </span>
+                        <span class="d-block font-weight-bold font-size-h6 mt-2">Descuentos</span>
+                    </a>
+                </div>
+                <!--end::Item-->
+
+                <!--begin::Item-->
+                <div class="col-6">
+                    <a href="/CatalogoUsuario" class="btn btn-block btn-light btn-hover-primary text-dark-50 text-center py-10 px-5 asideMenuUsuario">
+                        <span class="svg-icon svg-icon-3x svg-icon-primary m-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <polygon points="0 0 24 0 24 24 0 24"/>
+                                    <path d="M18,14 C16.3431458,14 15,12.6568542 15,11 C15,9.34314575 16.3431458,8 18,8 C19.6568542,8 21,9.34314575 21,11 C21,12.6568542 19.6568542,14 18,14 Z M9,11 C6.790861,11 5,9.209139 5,7 C5,4.790861 6.790861,3 9,3 C11.209139,3 13,4.790861 13,7 C13,9.209139 11.209139,11 9,11 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"/>
+                                    <path d="M17.6011961,15.0006174 C21.0077043,15.0378534 23.7891749,16.7601418 23.9984937,20.4 C24.0069246,20.5466056 23.9984937,21 23.4559499,21 L19.6,21 C19.6,18.7490654 18.8562935,16.6718327 17.6011961,15.0006174 Z M0.00065168429,20.1992055 C0.388258525,15.4265159 4.26191235,13 8.98334134,13 C13.7712164,13 17.7048837,15.2931929 17.9979143,20.2 C18.0095879,20.3954741 17.9979143,21 17.2466999,21 C13.541124,21 8.03472472,21 0.727502227,21 C0.476712155,21 -0.0204617505,20.45918 0.00065168429,20.1992055 Z" fill="#000000" fill-rule="nonzero"/>
+                                </g>
+                            </svg>
+                        </span>
+                        <span class="d-block font-weight-bold font-size-h6 mt-2">Usuarios</span>
+                    </a>
+                </div>
+                <!--end::Item-->
+            </div>
+            <div class="row gutter-b">
+                <!--begin::Item-->
+                <div class="col-6">
+                    <a href="/Ajustes" class="btn btn-block btn-light btn-hover-primary text-dark-50 text-center py-10 px-5 asideMenuAjuste">
+                        <span class="svg-icon svg-icon-primary svg-icon-3x m-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <rect x="0" y="0" width="24" height="24"/>
+                                    <path d="M15.9497475,3.80761184 L13.0246125,6.73274681 C12.2435639,7.51379539 12.2435639,8.78012535 13.0246125,9.56117394 L14.4388261,10.9753875 C15.2198746,11.7564361 16.4862046,11.7564361 17.2672532,10.9753875 L20.1923882,8.05025253 C20.7341101,10.0447871 20.2295941,12.2556873 18.674559,13.8107223 C16.8453326,15.6399488 14.1085592,16.0155296 11.8839934,14.9444337 L6.75735931,20.0710678 C5.97631073,20.8521164 4.70998077,20.8521164 3.92893219,20.0710678 C3.1478836,19.2900192 3.1478836,18.0236893 3.92893219,17.2426407 L9.05556629,12.1160066 C7.98447038,9.89144078 8.36005124,7.15466739 10.1892777,5.32544095 C11.7443127,3.77040588 13.9552129,3.26588995 15.9497475,3.80761184 Z" fill="#000000"/>
+                                    <path d="M16.6568542,5.92893219 L18.0710678,7.34314575 C18.4615921,7.73367004 18.4615921,8.36683502 18.0710678,8.75735931 L16.6913928,10.1370344 C16.3008685,10.5275587 15.6677035,10.5275587 15.2771792,10.1370344 L13.8629656,8.7228208 C13.4724413,8.33229651 13.4724413,7.69913153 13.8629656,7.30860724 L15.2426407,5.92893219 C15.633165,5.5384079 16.26633,5.5384079 16.6568542,5.92893219 Z" fill="#000000" opacity="0.3"/>
+                                </g>
+                            </svg>
+                        </span>
+                        <span class="d-block font-weight-bold font-size-h6 mt-2">Ajustes</span>
+                    </a>
+                </div>
+                <!--end::Item-->
+
+                <!--begin::Item-->
+                <div class="col-6">
+                    <a href="javascript:void(0);" class="btn btn-block btn-light btn-hover-primary text-dark-50 text-center py-10 px-5" data-toggle="modal" data-target="#mdlHelpAsa">
+                        <span class="svg-icon svg-icon-primary svg-icon-3x m-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <rect x="0" y="0" width="24" height="24"/>
+                                    <path d="M16.4508979,17.4029496 L15.1784978,15.8599014 C16.324501,14.9149052 17,13.5137472 17,12 C17,10.4912085 16.3289582,9.09418404 15.1893841,8.14910121 L16.466112,6.60963188 C18.0590936,7.93073905 19,9.88958759 19,12 C19,14.1173586 18.0528606,16.0819686 16.4508979,17.4029496 Z M19.0211112,20.4681628 L17.7438102,18.929169 C19.7927036,17.2286725 21,14.7140097 21,12 C21,9.28974232 19.7960666,6.77820732 17.7520315,5.07766256 L19.031149,3.54017812 C21.5271817,5.61676443 23,8.68922234 23,12 C23,15.3153667 21.523074,18.3916375 19.0211112,20.4681628 Z M7.54910207,17.4029496 C5.94713944,16.0819686 5,14.1173586 5,12 C5,9.88958759 5.94090645,7.93073905 7.53388797,6.60963188 L8.81061588,8.14910121 C7.67104182,9.09418404 7,10.4912085 7,12 C7,13.5137472 7.67549895,14.9149052 8.82150222,15.8599014 L7.54910207,17.4029496 Z M4.9788888,20.4681628 C2.47692603,18.3916375 1,15.3153667 1,12 C1,8.68922234 2.47281829,5.61676443 4.96885102,3.54017812 L6.24796852,5.07766256 C4.20393339,6.77820732 3,9.28974232 3,12 C3,14.7140097 4.20729644,17.2286725 6.25618985,18.929169 L4.9788888,20.4681628 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"/>
+                                    <path d="M11,14.2919782 C10.1170476,13.9061998 9.5,13.0251595 9.5,12 C9.5,10.6192881 10.6192881,9.5 12,9.5 C13.3807119,9.5 14.5,10.6192881 14.5,12 C14.5,13.0251595 13.8829524,13.9061998 13,14.2919782 L13,20 C13,20.5522847 12.5522847,21 12,21 C11.4477153,21 11,20.5522847 11,20 L11,14.2919782 Z" fill="#000000"/>
+                                </g>
+                            </svg>
+                        </span>
+                        <span class="d-block font-weight-bold font-size-h6 mt-2">Información</span>
+                    </a>
+                </div>
+                <!--end::Item-->
+            </div>
+        </div>
+        <!--end::Content-->
+    </div>
+    <!--end::Panel botonera de administracion-->
+
+    <!-- Modal para mostrar acerca de -->
+    <div class="modal fade " id="mdlAcercaDe" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content bg-gray-900">
+                <div class="modal-body text-center text-white">
+                    <p class="text-left">Acerca de Disse Tickets</p>
+
+                    <img src="resources/images/general/N10.png" class="w-50 mb-5"/>
+
+                    <p>
+                        10.63.4-win-ddl-public (20231010121923)<br>
+                        2023&copy; Nivel 10 Consulting
+
+                    </p>
+
+                    <p class="text-left">
+                        Disse tickets es un producto echo y mantenido por N10 Consulting.<br>
+                        Este programa no es un software gratuito; puede redistribuirlo y/o modificarlo según los términos legales que aplique.
+                    </p>
+
+                    <div class="text-right mt-5">
+                        <button type="button" class="btn btn-light font-weight-bold btn-block" data-dismiss="modal">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para mostrar ayuda asa -->
+    <div class="modal fade " id="mdlHelpAsa" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content bg-gray-900">
+                <div class="modal-body text-center text-white">
+                    <p class="text-left">Ayuda y soporte técnico</p>
+
+                    <img src="resources/images/general/ASA-Logotipo.png" class="w-50 mb-5"/>
+
+                    <p class="text-left">
+                        Para solicitar soporte técnico de esta aplicación, favor de comunicarse a la extensión 2995 opción 1. En donde con gusto te atenderemos.
+                    </p>
+
+                    <div class="text-right mt-5">
+                        <button type="button" class="btn btn-light font-weight-bold btn-block" data-dismiss="modal">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+                
+    <!--begin::Scrolltop-->
+    <div id="kt_scrolltop" class="scrolltop">
+        <span class="svg-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                    <polygon points="0 0 24 0 24 24 0 24"/>
+                    <rect fill="#000000" opacity="0.3" x="11" y="10" width="2" height="10" rx="1"/>
+                    <path d="M6.70710678,12.7071068 C6.31658249,13.0976311 5.68341751,13.0976311 5.29289322,12.7071068 C4.90236893,12.3165825 4.90236893,11.6834175 5.29289322,11.2928932 L11.2928932,5.29289322 C11.6714722,4.91431428 12.2810586,4.90106866 12.6757246,5.26284586 L18.6757246,10.7628459 C19.0828436,11.1360383 19.1103465,11.7686056 18.7371541,12.1757246 C18.3639617,12.5828436 17.7313944,12.6103465 17.3242754,12.2371541 L12.0300757,7.38413782 L6.70710678,12.7071068 Z" fill="#000000" fill-rule="nonzero"/>
+                </g>
+            </svg>
+        </span>
+    </div>
+    <!--end::Scrolltop-->
+ 
+    <!--begin::Global Config(global config for global JS scripts)-->
+    <script>
+        var HOST_URL = "/";
+
+        var KTAppSettings = {
+            "breakpoints": {
+                "sm": 576,
+                "md": 768,
+                "lg": 992,
+                "xl": 1200,
+                "xxl": 1200
+            },
+            "colors": {
+                "theme": {
+                    "base": {
+                        "white": "#ffffff",
+                        "primary": "#8950FC",
+                        "secondary": "#E5EAEE",
+                        "success": "#1BC5BD",
+                        "info": "#8950FC",
+                        "warning": "#FFA800",
+                        "danger": "#F64E60",
+                        "light": "#F3F6F9",
+                        "dark": "#212121"
+                    },
+                    "light": {
+                        "white": "#ffffff",
+                        "primary": "#E1E9FF",
+                        "secondary": "#ECF0F3",
+                        "success": "#C9F7F5",
+                        "info": "#EEE5FF",
+                        "warning": "#FFF4DE",
+                        "danger": "#FFE2E5",
+                        "light": "#F3F6F9",
+                        "dark": "#D6D6E0"
+                    },
+                    "inverse": {
+                        "white": "#ffffff",
+                        "primary": "#ffffff",
+                        "secondary": "#212121",
+                        "success": "#ffffff",
+                        "info": "#ffffff",
+                        "warning": "#ffffff",
+                        "danger": "#ffffff",
+                        "light": "#464E5F",
+                        "dark": "#ffffff"
+                    }
+                },
+                "gray": {
+                    "gray-100": "#F3F6F9",
+                    "gray-200": "#ECF0F3",
+                    "gray-300": "#E5EAEE",
+                    "gray-400": "#D6D6E0",
+                    "gray-500": "#B5B5C3",
+                    "gray-600": "#80808F",
+                    "gray-700": "#464E5F",
+                    "gray-800": "#1B283F",
+                    "gray-900": "#212121"
+                }
+            },
+            "font-family": "Poppins"
+        };
+        
+        var translateKTable = {
+            records: {
+                noRecords: 'Sin registros'
+            },
+            toolbar: {
+                pagination: {
+                    items: {
+                        default: {
+                            first: 'Primero',
+                            prev: 'Anterior',
+                            next: 'Siguiente',
+                            last: 'Ultimo',
+                            more: 'Mas paginas',
+                            input: 'Numero de pagina',
+                            select: 'Registros por pagina'
+                        },
+                        info: 'Mostrando {{start}} - {{end}} de {{total}} registros'
+                    }
+                }
+            }
+        };
+        
+        var currency = function(money){
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD', 
+                minimumFractionDigits: 2
+            }).format(money);
+        };
+    
+        var meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+        var marcarMenu = (asideMenu) => {
+            $(`.${asideMenu}`).addClass('active');
+        };
+    </script>
+    <!--end::Global Config-->
+
+    <!--begin::Global Theme Bundle(used by all pages)-->
+    <script src="resources/plugins/custom/prismjs/prismjs.bundle1036.js?v=2.1.1"></script>
+    <script src="resources/js/scripts.bundle1036.js?v=2.1.1"></script>
+    <!--end::Global Theme Bundle-->
+
+    <!--begin::Page Scripts(used by this page)-->
+    <!-- <script src="/keen-v2/theme/demo2/dist/assets/js/pages/builder.js?v=2.1.1"></script> -->
+    <!--end::Page Scripts-->
+
+    <!-- Metodos globales  -->
+    <script>
+        $(document).ready( () => {
+            $('[data-form="userdata"]').popover({
+                placement : 'right',
+                boundary: 'window',
+                trigger: 'focus',
+                container: 'body',
+                html : true,
+                title : 'Información de usuario',
+                content : `
+                    <div class="media">
+                        <a href="javascript:void(0);" class="symbol symbol-circle symbol-60 mr-3">
+                            <!-- <img alt="Avatar" src="https://preview.keenthemes.com/keen-v2/theme/demo2/dist/assets/media/users/150-3.jpg" class="h-75 align-self-end"/> -->
+                            <span class="symbol-label font-size-h1">${ '<%= actualUser %>'.charAt(0).toUpperCase() }</span>
+                        </a>
+                        <div class="media-body">
+                            <h5 class="media-heading"><%= actualUser %></h5>
+                            <p>Conviértete en la persona que atraiga los resultados que buscas</p>
+                        </div>
+                    </div>
+
+                    <div class="separator separator-solid"></div>
+
+                    <div class="navi navi-spacer-x-0 pt-3">
+                        <!--begin::Item-->
+                        <a href="/Miperfil" class="navi-item px-8">
+                            <div class="navi-link">
+                                <div class="navi-icon mr-2 mb-auto mt-1">
+                                    <i class="flaticon2-calendar-3 text-muted"></i>
+                                </div>
+                                <div class="navi-text">
+                                    <div class="font-weight-bold">
+                                        Mi Perfil
+                                    </div>
+                                    <div class="text-muted">
+                                        Configuración de la cuenta
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <!--end::Item-->
+
+                        <!--begin::Item-->
+                        <a href="/Log"  class="navi-item px-8">
+                            <div class="navi-link">
+                                <div class="navi-icon mr-2 mb-auto mt-1">
+                                    <i class="flaticon2-rocket-1 text-muted"></i>
+                                </div>
+                                <div class="navi-text">
+                                    <div class="font-weight-bold">
+                                        Mi Actividad
+                                    </div>
+                                    <div class="text-muted">
+                                        Registros de movimientos
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <!--end::Item-->
+
+                        <!--begin::Footer-->
+                        <div class="navi-separator mt-3"></div>
+                        <div class="navi-footer  px-8 pt-5">
+                            <a href="javascript:void(0);" class="btn btn-light-danger btn-block font-weight-bold btnExit">Salir del sistema</a>
+                        </div>
+                        <!--end::Footer-->
+                    </div>
+                `
+            });
+
+            $(document).on('click', '.popover .btnExit', alertLogout);
+
+            $('#labelLetraUsuario').html( '<%= actualUser %>'.charAt(0).toUpperCase() );
+        });
+
+        // Mostrar notificaciones 
+        function showMessage(color, title, msg){
+            var content = {
+                message: msg,
+                title: title,
+                icon: 'icon flaticon-exclamation-2 icon-md'
+            };
+
+            $.notify(content, {
+                type: color,
+                allow_dismiss: true,
+                newest_on_top: false,
+                mouse_over: false,
+                showProgressbar: false,
+                spacing: 10,
+                timer: 2000,
+                placement: {
+                    from: 'top',
+                    align: 'right'
+                },
+                offset: {
+                    x: 30,
+                    y: 30
+                },
+                delay: 1000,
+                z_index: 10000,
+                animate: {
+                    enter: 'animate__animated animate__bounceIn',
+                    exit: 'animate__animated animate__fadeOutUp'
+                }
+            });
+        }
+
+        // Mostrar alerta para cierre de session
+        function alertLogout(){
+            Swal.fire({
+                title: "¿Estas seguro?",
+                text: `Confirma que deseas salir y cerrar la sesión`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "<i class='flaticon2-right-arrow icon-md'></i> Confirmar",
+                cancelButtonText: "Cancelar",
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-secondary"
+                },
+                allowOutsideClick: false
+            }).then(function(result) {
+                if (result.value) {
+                    window.location.replace('/Logout');
+                }
+            });
+        }
+    
+        function toggleFullscreen(elem) {
+            elem = elem || document.documentElement;
+            if (!document.fullscreenElement && !document.mozFullScreenElement &&
+                !document.webkitFullscreenElement && !document.msFullscreenElement) {
+                if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+                } else if (elem.mozRequestFullScreen) {
+                elem.mozRequestFullScreen();
+                } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+                }
+            } else {
+                if (document.exitFullscreen) {
+                document.exitFullscreen();
+                } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+                }
+            }
+        }
+
+        document.getElementById('btnFullScreen').addEventListener('click', function() {
+            toggleFullscreen();
+        });
+    </script>
+</body>
+<!--end::Body-->
+</html>
