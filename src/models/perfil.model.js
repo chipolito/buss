@@ -51,7 +51,7 @@ class PerfilModel {
                     const result    = await pool
                         .request()
                         .input('contrasenia', mSql.NVarChar, data.confirmPassword)
-                        .input('usuarioId', mSql.NVarChar, data.usuario_id)
+                        .input('usuarioId', mSql.Int, data.usuario_id)
                         .query(sqlCmd);
 
                     resolve({ success: true, message: 'Contraseña actualizada correctamente' });

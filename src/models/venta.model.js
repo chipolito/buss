@@ -1,150 +1,219 @@
 'use strict'
 
-const { logToFile }   = require('../controllers/auxiliar.controller');
-const sql   = require('mssql');
-const db    = require('./db');
+const { connectToDB, mSql }   = require('./db');
+const { logToFile } = require('../controllers/auxiliar.controller');
 
 class VentaModel {
-    constructor() {
-        this.sqlConfig = {
-            user: process.env.SQLUSER,
-            password: process.env.SQLKEY,
-            server: process.env.SQLSERVER, 
-            database: process.env.SQLDATABASE, 
-            options: {
-                trustServerCertificate: true
-            }
-        };
-    }
-
     GetTurno( turno_id = 0) {
         return new Promise((resolve, reject) => {
             let turnoEspecifico = turno_id > 0 ? ` t.turno_id = ${turno_id};` : 't.turno_estatus = 1;';
 
-            let sqlCmd = `
-                SELECT
-                    t.turno_id, 
-                    t.turno_usuario_apertura,
-                    (select u.usuario_propietario from usuario as u where u.usuario_id = t.turno_usuario_apertura) AS nombre_usuario_apertura,
-                    t.turno_fecha_apertura,
-                    t.turno_usuario_cierre,
-                    (select u.usuario_propietario from usuario as u where u.usuario_id = t.turno_usuario_cierre) AS nombre_usuario_cierre,
-                    t.turno_fecha_cierre,
-                    t.turno_efectivo_inicial,
-                    t.turno_efectivo_final,
-                    t.turno_efectivo_real,
-                    coalesce((select sum(v.venta_total) from venta as v where v.turno_id = t.turno_id and v.venta_estatus = 1), 0) AS total_venta_boletos,
-                    (
-                        select 
-                        coalesce(sum(CASE
-                                    WHEN v.venta_efectivo > v.venta_total THEN v.venta_total
-                                    ELSE v.venta_efectivo
-                                END), 0)
-                        from venta as v where v.turno_id = t.turno_id and v.venta_estatus = 1
-                    ) AS venta_efectivo,
-                    (select coalesce(sum(v.venta_tarjeta), 0) from venta as v where v.turno_id = t.turno_id and v.venta_estatus = 1) AS venta_tarjeta,
-                    (select coalesce(sum(me.movimiento_importe), 0) from movimiento_efectivo as me where me.movimiento_tipo = 'E' and me.turno_id = t.turno_id) AS entrada_efectivo,
-                    (select coalesce(sum(me.movimiento_importe), 0) from movimiento_efectivo as me where me.movimiento_tipo = 'S' and me.turno_id = t.turno_id) AS salida_efectivo,
-                    t.turno_comentario,
-                    (
-						select json_group_array(
-							json_object(
-								'fecha', movimiento_fecha,
-								'tipo', movimiento_tipo,
-								'importe', movimiento_importe,
-								'comentario',  movimiento_comentario
-						))
-						from movimiento_efectivo
-						where turno_id = t.turno_id
-					) AS movimiento_efectivo,
-                    (
-						SELECT 
-							json_group_array(
-								json_object(
-								'descuento_id', descuento_id, 
-								'descuento_estatus', descuento_estatus, 
-								'descuento_nombre', descuento_nombre, 
-								'total_venta', (select coalesce(sum(venta_precio_venta), 0) from venta_detalle where descuento_id = descuento.descuento_id and venta_id in (select venta_id from venta where turno_id = t.turno_id and venta_estatus = 1)),
-                                'total_pasajeros', (select count(detalle_id) from venta_detalle where descuento_id = descuento.descuento_id and venta_id in (select venta_id from venta where turno_id = t.turno_id and venta_estatus = 1))
-								)
-							)
-						FROM descuento
-					) As detalle_tipo_descuento,
-                    t.turno_estatus
-                FROM 
-                    turno AS t
-                WHERE ${turnoEspecifico}
-            `;
-            db.get(sqlCmd, (error, data) => {
-                let response = (error) ? { success: false, data: error, message: 'Error de base de datos' } : { success: true, data: data, message: 'Catalogo cargado correctamente' };
-                resolve(response);
+            connectToDB()
+            .then(async pool => {
+                try{
+                    const sqlCmd    = `
+                        SELECT
+                            t.turno_id, 
+                            t.turno_usuario_apertura,
+                            (select u.usuario_propietario from usuario as u where u.usuario_id = t.turno_usuario_apertura) AS nombre_usuario_apertura,
+                            t.turno_fecha_apertura,
+                            t.turno_usuario_cierre,
+                            (select u.usuario_propietario from usuario as u where u.usuario_id = t.turno_usuario_cierre) AS nombre_usuario_cierre,
+                            t.turno_fecha_cierre,
+                            t.turno_efectivo_inicial,
+                            t.turno_efectivo_final,
+                            t.turno_efectivo_real,
+                            coalesce((select sum(v.venta_total) from venta as v where v.turno_id = t.turno_id and v.venta_estatus = 1), 0) AS total_venta_boletos,
+                            (
+                                select 
+                                coalesce(sum(CASE
+                                            WHEN v.venta_efectivo > v.venta_total THEN v.venta_total
+                                            ELSE v.venta_efectivo
+                                        END), 0)
+                                from venta as v where v.turno_id = t.turno_id and v.venta_estatus = 1
+                            ) AS venta_efectivo,
+                            (select coalesce(sum(v.venta_tarjeta), 0) from venta as v where v.turno_id = t.turno_id and v.venta_estatus = 1) AS venta_tarjeta,
+                            (select coalesce(sum(me.movimiento_importe), 0) from movimiento_efectivo as me where me.movimiento_tipo = 'E' and me.turno_id = t.turno_id) AS entrada_efectivo,
+                            (select coalesce(sum(me.movimiento_importe), 0) from movimiento_efectivo as me where me.movimiento_tipo = 'S' and me.turno_id = t.turno_id) AS salida_efectivo,
+                            t.turno_comentario,
+                            coalesce((
+                                select
+                                    me.movimiento_fecha AS fecha,
+                                    me.movimiento_tipo AS tipo,
+                                    me.movimiento_importe AS importe,
+                                    me.movimiento_comentario AS comentario
+                                from movimiento_efectivo AS me
+                                where me.turno_id = t.turno_id
+                                for json path
+                            ), '[]') AS movimiento_efectivo,
+                            (
+                                SELECT
+                                    descuento_id, 
+                                    descuento_estatus, 
+                                    descuento_nombre, 
+                                    (select coalesce(sum(venta_precio_venta), 0) from venta_detalle where descuento_id = descuento.descuento_id and venta_id in (select venta_id from venta where turno_id = t.turno_id and venta_estatus = 1)) AS total_venta,
+                                    (select count(detalle_id) from venta_detalle where descuento_id = descuento.descuento_id and venta_id in (select venta_id from venta where turno_id = t.turno_id and venta_estatus = 1)) AS total_pasajeros
+                                FROM descuento
+                                for json path
+                            ) As detalle_tipo_descuento,
+                            t.turno_estatus
+                        FROM 
+                            turno AS t
+                        WHERE t.sucursal_id = 2 and ${turnoEspecifico}
+                    `;
+
+                    const result    = await pool
+                        .request()
+                        .query(sqlCmd);
+    
+                    resolve({ success: true, data: result.recordset.length > 0 ? result.recordset[0] : {}, message: 'Catalogo cargado correctamente.' });
+                }
+                catch (error) {
+                    let strError = `venta.model | GetTurno | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
+                    logToFile(strError, 'disse-tickets.log', '\r\n');
+                    resolve({success: false, data: error, message: 'Error con la peticion al servidor de base de datos.'});
+                } finally {
+                    pool.close()
+                }
+            })
+            .catch( error => {
+                logToFile('venta.model | GetTurno | ' + error, 'disse-tickets.log', '\r\n');
+                resolve({success: false, data: error, message: 'Error de servidor de base de datos.'});
             });
         });
     }
 
     AbrirTurno(importeInicial, user_id){
         return new Promise((resolve, reject) => {
-            let sqlCmd = `
-                    INSERT INTO turno (
-                        turno_fecha_apertura,
-                        turno_fecha_cierre,
-                        turno_usuario_apertura,
-                        turno_usuario_cierre,
-                        turno_efectivo_inicial,
-                        turno_efectivo_final,
-                        turno_efectivo_real,
-                        turno_comentario,
-                        turno_estatus
-                    ) VALUES (datetime('now', 'localtime'), '', ?, ?, ?, 0, 0, '', 1);`,
-                data = [
-                    user_id,
-                    user_id,
-                    importeInicial
-                ];
+            connectToDB()
+            .then(async pool => {
+                try{
+                    const sqlCmd    = `
+                        INSERT INTO turno (
+                            turno_fecha_apertura,
+                            turno_fecha_cierre,
+                            turno_usuario_apertura,
+                            turno_usuario_cierre,
+                            turno_efectivo_inicial,
+                            turno_efectivo_final,
+                            turno_efectivo_real,
+                            turno_comentario,
+                            turno_estatus
+                        ) VALUES (
+                            SYSDATETIME(), 
+                            null, 
+                            @usuarioApertura, 
+                            @usuarioCierre,
+                            @efectivoinicial,
+                            0, 
+                            0, 
+                            '', 
+                            1
+                        );
 
-            db.run(sqlCmd, data, (error) => {
-                if(error){
-                    resolve({ success: false, data: error, message: 'Error al tratar de abrir el turno, contacte con soporte.' });
-                } else {
-                    db.get('SELECT last_insert_rowid() as id', function (err, row) {
-                        resolve({ success: true, message: 'Se abrio un nuevo turno.', turno_id: row.id });
-                   });
+                        SELECT SCOPE_IDENTITY() AS id;
+                    `;
+    
+                    const result    = await pool
+                        .request()
+                        .input('usuarioApertura', mSql.NVarChar, user_id)
+                        .input('usuarioCierre', mSql.NVarChar, user_id)
+                        .input('efectivoinicial', mSql.NVarChar, importeInicial)
+                        .query(sqlCmd);
+
+                    resolve({ success: true, message: 'Se abrio un nuevo turno.', turno_id: result.recordset[0].id});
                 }
+                catch (error) {
+                    let strError = `usuario.model | AbrirTurno | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
+                    logToFile(strError, 'disse-tickets.log', '\r\n');
+                    resolve({success: false, data: error, message: 'Error con la peticion al servidor de base de datos.'});
+                } finally {
+                    pool.close()
+                }
+            })
+            .catch( error => {
+                logToFile('venta.model | AbrirTurno | ' + error, 'disse-tickets.log', '\r\n');
+                resolve({success: false, data: error, message: 'Error de servidor de base de datos.'});
             });
         });
     }
 
     Sale(data){
         return new Promise((resolve, reject) => {
-            let complementoFolio = `
-                SELECT ${data.venta_folio} || PRINTF('%03d', (count(venta_id) +1)) FROM venta WHERE venta_sucursal = '${data.sucursal}' AND venta_fecha = date('now', 'localtime') AND venta_estatus = 1
-            `;
+            connectToDB()
+            .then(async pool => {
+                try{
+                    let complementoFolio = `
+                        SELECT concat(${data.venta_folio}, FORMAT((count(venta_id) +1), '00#')) FROM venta WHERE venta_sucursal = '${data.sucursal}' AND venta_fecha = CONVERT(date, getdate()) AND venta_estatus = 1
+                    `;
 
-            let sqlCmd = `
-                    INSERT INTO venta (
-                        turno_id,
-                        usuario_id,
-                        corrida_id,
-                        horario_id,
-                        venta_folio,
-                        venta_sucursal,
-                        venta_fecha,
-                        venta_hora,
-                        venta_cantidad,
-                        venta_ocupacion_real,
-                        venta_ocupacion_especial,
-                        venta_total,
-                        venta_descuento,
-                        venta_efectivo,
-                        venta_cambio,
-                        venta_tarjeta,
-                        venta_marca,
-                        venta_tipo,
-                        venta_autorizacion,
-                        venta_operacion,
-                        venta_estatus
-                    ) VALUES (?, ?, ?, ?, (${complementoFolio}), ?, date('now', 'localtime'), time('now', 'localtime'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1);`,
-                parrams = [
+                    const sqlCmd    = `
+                        INSERT INTO venta (
+                            turno_id,
+                            usuario_id,
+                            corrida_id,
+                            horario_id,
+                            venta_folio,
+                            venta_sucursal,
+                            venta_fecha,
+                            venta_hora,
+                            venta_cantidad,
+                            venta_ocupacion_real,
+                            venta_ocupacion_especial,
+                            venta_total,
+                            venta_descuento,
+                            venta_efectivo,
+                            venta_cambio,
+                            venta_tarjeta,
+                            venta_marca,
+                            venta_tipo,
+                            venta_autorizacion,
+                            venta_operacion,
+                            venta_estatus
+                        ) VALUES (
+                            @turnoId, 
+                            @usuarioId, 
+                            @corridaId, 
+                            @horarioId, 
+                            (${complementoFolio}), 
+                            @sucursal, 
+                            CONVERT(date, getdate()), 
+                            CONVERT(time, getdate()), 
+                            @cantidad, 
+                            @ocupacionReal, 
+                            @ocupacionEspecial, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1
+                        );
+
+                        SELECT SCOPE_IDENTITY() AS id;
+                    `;
+    
+                    const result    = await pool
+                        .request()
+                        .input('usuarioNombre', mSql.NVarChar, data.inputNombreUsuario)
+                        .input('usuarioContrasenia', mSql.NVarChar, data.inputContraseniaUsuario)
+                        .input('usuarioPropietario', mSql.NVarChar, data.inputPropietarioUsuario)
+                        .input('usuarioTelefono', mSql.NVarChar, data.inputContactoUsuario)
+                        .query(sqlCmd);
+
+                    resolve({ success: true, message: 'Usuario registrado correctamente', usuario_id: result.recordset[0].id});
+                }
+                catch (error) {
+                    let strError = `usuario.model | Set | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
+                    logToFile(strError, 'disse-tickets.log', '\r\n');
+                    resolve({success: false, data: error, message: 'Error con la peticion al servidor de base de datos.'});
+                } finally {
+                    pool.close()
+                }
+            })
+            .catch( error => {
+                logToFile('usuario.model | Set | ' + error, 'disse-tickets.log', '\r\n');
+                resolve({success: false, data: error, message: 'Error de servidor de base de datos.'});
+            });
+
+
+            
+
+            let                parrams = [
                     data.turno_id,
                     data.usuario_id,
                     data.corrida_id,
@@ -240,24 +309,42 @@ class VentaModel {
 
     GetMovimientoEffectivo(turno_id){
         return new Promise((resolve, reject) => {
-            let sqlCmd = `
-                SELECT 
-                    me.movimiento_id,
-                    me.turno_id,
-                    me.usuario_id,
-                    me.movimiento_fecha,
-                    me.movimiento_tipo,
-                    me.movimiento_importe,
-                    me.movimiento_comentario,
-                    u.usuario_propietario
-                FROM movimiento_efectivo AS me 
-                INNER JOIN usuario AS u ON me.usuario_id = u.usuario_id
-                WHERE me.turno_id = ?;
-            `;
+            connectToDB()
+            .then(async pool => {
+                try{
+                    const sqlCmd    = `
+                        SELECT 
+                            me.movimiento_id,
+                            me.turno_id,
+                            me.usuario_id,
+                            me.movimiento_fecha,
+                            me.movimiento_tipo,
+                            me.movimiento_importe,
+                            me.movimiento_comentario,
+                            u.usuario_propietario
+                        FROM movimiento_efectivo AS me 
+                        INNER JOIN usuario AS u ON me.usuario_id = u.usuario_id
+                        WHERE me.turno_id = @turnoId;
+                    `;
 
-            db.all(sqlCmd, [turno_id], (error, data) => {
-                let response = (error) ? { success: false, data: [], message: 'Error al cargar el catalogo'} : { success: true, data: data, message: 'Catalogo cargado correctamente' };
-                resolve(response);
+                    const result    = await pool
+                        .request()
+                        .input('turnoId', mSql.Int, turno_id)
+                        .query(sqlCmd);
+    
+                    resolve({ success: true, data: result.recordset, message: 'Catalogo cargado correctamente.' });
+                }
+                catch (error) {
+                    let strError = `venta.model | GetMovimientoEffectivo | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
+                    logToFile(strError, 'disse-tickets.log', '\r\n');
+                    resolve({success: false, data: [], message: 'Error con la peticion al servidor de base de datos.'});
+                } finally {
+                    pool.close()
+                }
+            })
+            .catch( error => {
+                logToFile('venta.model | GetMovimientoEffectivo | ' + error, 'disse-tickets.log', '\r\n');
+                resolve({success: false, data: [], message: 'Error de servidor de base de datos.'});
             });
         });
     }
