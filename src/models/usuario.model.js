@@ -62,22 +62,43 @@ class UsuarioModel{
 
     Get() {
         return new Promise((resolve, reject) => {
-            let sqlCmd = `
-                SELECT 
-                    u.usuario_id,
-                    u.usuario_nombre,
-                    u.usuario_propietario,
-                    u.usuario_telefono,
-                    u.usuario_tipo,
-                    (select GROUP_CONCAT(permiso_id) AS permisos from usuario_permiso where usuario_id = u.usuario_id) AS usuario_permiso
-                FROM 
-                    usuario AS u
-                WHERE
-                    usuario_estatus = 1 AND usuario_tipo = 2;
-            `;
-            db.all(sqlCmd, [], (error, data) => {
-                let response = (error) ? { success: false, data: error, message: 'Error de base de datos' } : { success: true, data: data, message: 'Catalogo cargado correctamente' };
-                resolve(response);
+            connectToDB()
+            .then(async pool => {
+                try{
+                    const sqlCmd    = `
+                        SELECT 
+                            u.usuario_id,
+                            u.usuario_nombre,
+                            u.usuario_propietario,
+                            u.usuario_telefono,
+                            u.usuario_tipo,
+                            u.sucursal_id,
+                            STRING_AGG(up.permiso_id, ',') as usuario_permiso
+                        FROM 
+                            usuario AS u
+                        INNER JOIN usuario_permiso AS up on u.usuario_id = up.usuario_id
+                        WHERE
+                            usuario_estatus = 1 AND usuario_tipo = 2
+                        GROUP BY u.usuario_id, u.usuario_nombre, u.usuario_propietario, u.usuario_telefono, u.usuario_tipo, u.sucursal_id
+                    `;
+
+                    const result    = await pool
+                        .request()
+                        .query(sqlCmd);
+    
+                    resolve({ success: true, data: result.recordset, message: 'Catalogo cargado correctamente.' });
+                }
+                catch (error) {
+                    let strError = `usuario.model | Get | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
+                    logToFile(strError, 'disse-tickets.log', '\r\n');
+                    resolve({success: false, data: error, message: 'Error con la peticion al servidor de base de datos.'});
+                } finally {
+                    pool.close()
+                }
+            })
+            .catch( error => {
+                logToFile('usuario.model | Get | ' + error, 'disse-tickets.log', '\r\n');
+                resolve({success: false, data: error, message: 'Error de servidor de base de datos.'});
             });
         });
     }
