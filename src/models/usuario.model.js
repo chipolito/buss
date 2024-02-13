@@ -42,7 +42,7 @@ class UsuarioModel{
                     resolve({ success: true, message: 'Usuario registrado correctamente', usuario_id: result.recordset[0].id});
                 }
                 catch (error) {
-                    let strError = `auxiliar.model | Set | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
+                    let strError = `usuario.model | Set | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
                     logToFile(strError, 'disse-tickets.log', '\r\n');
                     resolve({success: false, data: error, message: 'Error con la peticion al servidor de base de datos.'});
                 } finally {
@@ -50,7 +50,7 @@ class UsuarioModel{
                 }
             })
             .catch( error => {
-                logToFile('auxiliar.model | Set | ' + error, 'disse-tickets.log', '\r\n');
+                logToFile('usuario.model | Set | ' + error, 'disse-tickets.log', '\r\n');
                 resolve({success: false, data: error, message: 'Error de servidor de base de datos.'});
             });
         });
@@ -68,7 +68,7 @@ class UsuarioModel{
                     resolve(true);
                 }
                 catch (error) {
-                    let strError = `auxiliar.model | SetPermissions | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
+                    let strError = `usuario.model | SetPermissions | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
                     logToFile(strError, 'disse-tickets.log', '\r\n');
                     resolve(false);
                 } finally {
@@ -76,7 +76,7 @@ class UsuarioModel{
                 }
             })
             .catch( error => {
-                logToFile('auxiliar.model | SetPermissions | ' + error, 'disse-tickets.log', '\r\n');
+                logToFile('usuario.model | SetPermissions | ' + error, 'disse-tickets.log', '\r\n');
                 resolve(false);
             });
         });
@@ -98,7 +98,7 @@ class UsuarioModel{
                     resolve(true);
                 }
                 catch (error) {
-                    let strError = `auxiliar.model | DelPermissions | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
+                    let strError = `usuario.model | DelPermissions | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
                     logToFile(strError, 'disse-tickets.log', '\r\n');
                     resolve(false);
                 } finally {
@@ -106,7 +106,7 @@ class UsuarioModel{
                 }
             })
             .catch( error => {
-                logToFile('auxiliar.model | DelPermissions | ' + error, 'disse-tickets.log', '\r\n');
+                logToFile('usuario.model | DelPermissions | ' + error, 'disse-tickets.log', '\r\n');
                 resolve(false);
             });
         });
@@ -171,7 +171,7 @@ class UsuarioModel{
                     resolve({ success: true, message: 'Usuario eliminado correctamente' });
                 }
                 catch (error) {
-                    let strError = `auxiliar.model | Del | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
+                    let strError = `usuario.model | Del | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
                     logToFile(strError, 'disse-tickets.log', '\r\n');
                     resolve({ success: false, data: error, message: 'Error de base de datos' });
                 } finally {
@@ -179,7 +179,7 @@ class UsuarioModel{
                 }
             })
             .catch( error => {
-                logToFile('auxiliar.model | Del | ' + error, 'disse-tickets.log', '\r\n');
+                logToFile('usuario.model | Del | ' + error, 'disse-tickets.log', '\r\n');
                 resolve({ success: false, data: error, message: 'Error de base de datos' });
             });
         });
@@ -249,7 +249,7 @@ class UsuarioModel{
                     resolve({ success: true, message: 'Cuenta de usuario actualizado correctamente' });
                 }
                 catch (error) {
-                    let strError = `auxiliar.model | Put | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
+                    let strError = `usuario.model | Put | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
                     logToFile(strError, 'disse-tickets.log', '\r\n');
                     resolve({success: false, data: error, message: 'Error con la peticion al servidor de base de datos.'});
                 } finally {
@@ -257,7 +257,7 @@ class UsuarioModel{
                 }
             })
             .catch( error => {
-                logToFile('auxiliar.model | Put | ' + error, 'disse-tickets.log', '\r\n');
+                logToFile('usuario.model | Put | ' + error, 'disse-tickets.log', '\r\n');
                 resolve({success: false, data: error, message: 'Error de servidor de base de datos.'});
             });
         });
@@ -283,7 +283,7 @@ class UsuarioModel{
                     resolve({ success: true, message: 'Contraseña actualizada correctamente' });
                 }
                 catch (error) {
-                    let strError = `auxiliar.model | PutPassword | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
+                    let strError = `usuario.model | PutPassword | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
                     logToFile(strError, 'disse-tickets.log', '\r\n');
                     resolve({success: false, data: error, message: 'Error con la peticion al servidor de base de datos.'});
                 } finally {
@@ -291,7 +291,7 @@ class UsuarioModel{
                 }
             })
             .catch( error => {
-                logToFile('auxiliar.model | PutPassword | ' + error, 'disse-tickets.log', '\r\n');
+                logToFile('usuario.model | PutPassword | ' + error, 'disse-tickets.log', '\r\n');
                 resolve({success: false, data: error, message: 'Error de servidor de base de datos.'});
             });
         });
