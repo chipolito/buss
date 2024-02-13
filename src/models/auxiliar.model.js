@@ -40,35 +40,70 @@ class AuxiliarModel{
 
     GetAutobuses(){
         return new Promise((resolve, reject) => {
-            let sqlCmd = `
-                SELECT 
-                    autobus_id,
-                    autobus_nombre,
-                    autobus_capacidad
-                FROM autobus
-                WHERE autobus_estatus = 1;
-            `;
+            connectToDB()
+            .then(async pool => {
+                try{
+                    const sqlCmd    = `
+                        SELECT 
+                            autobus_id,
+                            autobus_nombre,
+                            autobus_capacidad
+                        FROM autobus
+                        WHERE autobus_estatus = 1;
+                    `;
 
-            db.all(sqlCmd, [], (error, data) => {
-                let response = (error) ? { success: false, data: [], message: 'Error de base de datos' } : { success: true, data: data, message: 'Catalogo de autobuses cargado correctamente' };
-                resolve(response);
+                    const result    = await pool
+                        .request()
+                        .query(sqlCmd);
+    
+                    resolve({ success: true, data: result.recordset, message: 'Catalogo de autobuses cargado correctamente.' });
+                }
+                catch (error) {
+                    let strError = `auxiliar.model | GetAutobuses | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
+                    logToFile(strError, 'disse-tickets.log', '\r\n');
+                    resolve({success: false, data: [], message: 'Error con la peticion al servidor de base de datos.'});
+                } finally {
+                    pool.close()
+                }
+            })
+            .catch( error => {
+                logToFile('auxiliar.model | GetAutobuses | ' + error, 'disse-tickets.log', '\r\n');
+                resolve({success: false, data: [], message: 'Error de servidor de base de datos.'});
             });
         });
     }
 
     GetConfiguracion( configuracionClave ) {
         return new Promise((resolve, reject) => {
-            let sqlCmd = `
-                SELECT
-                    configuracion_valor
-                FROM 
-                    configuracion
-                WHERE configuracion_clave = ?
-            `;
+            connectToDB()
+            .then(async pool => {
+                try{
+                    const sqlCmd    = `
+                        SELECT
+                            configuracion_valor
+                        FROM 
+                            configuracion
+                        WHERE configuracion_clave = @clave
+                    `;
 
-            db.get(sqlCmd, configuracionClave, (error, data) => {
-                let response = (error) ? { success: false, data: [], message: "Error de base de datos" } : { success: true, data: data.configuracion_valor, message: "Configuracion cargada" };
-                resolve(response);
+                    const result    = await pool
+                        .request()
+                        .input('clave', mSql.NVarChar, configuracionClave)
+                        .query(sqlCmd);
+    
+                    resolve({ success: true, data: result.recordset[0].configuracion_valor, message: 'Configuracion cargada.' });
+                }
+                catch (error) {
+                    let strError = `auxiliar.model | GetConfiguracion | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
+                    logToFile(strError, 'disse-tickets.log', '\r\n');
+                    resolve({success: false, data: [], message: 'Error con la peticion al servidor de base de datos.'});
+                } finally {
+                    pool.close()
+                }
+            })
+            .catch( error => {
+                logToFile('auxiliar.model | GetConfiguracion | ' + error, 'disse-tickets.log', '\r\n');
+                resolve({success: false, data: [], message: 'Error de servidor de base de datos.'});
             });
         });
     }
