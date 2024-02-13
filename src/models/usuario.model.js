@@ -6,40 +6,78 @@ const { logToFile } = require('../controllers/auxiliar.controller');
 class UsuarioModel{
     Set( data ) {
         return new Promise((resolve, reject) => {
-            let sqlCmd = `
-                INSERT INTO usuario (
-                    usuario_nombre,
-                    usuario_contrasenia,
-                    usuario_propietario,
-                    usuario_telefono,
-                    usuario_tipo,
-                    usuario_estatus
-                ) VALUES (?, ?, ?, ?, 2, 1);
-            `;
+            connectToDB()
+            .then(async pool => {
+                try{
+                    const sqlCmd    = `
+                        INSERT INTO usuario (
+                            usuario_nombre,
+                            usuario_contrasenia,
+                            usuario_propietario,
+                            usuario_telefono,
+                            usuario_tipo,
+                            sucursal_id,
+                            usuario_estatus
+                        ) VALUES (
+                            @usuarioNombre, 
+                            @usuarioContrasenia, 
+                            @usuarioPropietario, 
+                            @usuarioTelefono, 
+                            2, 
+                            2, 
+                            1
+                        );
 
-            let parameters = [
-                data.inputNombreUsuario,
-                data.inputContraseniaUsuario,
-                data.inputPropietarioUsuario,
-                data.inputContactoUsuario
-            ];
+                        SELECT SCOPE_IDENTITY() AS id;
+                    `;
+    
+                    const result    = await pool
+                        .request()
+                        .input('usuarioNombre', mSql.NVarChar, data.inputNombreUsuario)
+                        .input('usuarioContrasenia', mSql.NVarChar, data.inputContraseniaUsuario)
+                        .input('usuarioPropietario', mSql.NVarChar, data.inputPropietarioUsuario)
+                        .input('usuarioTelefono', mSql.NVarChar, data.inputContactoUsuario)
+                        .query(sqlCmd);
 
-            db.run(sqlCmd, parameters, (error) => {
-                if(error){
-                    resolve({ success: false, data: error, message: 'Error al tratar de registrar la cuenta de usuario' });
-                } else {
-                    db.get('SELECT last_insert_rowid() as id', function (err, row) {
-                        resolve({ success: true, message: 'Usuario registrado correctamente', usuario_id: row.id });
-                   });
+                    resolve({ success: true, message: 'Usuario registrado correctamente', usuario_id: result.recordset[0].id});
                 }
+                catch (error) {
+                    let strError = `auxiliar.model | Set | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
+                    logToFile(strError, 'disse-tickets.log', '\r\n');
+                    resolve({success: false, data: error, message: 'Error con la peticion al servidor de base de datos.'});
+                } finally {
+                    pool.close()
+                }
+            })
+            .catch( error => {
+                logToFile('auxiliar.model | Set | ' + error, 'disse-tickets.log', '\r\n');
+                resolve({success: false, data: error, message: 'Error de servidor de base de datos.'});
             });
         });
     }
 
     SetPermissions( sqlCmd ) {
         return new Promise((resolve, reject) => {
-            db.run(sqlCmd, [], (error) => {
-                resolve( (error) ? false : true );
+            connectToDB()
+            .then(async pool => {
+                try{
+                    const result    = await pool
+                        .request()
+                        .query(sqlCmd);
+
+                    resolve(true);
+                }
+                catch (error) {
+                    let strError = `auxiliar.model | SetPermissions | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
+                    logToFile(strError, 'disse-tickets.log', '\r\n');
+                    resolve(false);
+                } finally {
+                    pool.close()
+                }
+            })
+            .catch( error => {
+                logToFile('auxiliar.model | SetPermissions | ' + error, 'disse-tickets.log', '\r\n');
+                resolve(false);
             });
         });
     }
