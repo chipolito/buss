@@ -227,24 +227,38 @@ class UsuarioModel{
 
     Put( data ) {
         return new Promise((resolve, reject) => {
-            let sqlCmd = `
-                UPDATE usuario 
-                    SET usuario_nombre = ?,
-                    usuario_propietario = ?,
-                    usuario_telefono = ?
-                WHERE usuario_id = ?
-            `;
+            connectToDB()
+            .then(async pool => {
+                try{
+                    const sqlCmd    = `
+                        UPDATE usuario 
+                            SET usuario_nombre = @usuarioNombre,
+                            usuario_propietario = @usuarioPropietario,
+                            usuario_telefono = @usuarioTelefono
+                        WHERE usuario_id = @usuarioId;
+                    `;
+    
+                    const result    = await pool
+                        .request()
+                        .input('usuarioNombre', mSql.NVarChar, data.inputNombreUsuario)
+                        .input('usuarioPropietario', mSql.NVarChar, data.inputPropietarioUsuario)
+                        .input('usuarioTelefono', mSql.NVarChar, data.inputContactoUsuario)
+                        .input('usuarioId', mSql.NVarChar, data.usuarioId)
+                        .query(sqlCmd);
 
-            let parameters = [
-                data.inputNombreUsuario,
-                data.inputPropietarioUsuario,
-                data.inputContactoUsuario,
-                data.usuarioId
-            ];
-
-            db.run(sqlCmd, parameters, (error) => {
-                let response = (error) ? { success: false, data: error, message: 'Error de base de datos' } : { success: true, message: 'Cuenta de usuario actualizado correctamente' };
-                resolve(response);
+                    resolve({ success: true, message: 'Cuenta de usuario actualizado correctamente' });
+                }
+                catch (error) {
+                    let strError = `auxiliar.model | Put | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
+                    logToFile(strError, 'disse-tickets.log', '\r\n');
+                    resolve({success: false, data: error, message: 'Error con la peticion al servidor de base de datos.'});
+                } finally {
+                    pool.close()
+                }
+            })
+            .catch( error => {
+                logToFile('auxiliar.model | Put | ' + error, 'disse-tickets.log', '\r\n');
+                resolve({success: false, data: error, message: 'Error de servidor de base de datos.'});
             });
         });
     }
