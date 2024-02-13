@@ -5,18 +5,35 @@ const { connectToDB, mSql }   = require('./db');
 class AuxiliarModel{
     GetPermisos(){
         return new Promise((resolve, reject) => {
-            let sqlCmd = `
-                SELECT 
-                    permiso_id, 
-                    permiso_nombre, 
-                    permiso_clave, 
-                    permiso_descripcion 
-                FROM permiso;
-            `;
+            connectToDB()
+            .then(async pool => {
+                try{
+                    const sqlCmd    = `
+                        SELECT 
+                            permiso_id, 
+                            permiso_nombre, 
+                            permiso_clave, 
+                            permiso_descripcion 
+                        FROM permiso;
+                    `;
 
-            db.all(sqlCmd, [], (error, data) => {
-                let response = (error) ? { success: false, data: [], message: 'Error de base de datos' } : { success: true, data: data, message: 'Catalogo de permisos cargado correctamente' };
-                resolve(response);
+                    const result    = await pool
+                        .request()
+                        .query(sqlCmd);
+    
+                    resolve({ success: true, data: result.recordset, message: 'Catalogo de permisos cargado correctamente.' });
+                }
+                catch (error) {
+                    let strError = `auxiliar.model | GetPermisos | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
+                    logToFile(strError, 'disse-tickets.log', '\r\n');
+                    resolve({success: false, data: [], message: 'Error con la peticion al servidor de base de datos.'});
+                } finally {
+                    pool.close()
+                }
+            })
+            .catch( error => {
+                logToFile('auxiliar.model | GetPermisos | ' + error, 'disse-tickets.log', '\r\n');
+                resolve({success: false, data: [], message: 'Error de servidor de base de datos.'});
             });
         });
     }
