@@ -1,6 +1,7 @@
 'use strict'
 
 const { connectToDB, mSql }   = require('./db');
+const { logToFile } = require('../controllers/auxiliar.controller');
 
 class AuxiliarModel{
     GetPermisos(){
