@@ -91,7 +91,7 @@ class AuxiliarModel{
                     resolve({ success: true, message: 'Movimiento registrado correctamente'});
                 }
                 catch (error) {
-                    let strError = `Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
+                    let strError = `auxiliar.model | SetAuditoria | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
                     logToFile(strError, 'disse-tickets.log', '\r\n');
                     resolve({success: false, message: 'Error con la peticion al servidor de base de datos.'});
                 } finally {
@@ -99,7 +99,7 @@ class AuxiliarModel{
                 }
             })
             .catch( error => {
-                logToFile(error, 'disse-tickets.log', '\r\n');
+                logToFile('auxiliar.model | SetAuditoria | ' + error, 'disse-tickets.log', '\r\n');
                 resolve({success: false, message: 'Error de servidor de base de datos.'});
             });            
         });

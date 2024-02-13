@@ -121,7 +121,7 @@ class UsuarioModel{
                     resolve({ success: true, data: result.recordset.length > 0 ? result.recordset[0] : {}});
                 }
                 catch (error) {
-                    let strError = `Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
+                    let strError = `usuario.model | Sign | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
                     logToFile(strError, 'disse-tickets.log', '\r\n');
                     resolve({success: false, message: 'Error con la peticion al servidor de base de datos.'});
                 } finally {
@@ -129,7 +129,7 @@ class UsuarioModel{
                 }
             })
             .catch( error => {
-                logToFile(error, 'disse-tickets.log', '\r\n');
+                logToFile('usuario.model | Sign | ' + error, 'disse-tickets.log', '\r\n');
                 resolve({success: false, message: 'Error de servidor de base de datos.'});
             });
         });
