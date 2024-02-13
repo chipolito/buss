@@ -1,6 +1,7 @@
 'use strict'
 
 const { connectToDB, mSql }   = require('./db');
+const { logToFile } = require('../controllers/auxiliar.controller');
 
 class AjusteModel {
     Get(){
@@ -46,8 +47,9 @@ class AjusteModel {
                     const sqlCmd    = `
                         INSERT INTO configuracion (
                             configuracion_clave,
-                            configuracion_valor
-                        ) VALUES (@clave, @valor);
+                            configuracion_valor,
+                            sucursal_id
+                        ) VALUES (@clave, @valor, 2);
                     `;
     
                     const result    = await pool
