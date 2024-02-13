@@ -1,6 +1,6 @@
 'use strict'
 
-const db = require('./db');
+const { connectToDB, mSql }   = require('./db');
 
 class AuxiliarModel{
     GetPermisos(){
@@ -57,28 +57,51 @@ class AuxiliarModel{
     }
 
     SetAuditoria( data ) {
-        return new Promise((resolve, reject) => {
-            let sqlCmd = `
-                INSERT INTO auditoria (
-                    usuario_id,
-                    modulo,
-                    accion,
-                    fecha_hora,
-                    detalle
-                ) VALUES (?, ?, ?, datetime('now', 'localtime'), ?);
-            `;
+        return new Promise(async (resolve, reject) => {
+            connectToDB()
+            .then(async pool => {
+                try{
+                    const sqlCmd    = `
+                        INSERT INTO auditoria (
+                            usuario_id,
+                            modulo,
+                            accion,
+                            fecha_hora,
+                            detalle,
+                            sucursal_id
+                        ) VALUES (
+                            @usuarioId, 
+                            @modulo, 
+                            @accion, 
+                            SYSDATETIME(), 
+                            @detalle, 
+                            @sucursalId
+                        );
+                    `;
+    
+                    const result    = await pool
+                        .request()
+                        .input('usuarioId', mSql.Int, data.usuario_id)
+                        .input('modulo', mSql.NVarChar, data.modulo)
+                        .input('accion', mSql.NVarChar, data.accion)
+                        .input('detalle', mSql.NVarChar, data.detalle)
+                        .input('sucursalId', mSql.Int, 2)
+                        .query(sqlCmd);
 
-            let parameters = [
-                data.usuario_id,
-                data.modulo,
-                data.accion,
-                data.detalle
-            ];
-
-            db.run(sqlCmd, parameters, (error) => {
-                let response = (error) ? { success: false, data: error, message: 'Error al tratar de registrar el movimiento' } : { success: true, message: 'Movimiento registrado correctamente' };
-                resolve(response);
-            });
+                    resolve({ success: true, message: 'Movimiento registrado correctamente'});
+                }
+                catch (error) {
+                    let strError = `Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
+                    logToFile(strError, 'disse-tickets.log', '\r\n');
+                    resolve({success: false, message: 'Error con la peticion al servidor de base de datos.'});
+                } finally {
+                    pool.close()
+                }
+            })
+            .catch( error => {
+                logToFile(error, 'disse-tickets.log', '\r\n');
+                resolve({success: false, message: 'Error de servidor de base de datos.'});
+            });            
         });
     }
 }

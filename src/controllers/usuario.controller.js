@@ -70,7 +70,7 @@ class UsuarioController {
             let result = {};
 
             if(!response.success){
-                result = { success: false, message: 'Error de base de datos'};
+                result = response
             } else if(response.data && response.data.usuario_id){
                 let logged = bcrypt.compareSync(userInfo.password, response.data.usuario_contrasenia);
 

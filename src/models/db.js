@@ -1,14 +1,26 @@
 'use strict'
 
-const sqlite3 = require('sqlite3').verbose();
-const db_name = `${process.env.PATH_DATABASE}/n10Ticket.db`;
+const mSql       = require('mssql');
 
-const db = new sqlite3.Database(db_name, error => {
-    if (error) {
-        console.error(error.message);
+const sqlConfig = {
+    user: process.env.SQLUSER,
+    password: process.env.SQLKEY,
+    server: process.env.SQLSERVER, 
+    database: process.env.SQLDATABASE, 
+    options: {
+        trustServerCertificate: true
     }
+};
 
-    console.log('Se conectó correctamente a la base de datos');
-});
+function connectToDB() {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const pool = await mSql.connect(sqlConfig)
+            resolve(pool);
+        } catch (error) {
+            reject(`Error | Servidor de base de datos: ${JSON.stringify( error )}`);
+        }
+    });
+}
 
-module.exports = db;
+module.exports = {connectToDB, mSql};
