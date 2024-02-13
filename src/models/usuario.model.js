@@ -84,16 +84,30 @@ class UsuarioModel{
 
     DelPermissions( usuarioId ) {
         return new Promise((resolve, reject) => {
-            let sqlCmd = `
-                DELETE FROM usuario_permiso WHERE usuario_id = ?
-            `;
+            connectToDB()
+            .then(async pool => {
+                try{
+                    const sqlCmd = `
+                        DELETE FROM usuario_permiso WHERE usuario_id = @usuarioId
+                    `;
+                    const result    = await pool
+                        .request()
+                        .input('usuarioId', mSql.Int, usuarioId)
+                        .query(sqlCmd);
 
-            let parameters = [
-                usuarioId
-            ];
-
-            db.run(sqlCmd, parameters, (error) => {
-                resolve( (error) ? false : true );
+                    resolve(true);
+                }
+                catch (error) {
+                    let strError = `auxiliar.model | DelPermissions | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
+                    logToFile(strError, 'disse-tickets.log', '\r\n');
+                    resolve(false);
+                } finally {
+                    pool.close()
+                }
+            })
+            .catch( error => {
+                logToFile('auxiliar.model | DelPermissions | ' + error, 'disse-tickets.log', '\r\n');
+                resolve(false);
             });
         });
     }
@@ -143,13 +157,30 @@ class UsuarioModel{
 
     Del( usuarioId ) {
         return new Promise((resolve, reject) => {
-            let sqlCmd = `
-                    UPDATE usuario SET usuario_estatus = 0 WHERE ( usuario_id = ? );
-                `;
+            connectToDB()
+            .then(async pool => {
+                try{
+                    const sqlCmd = `
+                        UPDATE usuario SET usuario_estatus = 0 WHERE usuario_id = @usuarioId;
+                    `;
+                    const result    = await pool
+                        .request()
+                        .input('usuarioId', mSql.Int, usuarioId)
+                        .query(sqlCmd);
 
-            db.run(sqlCmd, [ usuarioId ], (error) => {
-                let response = (error) ? { success: false, data: error, message: 'Error de base de datos' } : { success: true, message: 'Usuario eliminado correctamente' };
-                resolve(response);
+                    resolve({ success: true, message: 'Usuario eliminado correctamente' });
+                }
+                catch (error) {
+                    let strError = `auxiliar.model | Del | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
+                    logToFile(strError, 'disse-tickets.log', '\r\n');
+                    resolve({ success: false, data: error, message: 'Error de base de datos' });
+                } finally {
+                    pool.close()
+                }
+            })
+            .catch( error => {
+                logToFile('auxiliar.model | Del | ' + error, 'disse-tickets.log', '\r\n');
+                resolve({ success: false, data: error, message: 'Error de base de datos' });
             });
         });
     }
