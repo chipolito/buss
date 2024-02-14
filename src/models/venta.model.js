@@ -4,7 +4,7 @@ const { connectToDB, mSql }   = require('./db');
 const { logToFile } = require('../controllers/auxiliar.controller');
 
 class VentaModel {
-    GetTurno( turno_id = 0) {
+    GetTurno( turno_id = 0, sucursalId) {
         return new Promise((resolve, reject) => {
             let turnoEspecifico = turno_id > 0 ? ` t.turno_id = ${turno_id};` : 't.turno_estatus = 1;';
 
@@ -59,11 +59,12 @@ class VentaModel {
                             t.turno_estatus
                         FROM 
                             turno AS t
-                        WHERE t.sucursal_id = 2 and ${turnoEspecifico}
+                        WHERE t.sucursal_id = @sucursalId and ${turnoEspecifico}
                     `;
 
                     const result    = await pool
                         .request()
+                        .input('sucursalId', mSql.Int, sucursalId)
                         .query(sqlCmd);
     
                     resolve({ success: true, data: result.recordset.length > 0 ? result.recordset[0] : {}, message: 'Catalogo cargado correctamente.' });
@@ -83,7 +84,7 @@ class VentaModel {
         });
     }
 
-    AbrirTurno(importeInicial, user_id){
+    AbrirTurno(importeInicial, user_id, sucursalId){
         return new Promise((resolve, reject) => {
             connectToDB()
             .then(async pool => {
@@ -110,7 +111,7 @@ class VentaModel {
                             0, 
                             '', 
                             1,
-                            2
+                            @sucursalId
                         );
 
                         SELECT SCOPE_IDENTITY() AS id;
@@ -121,6 +122,7 @@ class VentaModel {
                         .input('usuarioApertura', mSql.Int, user_id)
                         .input('usuarioCierre', mSql.Int, user_id)
                         .input('efectivoinicial', mSql.Float, importeInicial)
+                        .input('sucursalId', mSql.Int, sucursalId)
                         .query(sqlCmd);
 
                     resolve({ success: true, message: 'Se abrio un nuevo turno.', turno_id: result.recordset[0].id});
@@ -585,7 +587,7 @@ class VentaModel {
         });
     }
 
-    GetTurnos(){
+    GetTurnos( sucursalId ){
         return new Promise((resolve, reject) => {
             connectToDB()
             .then(async pool => {
@@ -607,11 +609,13 @@ class VentaModel {
                         FROM turno As t
                         INNER JOIN usuario As ua ON t.turno_usuario_apertura = ua.usuario_id
                         INNER JOIN usuario As uc ON t.turno_usuario_cierre = uc.usuario_id
+                        WHERE t.sucursal_id = @sucursalId
                         ORDER BY t.turno_id DESC
                     `;
 
                     const result    = await pool
                         .request()
+                        .input('sucursalId', mSql.Int, sucursalId)
                         .query(sqlCmd);
     
                     resolve({ success: true, data: result.recordset, message: 'Historial cargada correctamente.' });

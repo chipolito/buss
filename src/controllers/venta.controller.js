@@ -36,7 +36,7 @@ class VentaController {
     AbrirTurno(req, res) {
         let authData = req.session.authData;
 
-        ventaModel.AbrirTurno(req.body.importeInicial, authData.usuario_id)
+        ventaModel.AbrirTurno(req.body.importeInicial, authData.usuario_id, req.session.sucursalId)
         .then(async response => { 
             if(response.success){
                 response.miTurno = await ventaModel.GetTurno();
@@ -62,7 +62,8 @@ class VentaController {
         let authData    = req.session.authData;
        
         dataSale.usuario_id = authData.usuario_id;
-        dataSale.venta_folio = generaFolioUnico(dataSale.sucursal);
+        dataSale.venta_folio = generaFolioUnico(req.session.sucursalClave);
+        dataSale.sucursal = req.session.sucursalClave;
         
         ventaModel.Sale(dataSale)
         .then( async response => { 
@@ -172,7 +173,7 @@ class VentaController {
     GetTurno(req, res) {
         let turno_id = req.params.turnoid;
 
-        ventaModel.GetTurno( turno_id )
+        ventaModel.GetTurno( turno_id, req.session.sucursalId )
         .then( response => { return res.status( 200 ).json( response ); } )
         .catch( error => { return res.status( 500 ).json( { success: false, data: error, message: 'Error de sistema, contacte a soporte técnico' } ); } );
     }
@@ -204,7 +205,7 @@ class VentaController {
     }
 
     GetTurnos(req, res){
-        ventaModel.GetTurnos()
+        ventaModel.GetTurnos( req.session.sucursalId )
         .then(response => { return res.status(200).json(response); })
         .catch(error => { return res.status(500).json({success: false, data: error, message: 'Error de sistema, contacte a soporte técnico' }); });
     }
