@@ -88,6 +88,7 @@
 <body>
     <input type="hidden" id="registro_id" value="0"/>
     <input type="hidden" id="boleto_id" value="0"/>
+    <input type="hidden" id="sucursal_id" value="0"/>
 
     <table width="100%" cellspacing="0" cellpadding="0" border="0" class="mb-5">
         <tbody>
@@ -156,6 +157,7 @@
             }).format(money);
         },
         venta_id = $('#registro_id').val(),
+        sucursal_id = $('#sucursal_id').val(),
         options = {
             method: 'GET',
             headers: {
@@ -163,7 +165,7 @@
             }
         };
 
-        await fetch(`http://localhost:3000/Pos/GetVentaForTicket/${venta_id}`, options)
+        await fetch(`http://localhost:3000/Pos/GetVentaForTicket/${venta_id}/${sucursal_id}`, options)
         .then(response => response.json())
         .then(data => {
             if(data.success){

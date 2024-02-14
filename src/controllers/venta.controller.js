@@ -19,8 +19,8 @@ class VentaController {
 
             let configuracion = {
                 turno: response,
-                base: await getConfiguracion('cnf_base'),
-                comercio: await getConfiguracion('cnf_empresa'),
+                base: await getConfiguracion('cnf_base', req.session.sucursalId),
+                comercio: await getConfiguracion('cnf_empresa', req.session.sucursalId),
                 authData,
                 permisoHistorialVenta,
                 permisoMovimientoEfectivo,
@@ -68,7 +68,7 @@ class VentaController {
         ventaModel.Sale(dataSale)
         .then( async response => { 
             if(response.success){
-                const configuracion = await getConfiguracion('cnf_base');
+                const configuracion = await getConfiguracion('cnf_base', req.session.sucursalId);
                 const objConfiguracion = JSON.parse( configuracion.data );
 
                 let colaImpresion = [];
@@ -97,10 +97,10 @@ class VentaController {
                 if(objConfiguracion.inputBaseImpresora != '0') {
                     let impresora = { name: objConfiguracion.inputBaseImpresora, size: objConfiguracion.inputBaseImpresoraTamanio };
 
-                    await VentaController.printTicket('ticket', response.data.venta_id,  response.data.venta_folio, 0, impresora);
+                    await VentaController.printTicket('ticket', response.data.venta_id,  response.data.venta_folio, 0, impresora, req.session.sucursalId);
 
                     await VentaController.asyncForEach(colaImpresion, async (boleto) => {
-                        await VentaController.printTicket(boleto.forma, boleto.venta_id,  boleto.folio, boleto.ticket, impresora);
+                        await VentaController.printTicket(boleto.forma, boleto.venta_id,  boleto.folio, boleto.ticket, impresora, req.session.sucursalId);
                     });
                 }
 
@@ -242,12 +242,12 @@ class VentaController {
     }
 
     GetVentaForTicket(req, res){
-        ventaModel.GetVentaForTicket( req.params.venta_id )
+        ventaModel.GetVentaForTicket( req.params.venta_id, req.params.sucursal_id )
         .then(response => { return res.status(200).json(response); })
         .catch(error => { return res.status(500).json({success: false, data: error, message: 'Error de sistema, contacte a soporte técnico' }); });
     }
 
-    static printTicket(forma = '', registro_id = 0, fileName = '', boleto_id = 0, impresora = {}) {
+    static printTicket(forma = '', registro_id = 0, fileName = '', boleto_id = 0, impresora = {}, sucursalId) {
         return new Promise(async (resolve, reject) => {
             let doctoHtml   = fs.readFileSync(`./src/views/formas/${forma}.html`, 'utf8'),
                 $           = cheerio.load(doctoHtml),
@@ -255,6 +255,7 @@ class VentaController {
 
             $('#registro_id').val(registro_id);
             $('#boleto_id').val(boleto_id);
+            $('#sucursal_id').val(sucursalId);
 
             const browser = await puppeteer.launch({
                 executablePath: 'C://Program Files//Google//Chrome//Application//chrome.exe',
@@ -294,7 +295,7 @@ class VentaController {
     }
 
     async Reimpresion(req, res){
-        const configuracion = await getConfiguracion('cnf_base');
+        const configuracion = await getConfiguracion('cnf_base', req.session.sucursalId);
         const objConfiguracion = JSON.parse( configuracion.data );
 
         let message = 'No se ha configurado una impresora correcta.';
@@ -303,7 +304,7 @@ class VentaController {
 
             let impresora = { name: objConfiguracion.inputBaseImpresora, size: objConfiguracion.inputBaseImpresoraTamanio };
 
-            await VentaController.printTicket(req.body.forma, req.body.venta_id, req.body.venta_folio, req.body.boleto_id, impresora);
+            await VentaController.printTicket(req.body.forma, req.body.venta_id, req.body.venta_folio, req.body.boleto_id, impresora, req.session.sucursalId);
 
             let toAuditoria = {
                 usuario_id: req.session.authData.usuario_id,

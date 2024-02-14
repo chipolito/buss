@@ -635,7 +635,7 @@ class VentaModel {
         });
     }
 
-    GetVentaForTicket(venta_id){
+    GetVentaForTicket(venta_id, sucursalId){
         return new Promise((resolve, reject) => {
             connectToDB()
             .then(async pool => {
@@ -678,7 +678,7 @@ class VentaModel {
                                 WHERE d.detalle_estatus = 1 AND d.venta_id = v.venta_id
                                 for json path
                             ) AS detalle_venta,
-                            (select configuracion_valor from configuracion where configuracion_clave = 'cnf_empresa') AS configuracion
+                            (select configuracion_valor from configuracion where configuracion_clave = 'cnf_empresa' and sucursal_id = @sucursalId ) AS configuracion
                         FROM venta AS v
                         INNER JOIN usuario AS u ON v.usuario_id = u.usuario_id
                         INNER JOIN corrida AS c ON v.corrida_id = c.corrida_id
@@ -690,9 +690,10 @@ class VentaModel {
                     const result    = await pool
                         .request()
                         .input('ventaId', mSql.Int, venta_id)
+                        .input('sucursalId', mSql.Int, sucursalId)
                         .query(sqlCmd);
     
-                    resolve({ success: true, data: result.recordset, message: 'Venta cargada correctamente.' });
+                    resolve({ success: true, data: result.recordset[0], message: 'Venta cargada correctamente.' });
                 }
                 catch (error) {
                     let strError = `venta.model | GetVentaForTicket | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;

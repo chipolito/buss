@@ -70,8 +70,8 @@ function generaFolioUnico(sucursal){
     return `${newYear}${appendZeroToLength(parseInt(julDay), 3)}${sucursal}`;
 }
 
-function getConfiguracion(configuracionClave) {
-    return auxiliarModel.GetConfiguracion(configuracionClave)
+function getConfiguracion(configuracionClave, sucursalId) {
+    return auxiliarModel.GetConfiguracion(configuracionClave, sucursalId)
     .then(response => { return response;  })
     .catch(error => { return {success: false, data: error, message: "Error de sistema"}; });
 }

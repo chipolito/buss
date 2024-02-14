@@ -74,7 +74,7 @@ class AuxiliarModel{
         });
     }
 
-    GetConfiguracion( configuracionClave ) {
+    GetConfiguracion( configuracionClave, sucursalId ) {
         return new Promise((resolve, reject) => {
             connectToDB()
             .then(async pool => {
@@ -84,12 +84,13 @@ class AuxiliarModel{
                             configuracion_valor
                         FROM 
                             configuracion
-                        WHERE configuracion_clave = @clave
+                        WHERE configuracion_clave = @clave AND sucursal_id = @sucursalId
                     `;
 
                     const result    = await pool
                         .request()
                         .input('clave', mSql.NVarChar, configuracionClave)
+                        .input('sucursalId', mSql.Int, sucursalId)
                         .query(sqlCmd);
     
                     resolve({ success: true, data: result.recordset[0].configuracion_valor, message: 'Configuracion cargada.' });

@@ -7,7 +7,7 @@ router.get('/MovimientoEfectivo/:turno_id', ventaController.GetMovimientoEffecti
 router.get('/GetHistorialVenta/:turno_id', ventaController.GetHistorialVenta);
 router.get('/GetTurno/:turnoid', ventaController.GetTurno);
 router.get('/GetTurnos', ventaController.GetTurnos);
-router.get('/GetVentaForTicket/:venta_id', ventaController.GetVentaForTicket);
+router.get('/GetVentaForTicket/:venta_id/:sucursal_id', ventaController.GetVentaForTicket);
 router.post('/AbrirTurno', ventaController.AbrirTurno);
 router.post('/Sale', ventaController.Sale);
 router.post('/CerrarTurno', ventaController.CerrarTurno)
