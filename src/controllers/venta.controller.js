@@ -90,7 +90,7 @@ class VentaController {
                         colaImpresion.push( { forma: 'boleto', venta_id: response.data.venta_id, folio: ticket.data.folio, ticket: ticket.data.tiket_id } );
                 });
 
-                ventaModel.procesaCopia(dataSale.sucursal);
+                // ventaModel.procesaCopia(dataSale.sucursal);
 
                 if(objConfiguracion.inputBaseImpresora != '0') {
                     let impresora = { name: objConfiguracion.inputBaseImpresora, size: objConfiguracion.inputBaseImpresoraTamanio };
