@@ -5,7 +5,9 @@ const { setAuditoria } = require('../controllers/auxiliar.controller');
 
 class AjusteController {
     async Set (req, res) {
-        let updateValues = await ajusteModel.Del(req.body.ajuste_clave);
+        let updateValues = await ajusteModel.Del(req.body.ajuste_clave, req.session.sucursalId );
+
+        req.body.sucursalId = req.session.sucursalId;
 
         if ( updateValues ) {
             ajusteModel.Set(req.body)
@@ -15,7 +17,7 @@ class AjusteController {
                     modulo: 'Configuracion',
                     accion: 'Actualizó los parametros de configuración',
                     detalle: JSON.stringify(req.body),
-                    sucursal_id: req.session.sucursalId
+                    sucursal_id: req.body.sucursalId
                 };
     
                 setAuditoria(toAuditoria);
@@ -28,9 +30,10 @@ class AjusteController {
     }
 
     Get(req, res) {
-        ajusteModel.Get()
+        ajusteModel.Get( req.session.sucursalId )
         .then( async response => { 
             response.impresoras = await getPrinters();
+            response.sucursalClave = req.session.sucursalClave;
             return res.status( 200 ).json( response ); 
         })
         .catch( error => { return res.status( 500 ).json( { success: false, data: error, message: 'Error de sistema, contacte a soporte técnico' } ); } );

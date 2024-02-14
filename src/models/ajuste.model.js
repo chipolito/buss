@@ -4,7 +4,7 @@ const { connectToDB, mSql }   = require('./db');
 const { logToFile } = require('../controllers/auxiliar.controller');
 
 class AjusteModel {
-    Get(){
+    Get( sucursalId ){
         return new Promise((resolve, reject) => {
             connectToDB()
             .then(async pool => {
@@ -15,11 +15,14 @@ class AjusteModel {
                             configuracion_clave,
                             configuracion_valor
                         FROM 
-                            configuracion;
+                            configuracion
+                        WHERE
+                            sucursal_id = @sucursalId
                     `;
 
                     const result    = await pool
                         .request()
+                        .input('sucursalId', mSql.Int, sucursalId)
                         .query(sqlCmd);
     
                     resolve({ success: true, data: result.recordset, message: 'Ajustes cargados correctamente.' });
@@ -49,13 +52,14 @@ class AjusteModel {
                             configuracion_clave,
                             configuracion_valor,
                             sucursal_id
-                        ) VALUES (@clave, @valor, 2);
+                        ) VALUES (@clave, @valor, @sucursalId);
                     `;
     
                     const result    = await pool
                         .request()
                         .input('clave', mSql.NVarChar, data.ajuste_clave)
                         .input('valor', mSql.NVarChar, data.ajuste_valor)
+                        .input('sucursalId', mSql.Int, data.sucursalId)
                         .query(sqlCmd);
 
                     resolve({ success: true, message: 'Ajsue registrado correctamente'});
@@ -75,17 +79,18 @@ class AjusteModel {
         });
     }
 
-    Del( clave ) {
+    Del( clave, sucursalId ) {
         return new Promise((resolve, reject) => {
             connectToDB()
             .then(async pool => {
                 try{
                     const sqlCmd = `
-                        DELETE FROM configuracion WHERE configuracion_clave = @clave
+                        DELETE FROM configuracion WHERE configuracion_clave = @clave and sucursal_id = @sucursalId
                     `;
                     const result    = await pool
                         .request()
                         .input('clave', mSql.NVarChar, clave)
+                        .input('sucursalId', mSql.Int, sucursalId)
                         .query(sqlCmd);
 
                     resolve(true);

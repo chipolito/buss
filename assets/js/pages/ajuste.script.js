@@ -187,12 +187,10 @@ var uxControl = function () {
 
                             $.each(inputsE, (input, inputVal) => {
                                 if(input == 'inputGeneralSucursal') {
-                                    $(`#${input}`).val( inputVal ).selectpicker('render');
+                                   // $(`#${input}`).val( inputVal ).selectpicker('render');
                                 } else {
                                     $(`#${input}`).val( inputVal );
                                 }
-
-                                
                             });
                             break;
                         case 'cnf_base':
@@ -218,6 +216,8 @@ var uxControl = function () {
                             console.log('Configuracion no establecida', item.configuracion_clave);
                     }
                 });
+
+                $(`#inputGeneralSucursal`).val( data.sucursalClave ).selectpicker('render');
             }
         })
         .catch(( error ) => {
