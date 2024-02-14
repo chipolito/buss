@@ -8,7 +8,7 @@ const { getConfiguracion, generaFolioUnico, setAuditoria } = require('../control
 
 class VentaController {
     Configuracion(req, res) {
-        ventaModel.GetTurno()
+        ventaModel.GetTurno(0, req.session.sucursalId)
         .then( async response => { 
             let authData                    = req.session.authData,
                 jsonPermiso                 = JSON.parse(authData.usuario_permiso),
