@@ -185,7 +185,7 @@ class UsuarioModel{
         });
     }
     
-    Sign( username ) {
+    Sign( username, sucursalClave ) {
         return new Promise(async (resolve, reject) => {
             connectToDB()
             .then(async pool => {
@@ -198,7 +198,8 @@ class UsuarioModel{
                             u.usuario_propietario, 
                             u.usuario_telefono, 
                             u.usuario_tipo,
-                            concat('["', (select STRING_AGG(p.permiso_clave, '","') from permiso p where p.permiso_id in (select up.permiso_id from usuario_permiso up where up.usuario_id = u.usuario_id) ), '"]') as usuario_permiso
+                            concat('["', (select STRING_AGG(p.permiso_clave, '","') from permiso p where p.permiso_id in (select up.permiso_id from usuario_permiso up where up.usuario_id = u.usuario_id) ), '"]') as usuario_permiso,
+                            (select sucursal_id from sucursal where sucursal_clave = @sucursalClave and sucursal_estatus = 1) AS sucursal_id
                         FROM usuario As u
                         WHERE u.usuario_nombre = @nombre AND u.usuario_estatus = 1;
                     `;
@@ -206,6 +207,7 @@ class UsuarioModel{
                     const result    = await pool
                         .request()
                         .input('nombre', mSql.NVarChar, username)
+                        .input('sucursalClave', mSql.NVarChar, sucursalClave)
                         .query(sqlCmd);
     
                     resolve({ success: true, data: result.recordset.length > 0 ? result.recordset[0] : {}});

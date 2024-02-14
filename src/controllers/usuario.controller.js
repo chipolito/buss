@@ -63,9 +63,10 @@ class UsuarioController {
     }
 
     Sign(req, res) {
-        let userInfo = req.body;
+        let userInfo        = req.body,
+            sucursalClave   = process.env.CLAVESUCURSAL;
 
-        usuarioModel.Sign(userInfo.username)
+        usuarioModel.Sign(userInfo.username, sucursalClave)
         .then(response => {
             let result = {};
 
@@ -79,9 +80,14 @@ class UsuarioController {
                 if(logged){
                     result = { success: true, message: `Bienvenido ${response.data.usuario_propietario}` };
 
-                    req.session.authData    = response.data;
-                    req.session.isLoggedIn  = true;
-                    req.session.createdAt   = Date.now();
+                    req.session.isLoggedIn      = true;
+                    req.session.createdAt       = Date.now();
+                    req.session.sucursalClave   = sucursalClave;
+                    req.session.sucursalId      = response.data.sucursal_id;
+
+                    delete response.data.sucursal_id;
+
+                    req.session.authData        = response.data;
 
                     let toAuditoria = {
                         usuario_id: req.session.authData.usuario_id,
@@ -89,9 +95,8 @@ class UsuarioController {
                         accion: 'Inició sesión en la aplicación',
                         detalle: JSON.stringify( req.session.authData )
                     };
-        
-                    setAuditoria(toAuditoria);
 
+                    setAuditoria(toAuditoria);
                 } else {
                     result = { success: false, message: 'Contraseña incorrecta' };
                 }
