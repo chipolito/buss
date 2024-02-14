@@ -39,7 +39,7 @@ class VentaController {
         ventaModel.AbrirTurno(req.body.importeInicial, authData.usuario_id, req.session.sucursalId)
         .then(async response => { 
             if(response.success){
-                response.miTurno = await ventaModel.GetTurno();
+                response.miTurno = await ventaModel.GetTurno(0, req.session.sucursalId);
 
                 let toAuditoria = {
                     usuario_id: authData.usuario_id,
