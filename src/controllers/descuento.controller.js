@@ -10,7 +10,8 @@ class DescuentoController {
                 usuario_id: req.session.authData.usuario_id,
                 modulo: 'Descuentos',
                 accion: 'Registró un nuevo descuento',
-                detalle: JSON.stringify(req.body)
+                detalle: JSON.stringify(req.body),
+                sucursal_id: req.session.sucursalId
             };
 
             setAuditoria(toAuditoria);
@@ -33,7 +34,8 @@ class DescuentoController {
                 usuario_id: req.session.authData.usuario_id,
                 modulo: 'Descuentos',
                 accion: 'Eliminó un registro de descuento',
-                detalle: JSON.stringify(req.body)
+                detalle: JSON.stringify(req.body),
+                sucursal_id: req.session.sucursalId
             };
 
             setAuditoria(toAuditoria);

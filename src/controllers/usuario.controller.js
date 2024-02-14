@@ -28,7 +28,8 @@ class UsuarioController {
                     usuario_id: req.session.authData.usuario_id,
                     modulo: 'Usuarios',
                     accion: 'Registró un nuevo usuario',
-                    detalle: JSON.stringify(data)
+                    detalle: JSON.stringify(data),
+                    sucursal_id: req.session.sucursalId
                 };
     
                 setAuditoria(toAuditoria);
@@ -52,7 +53,8 @@ class UsuarioController {
                 usuario_id: req.session.authData.usuario_id,
                 modulo: 'Usuarios',
                 accion: 'Eliminó el registro de un usuario',
-                detalle: JSON.stringify(req.body)
+                detalle: JSON.stringify(req.body),
+                sucursal_id: req.session.sucursalId
             };
 
             setAuditoria(toAuditoria);
@@ -93,7 +95,8 @@ class UsuarioController {
                         usuario_id: req.session.authData.usuario_id,
                         modulo: 'Usuarios',
                         accion: 'Inició sesión en la aplicación',
-                        detalle: JSON.stringify( req.session.authData )
+                        detalle: JSON.stringify( req.session.authData ),
+                        sucursal_id: req.session.sucursalId
                     };
 
                     setAuditoria(toAuditoria);
@@ -134,7 +137,8 @@ class UsuarioController {
                         usuario_id: req.session.authData.usuario_id,
                         modulo: 'Usuarios',
                         accion: 'Actualizó el registro de un usuario',
-                        detalle: JSON.stringify(req.body)
+                        detalle: JSON.stringify(req.body),
+                        sucursal_id: req.session.sucursalId
                     };
         
                     setAuditoria(toAuditoria);
@@ -157,7 +161,8 @@ class UsuarioController {
                 usuario_id: req.session.authData.usuario_id,
                 modulo: 'Usuarios',
                 accion: 'Actualizó la contraseña de un usuario',
-                detalle: JSON.stringify(req.body)
+                detalle: JSON.stringify(req.body),
+                sucursal_id: req.session.sucursalId
             };
 
             setAuditoria(toAuditoria);

@@ -10,7 +10,8 @@ class AutobusController {
                 usuario_id: req.session.authData.usuario_id,
                 modulo: 'Autobus',
                 accion: 'Registró un nuevo autobus',
-                detalle: JSON.stringify(req.body)
+                detalle: JSON.stringify(req.body),
+                sucursal_id: req.session.sucursalId
             };
 
             setAuditoria(toAuditoria);
@@ -33,7 +34,8 @@ class AutobusController {
                 usuario_id: req.session.authData.usuario_id,
                 modulo: 'Autobus',
                 accion: 'Eliminó un autobus',
-                detalle: JSON.stringify({autobusId: req.body.autobusId})
+                detalle: JSON.stringify({autobusId: req.body.autobusId}),
+                sucursal_id: req.session.sucursalId
             };
 
             setAuditoria(toAuditoria);

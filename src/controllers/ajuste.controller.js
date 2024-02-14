@@ -14,7 +14,8 @@ class AjusteController {
                     usuario_id: req.session.authData.usuario_id,
                     modulo: 'Configuracion',
                     accion: 'Actualizó los parametros de configuración',
-                    detalle: JSON.stringify(req.body)
+                    detalle: JSON.stringify(req.body),
+                    sucursal_id: req.session.sucursalId
                 };
     
                 setAuditoria(toAuditoria);

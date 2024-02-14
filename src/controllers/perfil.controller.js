@@ -28,7 +28,8 @@ class PerfilController {
                         usuario_id: req.session.authData.usuario_id,
                         modulo: 'Configuración',
                         accion: 'Actualización de contraseña',
-                        detalle: JSON.stringify( {} )
+                        detalle: JSON.stringify( {} ),
+                        sucursal_id: req.session.sucursalId
                     };
         
                     setAuditoria(toAuditoria);

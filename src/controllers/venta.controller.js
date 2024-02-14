@@ -45,7 +45,8 @@ class VentaController {
                     usuario_id: authData.usuario_id,
                     modulo: 'Ventas',
                     accion: 'Abrió nuevo turno de caja.',
-                    detalle: JSON.stringify({importeInicial: req.body.importeInicial, turno: response.miTurno.turno_id})
+                    detalle: JSON.stringify({importeInicial: req.body.importeInicial, turno: response.miTurno.turno_id}),
+                    sucursal_id: req.session.sucursalId
                 };
 
                 setAuditoria(toAuditoria);
@@ -106,7 +107,8 @@ class VentaController {
                     usuario_id: authData.usuario_id,
                     modulo: 'Ventas',
                     accion: 'Vendió nuevo boleto.',
-                    detalle: JSON.stringify({ventaId: response.data.venta_id, folio: response.data.venta_folio})
+                    detalle: JSON.stringify({ventaId: response.data.venta_id, folio: response.data.venta_folio}),
+                    sucursal_id: req.session.sucursalId
                 };
 
                 setAuditoria(toAuditoria);
@@ -130,7 +132,8 @@ class VentaController {
                 usuario_id: req.session.authData.usuario_id,
                 modulo: 'Ventas',
                 accion: 'Eliminó un registro de movimiento de efectivo.',
-                detalle: JSON.stringify({registroId: req.body.movimientoId})
+                detalle: JSON.stringify({registroId: req.body.movimientoId}),
+                sucursal_id: req.session.sucursalId
             };
 
             setAuditoria(toAuditoria);
@@ -149,7 +152,8 @@ class VentaController {
                 usuario_id: req.session.authData.usuario_id,
                 modulo: 'Ventas',
                 accion: 'Registró un movimiento de efectivo.',
-                detalle: JSON.stringify(req.body)
+                detalle: JSON.stringify(req.body),
+                sucursal_id: req.session.sucursalId
             };
 
             setAuditoria(toAuditoria);
@@ -185,7 +189,8 @@ class VentaController {
                     usuario_id: req.session.authData.usuario_id,
                     modulo: 'Ventas',
                     accion: 'Cierre de turno.',
-                    detalle: JSON.stringify(req.body)
+                    detalle: JSON.stringify(req.body),
+                    sucursal_id: req.session.sucursalId
                 };
     
                 setAuditoria(toAuditoria);
@@ -303,7 +308,8 @@ class VentaController {
                 usuario_id: req.session.authData.usuario_id,
                 modulo: 'Ventas',
                 accion: 'Reimpresión de ticket de venta',
-                detalle: JSON.stringify(req.body)
+                detalle: JSON.stringify(req.body),
+                sucursal_id: req.session.sucursalId
             };
 
             setAuditoria(toAuditoria);

@@ -18,7 +18,8 @@ class CorridaController {
                     usuario_id: req.session.authData.usuario_id,
                     modulo: 'Corridas',
                     accion: 'Registró una nueva corrida',
-                    detalle: JSON.stringify(req.body)
+                    detalle: JSON.stringify(req.body),
+                    sucursal_id: req.session.sucursalId
                 };
     
                 setAuditoria(toAuditoria);
@@ -53,7 +54,8 @@ class CorridaController {
                     usuario_id: req.session.authData.usuario_id,
                     modulo: 'Corridas',
                     accion: 'Actualizó la informacion de la corrida',
-                    detalle: JSON.stringify(req.body)
+                    detalle: JSON.stringify(req.body),
+                    sucursal_id: req.session.sucursalId
                 };
     
                 setAuditoria(toAuditoria);
@@ -95,7 +97,8 @@ class CorridaController {
                 usuario_id: req.session.authData.usuario_id,
                 modulo: 'Corridas',
                 accion: 'Eliminó la informacion de la corrida',
-                detalle: JSON.stringify(req.body)
+                detalle: JSON.stringify(req.body),
+                sucursal_id: req.session.sucursalId
             };
 
             setAuditoria(toAuditoria);

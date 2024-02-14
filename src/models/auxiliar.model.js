@@ -138,7 +138,7 @@ class AuxiliarModel{
                         .input('modulo', mSql.NVarChar, data.modulo)
                         .input('accion', mSql.NVarChar, data.accion)
                         .input('detalle', mSql.NVarChar, data.detalle)
-                        .input('sucursalId', mSql.Int, 2)
+                        .input('sucursalId', mSql.Int, data.sucursal_id)
                         .query(sqlCmd);
 
                     resolve({ success: true, message: 'Movimiento registrado correctamente'});
