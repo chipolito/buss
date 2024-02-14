@@ -6,6 +6,8 @@ class CorridaController {
     Set (req, res) {
         let data = req.body;
 
+        data.sucursalId = req.session.sucursalId;
+
         corridaModel.Set(data)
         .then( async response => { 
             if( response.success ) {
@@ -19,7 +21,7 @@ class CorridaController {
                     modulo: 'Corridas',
                     accion: 'Registró una nueva corrida',
                     detalle: JSON.stringify(req.body),
-                    sucursal_id: req.session.sucursalId
+                    sucursal_id: data.sucursalId
                 };
     
                 setAuditoria(toAuditoria);
@@ -32,6 +34,8 @@ class CorridaController {
 
     Put (req, res) {
         let data = req.body;
+
+        data.sucursalId = req.session.sucursalId;
 
         corridaModel.Put(data)
         .then( async response => { 
@@ -55,7 +59,7 @@ class CorridaController {
                     modulo: 'Corridas',
                     accion: 'Actualizó la informacion de la corrida',
                     detalle: JSON.stringify(req.body),
-                    sucursal_id: req.session.sucursalId
+                    sucursal_id: data.sucursalId
                 };
     
                 setAuditoria(toAuditoria);
@@ -67,7 +71,7 @@ class CorridaController {
     }
 
     Get(req, res) {
-        corridaModel.Get()
+        corridaModel.Get( req.session.sucursalId )
         .then( response => { 
             if(response.success) {
                 response.data.forEach(function(corrida, index) {

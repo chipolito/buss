@@ -22,7 +22,7 @@ class CorridaModel {
                             @destino,
                             @tiempo,
                             @precio,
-                            2,
+                            @sucursalId,
                             1
                         );
 
@@ -35,6 +35,7 @@ class CorridaModel {
                         .input('destino', mSql.NVarChar, data.inputNombreDestino)
                         .input('tiempo', mSql.NVarChar, data.inputTiempo)
                         .input('precio', mSql.Float, data.inputPrecio)
+                        .input('sucursalId', mSql.Int, data.sucursalId)
                         .query(sqlCmd);
 
                     resolve({ success: true, message: 'Corrida registrada correctamente', corrida_id: result.recordset[0].id});
@@ -65,7 +66,7 @@ class CorridaModel {
                             corrida_destino = @destino,
                             corrida_tiempo_estimado = @tiempo,
                             corrida_precio = @precio,
-                            sucursal_id = 2
+                            sucursal_id = @sucursalId
                         WHERE corrida_id = @corridaId;
                     `;
     
@@ -76,6 +77,7 @@ class CorridaModel {
                         .input('tiempo', mSql.NVarChar, data.inputTiempo)
                         .input('precio', mSql.NVarChar, data.inputPrecio)
                         .input('corridaId', mSql.NVarChar, data.inputIdCorrida)
+                        .input('sucursalId', mSql.Int, data.sucursalId)
                         .query(sqlCmd);
 
                     resolve({ success: true, message: 'Corrida actualizada correctamente' });
@@ -121,7 +123,7 @@ class CorridaModel {
         });
     }
 
-    Get(){
+    Get(sucursalId){
         return new Promise((resolve, reject) => {
             connectToDB()
             .then(async pool => {
@@ -152,11 +154,13 @@ class CorridaModel {
                         FROM 
                             corrida AS c
                         WHERE
-                            c.corrida_estatus = 1;
+                            c.sucursal_id = @sucursalId
+                            AND c.corrida_estatus = 1;
                     `;
 
                     const result    = await pool
                         .request()
+                        .input('sucursalId', mSql.Int, sucursalId)
                         .query(sqlCmd);
     
                     resolve({ success: true, data: result.recordset, message: 'Catalogo cargado correctamente.' });
