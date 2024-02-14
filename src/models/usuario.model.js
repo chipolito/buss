@@ -24,7 +24,7 @@ class UsuarioModel{
                             @usuarioPropietario, 
                             @usuarioTelefono, 
                             2, 
-                            2, 
+                            @sucursalId, 
                             1
                         );
 
@@ -37,6 +37,7 @@ class UsuarioModel{
                         .input('usuarioContrasenia', mSql.NVarChar, data.inputContraseniaUsuario)
                         .input('usuarioPropietario', mSql.NVarChar, data.inputPropietarioUsuario)
                         .input('usuarioTelefono', mSql.NVarChar, data.inputContactoUsuario)
+                        .input('sucursalId', mSql.Int, data.sucursalId)
                         .query(sqlCmd);
 
                     resolve({ success: true, message: 'Usuario registrado correctamente', usuario_id: result.recordset[0].id});
@@ -112,7 +113,7 @@ class UsuarioModel{
         });
     }
 
-    Get() {
+    Get( sucursalId ) {
         return new Promise((resolve, reject) => {
             connectToDB()
             .then(async pool => {
@@ -130,12 +131,13 @@ class UsuarioModel{
                             usuario AS u
                         INNER JOIN usuario_permiso AS up on u.usuario_id = up.usuario_id
                         WHERE
-                            usuario_estatus = 1 AND usuario_tipo = 2
+                            usuario_estatus = 1 AND usuario_tipo = 2 AND sucursal_id = @sucursalId
                         GROUP BY u.usuario_id, u.usuario_nombre, u.usuario_propietario, u.usuario_telefono, u.usuario_tipo, u.sucursal_id
                     `;
 
                     const result    = await pool
                         .request()
+                        .input('sucursalId', mSql.Int, sucursalId)
                         .query(sqlCmd);
     
                     resolve({ success: true, data: result.recordset, message: 'Catalogo cargado correctamente.' });

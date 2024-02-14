@@ -7,6 +7,8 @@ class UsuarioController {
     Set (req, res) {
         let data = req.body;
 
+        data.sucursalId = req.session.sucursalId;
+
         data.inputContraseniaUsuario = bcrypt.hashSync(data.inputContraseniaUsuario, 10);
 
         usuarioModel.Set(data)
@@ -41,7 +43,7 @@ class UsuarioController {
     }
 
     Get(req, res) {
-        usuarioModel.Get()
+        usuarioModel.Get( req.session.sucursalId )
         .then( response => { return res.status( 200 ).json( response ); } )
         .catch( error => { return res.status( 500 ).json( { success: false, data: error, message: 'Error de sistema, contacte a soporte técnico' } ); } );
     }
