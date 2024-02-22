@@ -41,6 +41,7 @@ app.use('/Pos', require('./routes/venta.route'));
 app.use('/Logs', require('./routes/log.route'));
 app.use('/Perfil', require('./routes/perfil.route'));
 app.use('/Motivo', require('./routes/motivo.route'));
+app.use('/tool', require('./routes/tool.route'));
 app.use('/', require('./routes/app.route'));
 
 app.use((req, res, next) => {
