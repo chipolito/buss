@@ -56,6 +56,7 @@ class VentaModel {
                                 FROM descuento
                                 for json path
                             ) As detalle_tipo_descuento,
+                            (select concat('Sucursal ', sucursal_nombre_corto, ' - ', sucursal_nombre) from sucursal where sucursal_id = 2) As nombre_sucursal,
                             t.turno_estatus
                         FROM 
                             turno AS t

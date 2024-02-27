@@ -287,6 +287,8 @@
                         $('.lbl-nombre-cajero-cierre').parent().addClass('d-none');
                     }
 
+                    $('.lblNombreSucursal').html( turnoActual.nombre_sucursal );
+
                     let totalCaja = ( turnoActual.turno_efectivo_inicial + turnoActual.venta_efectivo + turnoActual.entrada_efectivo ) - turnoActual.salida_efectivo;
 
                     $('.lbl-total-efectivo').html( currency( totalCaja ));
@@ -351,8 +353,6 @@
                                 `;
 
                                 $(row).appendTo("#tblCorteHistorialVenta");
-
-                                $('.lblNombreSucursal').html( item.venta_sucursal == '01' ? 'Sucursal AICM - Aeropuerto Internacional de la Ciudad de México' : 'Sucursal AIFA - Aeropuerto Internacional Felipe Ángeles');
                             });
                         }
                     });
