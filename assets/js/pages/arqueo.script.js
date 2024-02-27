@@ -147,10 +147,11 @@ var uxControl = function () {
             .then(async data => {
                 $(this).html( contentBkp );
                 KTUtil.btnRelease(btn);
+
+                showMessage('dark', 'Arqueo de caja', data.msg);
                 
                 if(data.success) {
-                    showMessage('dark', 'Arqueo de caja', 'Formato generado');
-                    window.open(`http://localhost:3000/resources/formas/${data.msg}`, "_blank");
+                    window.open(`http://localhost:3000/resources/formas/${data.file}`, "_blank");
                 }
             });
         });

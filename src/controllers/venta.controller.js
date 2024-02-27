@@ -225,27 +225,32 @@ class VentaController {
         $('#sucursal_id').html(req.session.sucursalId);
         $('#turno_web').html(turno_web);
 
-        const browser = await puppeteer.launch({
-            executablePath: 'C://Program Files//Google//Chrome//Application//chrome.exe',
-            headless: 'new'
-        });
+        try {
 
-        const page = await browser.newPage();
+            const browser = await puppeteer.launch({
+                executablePath: 'C://Program Files//Google//Chrome//Application//chrome.exe',
+                headless: 'new'
+            });
 
-        await page.setContent($.html(), { waitUntil: 'networkidle0' });
+            const page = await browser.newPage();
 
-        await page.emulateMediaType('screen');
+            await page.setContent($.html(), { waitUntil: 'networkidle0' });
 
-        const PDF = await page.pdf({
-            path: `assets/formas/${nameFile}`,
-            margin: { top: '40px', right: '0px', bottom: '40px', left: '0px' },
-            printBackground: true,
-            format: 'A4'
-        });
+            await page.emulateMediaType('screen');
 
-        await browser.close();
+            const PDF = await page.pdf({
+                path: `assets/formas/${nameFile}`,
+                margin: { top: '40px', right: '0px', bottom: '40px', left: '0px' },
+                printBackground: true,
+                format: 'A4'
+            });
 
-        res.status(200).json({success: true, msg: nameFile});
+            await browser.close();
+
+            res.status(200).json({success: true, msg: 'Formato generado', file: nameFile});
+        } catch (error) {
+            res.status(200).json({success: false, msg: 'Ocurrió un error al tratar de generar el archivo de corte, inténtelo nuevamente'});
+        }
     }
 
     GetVentaForTicket(req, res){
