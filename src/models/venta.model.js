@@ -60,7 +60,7 @@ class VentaModel {
                             t.turno_estatus
                         FROM 
                             turno AS t
-                        WHERE t.sucursal_id = @sucursalId and ${turnoEspecifico}
+                        WHERE t.sucursal_id = @sucursalId and t.turno_web = 0 and ${turnoEspecifico}
                     `;
 
                     const result    = await pool
@@ -606,7 +606,8 @@ class VentaModel {
                             t.turno_venta_tarjeta,
                             t.turno_venta_total,
                             t.turno_comentario,
-                            t.turno_estatus
+                            t.turno_estatus,
+                            t.turno_web
                         FROM turno As t
                         INNER JOIN usuario As ua ON t.turno_usuario_apertura = ua.usuario_id
                         INNER JOIN usuario As uc ON t.turno_usuario_cierre = uc.usuario_id

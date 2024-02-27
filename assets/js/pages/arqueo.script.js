@@ -56,8 +56,11 @@ var uxControl = function () {
                         return (row.turno_estatus == 1) ? 'N/A' : row.turno_fecha_cierre;
 					},
 				}, {
-                    field: 'usuario_apertura',
-                    title: 'Cajero'
+                    field: 'turno_web',
+                    title: 'Origen',
+                    template: function(row){
+                        return row.turno_web == 1 ? 'Aplicación web' : 'Terminal'
+                    }
                 }, {
                     field: 'turno_venta_total',
                     title: 'Venta',
@@ -80,6 +83,9 @@ var uxControl = function () {
                         return currency(row.turno_venta_tarjeta);
                     }
                 }, {
+                    field: 'usuario_apertura',
+                    title: 'Cajero'
+                },{
 					field: 'turno_estatus',
 					title: 'Estatus',
 					width: 60,
