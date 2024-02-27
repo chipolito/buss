@@ -102,7 +102,7 @@ var uxControl = function () {
 					autoHide: false,
 					template: function(row) {
                         return `
-                            <a href="javascript:;" class="btn btn-sm btn-icon btn-outline-primary" data-pdf-arqueo='${row.turno_id}' id="btnPrint${row.turno_id}" title="Imprimir Documento PDF">
+                            <a href="javascript:;" class="btn btn-sm btn-icon btn-outline-primary" data-pdf-arqueo='${row.turno_id}' data-turno-web='${row.turno_web}' id="btnPrint${row.turno_id}" title="Imprimir Documento PDF">
                                 <span class="svg-icon svg-icon-md">
                                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                                         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -131,14 +131,15 @@ var uxControl = function () {
 
             KTUtil.btnWait(btn, 'spinner spinner-right spinner-white pr-15', '', true);
 
-            let turno_id = $(this).data('pdf-arqueo');
+            let turno_id = $(this).data('pdf-arqueo'),
+                turno_web = $(this).data('turno-web');
 
             let options = {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify( { turno_id } )
+                body: JSON.stringify( { turno_id, turno_web } )
             };
     
             fetch('/Pos/GeneraPdfCorte', options)

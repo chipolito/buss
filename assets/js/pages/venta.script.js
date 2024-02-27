@@ -1526,7 +1526,7 @@ var uxControl = function () {
                 }
             };
     
-            fetch('/Pos/GetTurno/0/0', options)
+            fetch('/Pos/GetTurno/0/0/0', options)
             .then(response => response.json())
             .then(data => {
                 if(data.success){

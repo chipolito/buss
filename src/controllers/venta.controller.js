@@ -8,7 +8,7 @@ const { getConfiguracion, generaFolioUnico, setAuditoria } = require('../control
 
 class VentaController {
     Configuracion(req, res) {
-        ventaModel.GetTurno(0, req.session.sucursalId)
+        ventaModel.GetTurno(0, req.session.sucursalId, 0)
         .then( async response => { 
             let authData                    = req.session.authData,
                 jsonPermiso                 = JSON.parse(authData.usuario_permiso),
@@ -39,7 +39,7 @@ class VentaController {
         ventaModel.AbrirTurno(req.body.importeInicial, authData.usuario_id, req.session.sucursalId)
         .then(async response => { 
             if(response.success){
-                response.miTurno = await ventaModel.GetTurno(0, req.session.sucursalId);
+                response.miTurno = await ventaModel.GetTurno(0, req.session.sucursalId, 0);
 
                 let toAuditoria = {
                     usuario_id: authData.usuario_id,
@@ -172,11 +172,12 @@ class VentaController {
 
     GetTurno(req, res) {
         let turno_id = req.params.turnoid,
-            sucursal_id = req.params.sucursal_id == 0 ? req.session.sucursalId : req.params.sucursal_id;
+            sucursal_id = req.params.sucursal_id == 0 ? req.session.sucursalId : req.params.sucursal_id,
+            turnoWeb = req.params.turno_web;
 
 
 
-        ventaModel.GetTurno( turno_id, sucursal_id )
+        ventaModel.GetTurno( turno_id, sucursal_id, turnoWeb )
         .then( response => { return res.status( 200 ).json( response ); } )
         .catch( error => { return res.status( 500 ).json( { success: false, data: error, message: 'Error de sistema, contacte a soporte técnico' } ); } );
     }
@@ -217,10 +218,12 @@ class VentaController {
         let doctoHtml   = fs.readFileSync(`./src/views/formas/arqueo.html`, 'utf8'),
             $           = cheerio.load(doctoHtml),
             nameFile    = `${(Math.floor(Date.now() / 1000)).toString()}.pdf`,
-            turno_id    = req.body.turno_id;
+            turno_id    = req.body.turno_id,
+            turno_web   = req.body.turno_web;
 
         $('#turno_id').html(turno_id);
         $('#sucursal_id').html(req.session.sucursalId);
+        $('#turno_web').html(turno_web);
 
         const browser = await puppeteer.launch({
             executablePath: 'C://Program Files//Google//Chrome//Application//chrome.exe',

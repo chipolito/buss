@@ -4,7 +4,7 @@ const { connectToDB, mSql }   = require('./db');
 const { logToFile } = require('../controllers/auxiliar.controller');
 
 class VentaModel {
-    GetTurno( turno_id = 0, sucursalId) {
+    GetTurno( turno_id = 0, sucursalId, turnoWeb) {
         return new Promise((resolve, reject) => {
             let turnoEspecifico = turno_id > 0 ? ` t.turno_id = ${turno_id};` : 't.turno_estatus = 1;';
 
@@ -19,7 +19,9 @@ class VentaModel {
                             CONCAT(CAST(CAST(t.turno_fecha_apertura as date) AS nvarchar), ' ', CAST(CAST(t.turno_fecha_apertura as time) AS nvarchar(5)) ) AS turno_fecha_apertura,
                             t.turno_usuario_cierre,
                             (select u.usuario_propietario from usuario as u where u.usuario_id = t.turno_usuario_cierre) AS nombre_usuario_cierre,
-                            t.turno_fecha_cierre,
+                            case when t.turno_estatus > 0 then CONCAT(CAST(CAST(t.turno_fecha_cierre as date) AS nvarchar), ' ', CAST(CAST(t.turno_fecha_cierre as time) AS nvarchar(5)) )
+							else 'N/A'
+                            end As turno_fecha_cierre,
                             t.turno_efectivo_inicial,
                             t.turno_efectivo_final,
                             t.turno_efectivo_real,
@@ -60,7 +62,7 @@ class VentaModel {
                             t.turno_estatus
                         FROM 
                             turno AS t
-                        WHERE t.sucursal_id = @sucursalId and t.turno_web = 0 and ${turnoEspecifico}
+                        WHERE t.sucursal_id = @sucursalId and t.turno_web = ${turnoWeb} and ${turnoEspecifico}
                     `;
 
                     const result    = await pool
