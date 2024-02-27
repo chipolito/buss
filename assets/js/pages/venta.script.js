@@ -593,8 +593,6 @@ var uxControl = function () {
 
         $('div[data-repeater-list|="boletos"]').html(templateRepeatItem);
         $objListaBoletos.destory();
-
-        _cargarCorridas();
     }
 
     var _cargarDescuentos = function () {

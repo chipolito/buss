@@ -149,6 +149,7 @@ class CorridaModel {
                                 FROM horario h
                                 INNER JOIN autobus a ON h.autobus_id = a.autobus_id
                                 WHERE corrida_id = c.corrida_id AND horario_estatus = 1
+                                order by h.horario_salida ASC
                                 for json path
                             ) AS corrida_horario
                         FROM 
