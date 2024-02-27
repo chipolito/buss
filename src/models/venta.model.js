@@ -713,6 +713,36 @@ class VentaModel {
             });
         });
     }
+
+    ActualizarDisponibilidad(horarioId = 0) {
+        return new Promise((resolve, reject) => {
+            connectToDB()
+            .then(async pool => {
+                try{
+                    const result = await pool
+                        .request()
+                        .input('id_horario', mSql.Int, horarioId)
+                        .input('fecha', mSql.VarChar, '2024-02-27')
+                        .output('d_asientos', mSql.Int)
+                        .output('d_lugares', mSql.Int)
+                        .execute('actualiza_disponibilidad');
+    
+                    resolve({ success: true, data: result.output, message: 'Disponibilidad actualizada' });
+                }
+                catch (error) {
+                    let strError = `venta.model | ActualizarDisponibilidad | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
+                    logToFile(strError, 'disse-tickets.log', '\r\n');
+                    resolve({success: false, data: [], message: 'Error con la peticion al servidor de base de datos.'});
+                } finally {
+                    pool.close()
+                }
+            })
+            .catch( error => {
+                logToFile('venta.model | ActualizarDisponibilidad | ' + error, 'disse-tickets.log', '\r\n');
+                resolve({success: false, data: [], message: 'Error de servidor de base de datos.'});
+            });
+        });
+    }
 }
 
 module.exports = new VentaModel();

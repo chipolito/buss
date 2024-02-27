@@ -15,5 +15,6 @@ router.post('/RegistrarMovimiento', ventaController.SetMovimientoEfectivo);
 router.post('/GeneraPdfCorte', ventaController.GeneraPdfCorte);
 router.post('/Reimpresion', ventaController.Reimpresion);
 router.delete('/MovimientoEfectivo', ventaController.DelMovimientoEfectivo);
+router.get('/ActualizarDisponibilidad/:horarioId', ventaController.ActualizarDisponibilidad);
 
 module.exports = router;

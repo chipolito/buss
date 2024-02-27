@@ -175,8 +175,6 @@ class VentaController {
             sucursal_id = req.params.sucursal_id == 0 ? req.session.sucursalId : req.params.sucursal_id,
             turnoWeb = req.params.turno_web;
 
-
-
         ventaModel.GetTurno( turno_id, sucursal_id, turnoWeb )
         .then( response => { return res.status( 200 ).json( response ); } )
         .catch( error => { return res.status( 500 ).json( { success: false, data: error, message: 'Error de sistema, contacte a soporte técnico' } ); } );
@@ -257,6 +255,14 @@ class VentaController {
         ventaModel.GetVentaForTicket( req.params.venta_id, req.params.sucursal_id )
         .then(response => { return res.status(200).json(response); })
         .catch(error => { return res.status(500).json({success: false, data: error, message: 'Error de sistema, contacte a soporte técnico' }); });
+    }
+
+    ActualizarDisponibilidad(req, res) {
+        let horarioId = req.params.horarioId;
+
+        ventaModel.ActualizarDisponibilidad( horarioId )
+        .then( response => { return res.status( 200 ).json( response ); } )
+        .catch( error => { return res.status( 500 ).json( { success: false, data: error, message: 'Error de sistema, contacte a soporte técnico' } ); } );
     }
 
     static printTicket(forma = '', registro_id = 0, fileName = '', boleto_id = 0, impresora = {}, sucursalId) {

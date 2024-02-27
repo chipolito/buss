@@ -58,6 +58,12 @@ var uxControl = function () {
         }
     );
 
+    const $tiempoRestante = document.querySelector("#tiempoRestante");
+
+    let idInterval = null, 
+        diferenciaTemporal = 0,
+		fechaFuturo = null;
+
     var _activarControles = () => {
         KTUtil.addEvent(btnPrecreate, 'click', function(){
             let salidaSeleccionada  = $("input[name='corrida_horario']:checked").data('detalle');
@@ -530,6 +536,64 @@ var uxControl = function () {
                 $(this).prop('selectedIndex', 0);
             }
         });
+
+        $(document).on('change', 'input[type=radio][name=corrida_horario]', function(){
+            let horarioId = this.value;
+
+            let options = {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+
+            fetch(`/Pos/ActualizarDisponibilidad/${horarioId}`, options)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                iniciarTemporizador(10, 0);
+            }).catch(( error ) => {
+                console.log(error);
+                showMessage('danger', 'Administración', 'Por favor recargue la página (F5), si el problema persiste solcite a soporte técnico.');
+            });
+        });
+
+
+        const iniciarTemporizador = (minutos, segundos) => {
+            if (fechaFuturo) {
+                fechaFuturo = new Date(new Date().getTime() + diferenciaTemporal);
+                diferenciaTemporal = 0;
+            } else {
+                const milisegundos = (segundos + (minutos * 60)) * 1000;
+                fechaFuturo = new Date(new Date().getTime() + milisegundos);
+            }
+
+            clearInterval(idInterval);
+
+            idInterval = setInterval(() => {
+                const tiempoRestante = fechaFuturo.getTime() - new Date().getTime();
+                if (tiempoRestante <= 0) {
+                    clearInterval(idInterval);
+                } else {
+                    $tiempoRestante.textContent = milisegundosAMinutosYSegundos(tiempoRestante);
+                }
+            }, 50);
+        };
+
+        const milisegundosAMinutosYSegundos = (milisegundos) => {
+            const minutos = parseInt(milisegundos / 1000 / 60);
+            milisegundos -= minutos * 60 * 1000;
+            let segundos = (milisegundos / 1000);
+            return `${agregarCeroSiEsNecesario(minutos)}:${agregarCeroSiEsNecesario(parseInt(segundos))}`;
+        };
+
+        const agregarCeroSiEsNecesario = valor => {
+            if (valor < 10) {
+                return "0" + valor;
+            } else {
+                return "" + valor;
+            }
+        }
     }
 
     var _resetForm = () => {
