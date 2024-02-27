@@ -1437,7 +1437,7 @@ var uxControl = function () {
                             Metodo Pago
                         </a>
                         <span class="text-muted font-weight-bold">
-                            ${e.data.venta_efectivo > 0 ? 'Efectivo: ' + currency(e.data.venta_efectivo) : 'Tarjeta: #Aut ' + e.data.venta_autorizacion}
+                            ${e.data.venta_efectivo > 0 ? 'Efectivo: ' + currency(e.data.venta_efectivo) : 'Tarjeta: #Aut ' + e.data.venta_tarjeta_autorizacion}
                         </span>
                     </div>
                 </div>
