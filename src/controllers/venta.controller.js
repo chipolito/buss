@@ -171,9 +171,12 @@ class VentaController {
     }
 
     GetTurno(req, res) {
-        let turno_id = req.params.turnoid;
+        let turno_id = req.params.turnoid,
+            sucursal_id = req.params.sucursal_id == 0 ? req.session.sucursalId : req.params.sucursal_id;
 
-        ventaModel.GetTurno( turno_id, req.session.sucursalId )
+
+
+        ventaModel.GetTurno( turno_id, sucursal_id )
         .then( response => { return res.status( 200 ).json( response ); } )
         .catch( error => { return res.status( 500 ).json( { success: false, data: error, message: 'Error de sistema, contacte a soporte técnico' } ); } );
     }
@@ -217,6 +220,7 @@ class VentaController {
             turno_id    = req.body.turno_id;
 
         $('#turno_id').html(turno_id);
+        $('#sucursal_id').html(req.session.sucursalId);
 
         const browser = await puppeteer.launch({
             executablePath: 'C://Program Files//Google//Chrome//Application//chrome.exe',

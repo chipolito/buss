@@ -37,6 +37,8 @@
 </head>
 <body>
     <p id="turno_id" class="d-none">0</p>
+    <p id="sucursal_id" class="d-none">0</p>
+
     <div class="container">
         <div class="media">
             <img class="align-self-start mr-3" src="http://localhost:3000/resources/images/general/ASA-Logotipo.png" width="160" alt="Logo ASA">
@@ -259,6 +261,7 @@
                 }).format(money);
             },
             turno_id = $('#turno_id').html(),
+            sucursal_id = $('#sucursal_id').html(),
             options = {
                 method: 'GET',
                 headers: {
@@ -266,7 +269,7 @@
                 }
             };
 
-            await fetch(`http://localhost:3000/Pos/GetTurno/${turno_id}`, options)
+            await fetch(`http://localhost:3000/Pos/GetTurno/${turno_id}/${sucursal_id}`, options)
             .then(response => response.json())
             .then(data => {
                 if(data.success){

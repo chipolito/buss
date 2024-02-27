@@ -5,7 +5,7 @@ const router                = express.Router();
 router.get('/Configuracion', ventaController.Configuracion);
 router.get('/MovimientoEfectivo/:turno_id', ventaController.GetMovimientoEffectivo);
 router.get('/GetHistorialVenta/:turno_id', ventaController.GetHistorialVenta);
-router.get('/GetTurno/:turnoid', ventaController.GetTurno);
+router.get('/GetTurno/:turnoid/:sucursal_id', ventaController.GetTurno);
 router.get('/GetTurnos', ventaController.GetTurnos);
 router.get('/GetVentaForTicket/:venta_id/:sucursal_id', ventaController.GetVentaForTicket);
 router.post('/AbrirTurno', ventaController.AbrirTurno);
