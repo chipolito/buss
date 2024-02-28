@@ -229,17 +229,7 @@
                                     <th>Pago</th>
                                 </tr>
                             </thead>
-                            <tbody id="tblCorteHistorialVenta">
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
+                            <tbody id="tblCorteHistorialVenta"></tbody>
                         </table>
                     </div>
                 </div>
@@ -341,10 +331,14 @@
                     .then(response => response.json())
                     .then(async data => {
                         if(data.success) {
+                            let rowVentas = '',
+                                rowDevoluciones = '',
+                                totalDevoluciones = 0;
+
                             $.each(data.data, function(index, item){
-                                let row = `
+                                rowVentas += `
                                     <tr>
-                                        <td>#${item.venta_folio}</td>
+                                        <td>${ item.venta_estatus == 1 ? '#' + item.venta_folio : '<texto class="text-danger font-weight-bold">#'+ item.venta_folio +'</texto>'}</td>
                                         <td>${item.venta_fecha} / ${item.venta_hora}</td>
                                         <td>${item.venta_cantidad}</td>
                                         <td>${currency(item.venta_total)}</td>
@@ -354,18 +348,21 @@
                                     </tr>
                                 `;
 
-                                $(row).appendTo("#tblCorteHistorialVenta");
+                                if(item.venta_estatus == 0) {
+                                    rowDevoluciones += `
+                                        <td>${ item.venta_estatus == 1 ? '#' + item.venta_folio : '<texto class="text-danger font-weight-bold">#'+ item.venta_folio +'</texto>'}</td>
+                                        <td>${ item.horario_salida }</td>
+                                    `;
+
+                                    totalDevoluciones += parseFloat(item.venta_efectivo) + parseFloat(item.venta_tarjeta);
+                                }
                             });
+
+                            $(rowVentas).appendTo("#tblCorteHistorialVenta");
+                            $(rowDevoluciones).appendTo("#tblDevolucion");
+                            $('.lbl-salida-devoluciones').html( currency(totalDevoluciones) );
                         }
                     });
-                    
-                    
-                    // // Dibujar tabla de historial de ventas
-                    // $("#tblCorteHistorialVenta").html("");
-
-                    // if(turnoActual.ventasTurno.success){
-                    
-                    // }
                 }
             })
             .catch(( error ) => {
