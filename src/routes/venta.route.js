@@ -18,5 +18,6 @@ router.delete('/MovimientoEfectivo', ventaController.DelMovimientoEfectivo);
 router.get('/ActualizarDisponibilidad/:horarioId', ventaController.ActualizarDisponibilidad);
 router.post('/ReservacionBoleto/', ventaController.ReservacionBoleto);
 router.post('/TerminarReservacionBoleto/', ventaController.TerminarReservacionBoleto);
+router.post('/CancelarVenta/', ventaController.CancelarVenta);
 
 module.exports = router;

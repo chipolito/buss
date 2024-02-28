@@ -511,11 +511,13 @@ class VentaModel {
                                             d.venta_descuento_nombre,
                                             cast(d.venta_precio_venta as numeric(36, 2)) AS venta_precio_venta,
                                             d.detalle_beneficiario,
-                                            d.detalle_asiento
+                                            d.detalle_asiento,
+                                            d.detalle_estatus
                                 FROM venta_detalle AS d
-                                WHERE d.detalle_estatus = 1 AND d.venta_id = v.venta_id
+                                WHERE d.venta_id = v.venta_id
                                 for json path
-                            ) AS detalle_venta
+                            ) AS detalle_venta,
+                            v.venta_estatus
                         FROM venta AS v
                         INNER JOIN usuario AS u ON v.usuario_id = u.usuario_id
                         INNER JOIN corrida AS c ON v.corrida_id = c.corrida_id
@@ -788,7 +790,7 @@ class VentaModel {
                         .output('resultado', mSql.Int)
                         .execute('termina_reserva');
     
-                    resolve({ success: true, data: result.output, message: 'Reserva actualizada correctamente' });
+                    resolve({ success: true, data: result.output, message: info.estatus == 0 ? 'Proceso cancelado' : 'Proceso finalizado' });
                 }
                 catch (error) {
                     let strError = `venta.model | TerminarReservacionBoleto | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
@@ -801,6 +803,38 @@ class VentaModel {
             .catch( error => {
                 logToFile('venta.model | TerminarReservacionBoleto | ' + error, 'disse-tickets.log', '\r\n');
                 resolve({success: false, data: [], message: 'Error de servidor de base de datos.'});
+            });
+        });
+    }
+
+    CancelarVenta( venta_id ){
+        return new Promise((resolve, reject) => {
+            connectToDB()
+            .then(async pool => {
+                try{
+                    const sqlCmd    = `
+                        UPDATE venta SET venta_estatus = 0 WHERE venta_id = @ventaId;
+                        UPDATE venta_detalle SET detalle_estatus = 0 WHERE venta_id = @ventaId;
+                    `;
+    
+                    const result    = await pool
+                        .request()
+                        .input('ventaId', mSql.Int, venta_id)
+                        .query(sqlCmd);
+
+                    resolve({ success: true, message: 'Venta cancelada correctamente.' });
+                }
+                catch (error) {
+                    let strError = `venta.model | CancelarVenta | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
+                    logToFile(strError, 'disse-tickets.log', '\r\n');
+                    resolve({success: false, data: error, message: 'Error con la peticion al servidor de base de datos.'});
+                } finally {
+                    pool.close()
+                }
+            })
+            .catch( error => {
+                logToFile('venta.model | CancelarVenta | ' + error, 'disse-tickets.log', '\r\n');
+                resolve({success: false, data: error, message: 'Error de servidor de base de datos.'});
             });
         });
     }

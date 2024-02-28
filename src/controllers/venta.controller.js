@@ -15,7 +15,8 @@ class VentaController {
                 permisoHistorialVenta       = authData.usuario_tipo == 1 ? true : jsonPermiso.includes( 'p2' ) ? true : false,
                 permisoMovimientoEfectivo   = authData.usuario_tipo == 1 ? true : jsonPermiso.includes( 'p3' ) ? true : false,
                 permisoCorteCaja            = authData.usuario_tipo == 1 ? true : jsonPermiso.includes( 'p4' ) ? true : false,
-                permisoReimpresion          = authData.usuario_tipo == 1 ? true : jsonPermiso.includes( 'p11' ) ? true : false;
+                permisoReimpresion          = authData.usuario_tipo == 1 ? true : jsonPermiso.includes( 'p11' ) ? true : false,
+                permisoCancelarVenta        = authData.usuario_tipo == 1 ? true : jsonPermiso.includes( 'p13' ) ? true : false;
 
             let configuracion = {
                 turno: response,
@@ -25,7 +26,8 @@ class VentaController {
                 permisoHistorialVenta,
                 permisoMovimientoEfectivo,
                 permisoCorteCaja,
-                permisoReimpresion
+                permisoReimpresion,
+                permisoCancelarVenta
             };
 
             return res.status( 200 ).json( configuracion ); 
@@ -274,6 +276,12 @@ class VentaController {
 
     TerminarReservacionBoleto(req, res) {
         ventaModel.TerminarReservacionBoleto( req.body )
+        .then( response => { return res.status( 200 ).json( response ); } )
+        .catch( error => { return res.status( 500 ).json( { success: false, data: error, message: 'Error de sistema, contacte a soporte técnico' } ); } );
+    }
+
+    CancelarVenta(req, res) {
+        ventaModel.CancelarVenta( req.body.venta_id )
         .then( response => { return res.status( 200 ).json( response ); } )
         .catch( error => { return res.status( 500 ).json( { success: false, data: error, message: 'Error de sistema, contacte a soporte técnico' } ); } );
     }

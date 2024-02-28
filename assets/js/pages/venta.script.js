@@ -19,11 +19,13 @@ var uxControl = function () {
 
     var datatableMovimientos;
 
-    var datatableHistorialVenta;
+    var datatableHistorialVenta,
+        alreadyReloadedHistorialMovimiento = false;
 
     var datatableCorteCaja;
 
-    var permisoImpresion = false;
+    var permisoImpresion = false,
+        permisoCancelarVenta = false;
 
     var reglaFormMovimiento = FormValidation.formValidation(
         document.getElementById('frmMovimiento'), {
@@ -102,15 +104,15 @@ var uxControl = function () {
         KTUtil.addEvent(btnValidar, 'click', function(e) {
             e.preventDefault();
 
-            KTApp.block('#card-boletos', {
-                overlayColor: '#000000',
-                state: 'danger',
-                message: 'Reservando boletos...'
-            });
-
             let dataSalida = $("input[name='corrida_horario']:checked").data('detalle');
 
             if(dataSalida){
+                KTApp.block('#card-boletos', {
+                    overlayColor: '#000000',
+                    state: 'danger',
+                    message: 'Reservando boletos...'
+                });
+
                 let dataCorrida = $('#inputCorrida').find(":selected").data();
 
                 let dataTickets = $objListaBoletos.repeaterVal();
@@ -260,7 +262,7 @@ var uxControl = function () {
                         if(data.data.id_reserva > 0) {
                             idReservaBoleto = data.data.id_reserva;
                             KTLayoutGeneralActions.openPanel();
-                            iniciarTemporizador(10, 0);
+                            iniciarTemporizador(5, 0);
                         } else {
                             showMessage('dark', 'Administración', 'No se pudo realizar la reserva de boletos, la disponibilidad de los boletos ha disminuido.');
                         }
@@ -314,8 +316,8 @@ var uxControl = function () {
 
                         if(data.success){
                             idReservaBoleto = 0;
-                            KTLayoutGeneralActions.closePanel() ;
-                            detenerTemporizador(10, 0);
+                            KTLayoutGeneralActions.closePanel();
+                            detenerTemporizador();
                         }
                     }).catch(( error ) => {
                         console.log(error);
@@ -439,7 +441,6 @@ var uxControl = function () {
             });
         });
 
-        let alreadyReloadedHistorialMovimiento = false;
         $('#mdlHistorialVenta').on('shown.bs.modal', function() {
             _historialVenta();
 
@@ -457,6 +458,11 @@ var uxControl = function () {
 
                 alreadyReloadedHistorialMovimiento = true;
             }
+        });
+
+        $('#mdlHistorialVenta').on('hidden.bs.modal', function() {
+            datatableHistorialVenta.destroy();
+            alreadyReloadedHistorialMovimiento = false;
         });
 
         let alreadyReloadedCorteCaja = false;
@@ -692,7 +698,41 @@ var uxControl = function () {
             idInterval = setInterval(() => {
                 const tiempoRestante = fechaFuturo.getTime() - new Date().getTime();
                 if (tiempoRestante <= 0) {
-                    clearInterval(idInterval);
+                    detenerTemporizador();
+                    
+                    KTApp.block('#kt_general_actions', {
+                        overlayColor: '#000000',
+                        state: 'danger',
+                        message: 'Cancelando venta...'
+                    });
+
+                    let options = {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            id_reserva: idReservaBoleto,
+                            estatus: 0
+                        })
+                    };
+
+                    fetch('/Pos/TerminarReservacionBoleto', options)
+                    .then(response => response.json())
+                    .then(data => {
+                        showMessage('dark', 'Administración', data.message);
+
+                        if(data.success){
+                            idReservaBoleto = 0;
+                            KTLayoutGeneralActions.closePanel();
+                        }
+                    }).catch(( error ) => {
+                        console.log(error);
+                        showMessage('danger', 'Administración', 'Se presentaron problemas al tratar de procesar la solicitud, inténtelo nuevamente.');
+                    }).finally(() => {
+                        KTApp.unblock('#kt_general_actions');
+                    });
+
                 } else {
                     $('.lbl-tiempo-disponible').html( milisegundosAMinutosYSegundos(tiempoRestante) );
                 }
@@ -893,7 +933,7 @@ var uxControl = function () {
                         }
 
                         let chekOption = `
-                            <label class="option">
+                            <label class="option p-3">
                                 <span class="option-control">
                                     <span class="radio">
                                         <input type="radio" name="corrida_horario" data-detalle='${JSON.stringify(horario)}' value="${horario.horario_id}"/>
@@ -906,9 +946,9 @@ var uxControl = function () {
                                             Salida ${horario.horario_salida} HORAS
                                         </span>
                                     </span>
-                                    <span class="option-body text-dark-75">
+                                    <span class="option-body text-dark-75 pt-1">
                                         ${ strLlegada }
-                                        Disponibles <span class="font-size-lg font-weight-bold">${ ventaMaxima }</span> Asientos <br>
+                                        <!--Disponibles <span class="font-size-lg font-weight-bold">${ ventaMaxima }</span> Asientos <br>-->
                                         Autobus <span class="font-size-lg font-weight-bold">${horario.autobus_nombre}</span>
                                     </span>
                                 </span>
@@ -1114,6 +1154,7 @@ var uxControl = function () {
                                         $('.itemCorteCaja, #mdlCorteCaja').remove();
 
                                     permisoImpresion = configuracion.permisoReimpresion;
+                                    permisoCancelarVenta = configuracion.permisoCancelarVenta;
                                 }
                             });
                         } else {
@@ -1137,6 +1178,7 @@ var uxControl = function () {
                         $('.itemCorteCaja, #mdlCorteCaja').remove();
 
                     permisoImpresion = configuracion.permisoReimpresion;
+                    permisoCancelarVenta = configuracion.permisoCancelarVenta;
                 }
             } else {
                 showMessage('warning', 'Administración', 'No es posible recuperar la información del turno actual, Intentelo más tarde.');
@@ -1449,12 +1491,16 @@ var uxControl = function () {
                 field: 'venta_id',
                 title: '',
                 sortable: false,
-                width: 40,
+                width: 30,
                 textAlign: 'center',
             }, {
                 field: 'venta_folio',
                 title: 'Folio',
                 width: 80,
+                template: (row) => {
+                    let clase = row.venta_estatus == 1 ? '' : 'text-danger font-weight-bold';
+                    return `<texto class="${clase}">${row.venta_folio}</texto>`;
+                }
             }, {
                 field: 'venta_fecha',
                 title: 'Fecha/Hora',
@@ -1482,9 +1528,9 @@ var uxControl = function () {
                 title: '',
                 sortable: false,
                 textAlign: 'right',
-                width: '40',
+                width: '80',
                 template: function(row) {
-                    return permisoImpresion ? `
+                    let opciones= permisoImpresion ? `
                         <a href="javascript:;" class="btn btn-sm btn-icon btn-outline-primary" data-imprimir-tiket='${row.venta_id}' data-folio="${row.venta_folio}" title="Reimprimir ticket de venta">
                             <span class="svg-icon svg-icon-md">
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -1497,6 +1543,23 @@ var uxControl = function () {
                             </span>
                         </a>
                     ` : '';
+
+                    opciones += permisoCancelarVenta ? `
+                        <a href="javascript:;" class="btn btn-sm btn-icon btn-outline-danger ml-1" data-cancelar-tiket='${row.venta_id}' title="Cancelar ticket de venta">
+                            <span class="svg-icon svg-icon-md">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <rect x="0" y="0" width="24" height="24"/>
+                                        <path d="M6,8 L18,8 L17.106535,19.6150447 C17.04642,20.3965405 16.3947578,21 15.6109533,21 L8.38904671,21 C7.60524225,21 6.95358004,20.3965405 6.89346498,19.6150447 L6,8 Z M8,10 L8.45438229,14.0894406 L15.5517885,14.0339036 L16,10 L8,10 Z" fill="#000000" fill-rule="nonzero"/>
+                                        <path d="M14,4.5 L14,3.5 C14,3.22385763 13.7761424,3 13.5,3 L10.5,3 C10.2238576,3 10,3.22385763 10,3.5 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z" fill="#000000" opacity="0.3"/>
+                                    </g>
+                                </svg>
+                            </span>
+                        </a>
+                    ` : '';
+
+
+                    return row.venta_estatus == 1 ? opciones : '<texto class="text-danger font-weight-bold">Cancelado</texto>';
                 },
             }],
         });
@@ -1543,6 +1606,72 @@ var uxControl = function () {
             .catch(( error ) => {
                 console.log(error);
                 showMessage('danger', 'Administración', error.message);
+            });
+        });
+
+        datatableHistorialVenta.on('click', '[data-cancelar-tiket]', function() {
+            let currentButton = $(this);
+
+            Swal.fire({
+                title: "¿Estas seguro?",
+                text: `Confirma si deseas cancelar el registro de esta venta.`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "<i class='flaticon2-right-arrow icon-md'></i> Confirmar",
+                cancelButtonText: "Cancelar",
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-secondary"
+                },
+                allowOutsideClick: false
+            }).then(function(result) {
+                if (result.value){
+
+                    currentButton
+                    .html('')
+                    .addClass(' spinner spinner-white spinner-left ')
+                    .attr('disabled', 'disabled');
+
+                    let venta_id = currentButton.data('cancelar-tiket');
+                        
+                    let options = {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify( { venta_id } )
+                        };
+
+                    fetch('/Pos/CancelarVenta', options)
+                    .then(response => response.json())
+                    .then(data => {
+                        showMessage('dark', 'Administración', data.message);
+                        
+                        currentButton.html(`
+                            <span class="svg-icon svg-icon-md">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <rect x="0" y="0" width="24" height="24"/>
+                                        <path d="M6,8 L18,8 L17.106535,19.6150447 C17.04642,20.3965405 16.3947578,21 15.6109533,21 L8.38904671,21 C7.60524225,21 6.95358004,20.3965405 6.89346498,19.6150447 L6,8 Z M8,10 L8.45438229,14.0894406 L15.5517885,14.0339036 L16,10 L8,10 Z" fill="#000000" fill-rule="nonzero"/>
+                                        <path d="M14,4.5 L14,3.5 C14,3.22385763 13.7761424,3 13.5,3 L10.5,3 C10.2238576,3 10,3.22385763 10,3.5 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z" fill="#000000" opacity="0.3"/>
+                                    </g>
+                                </svg>
+                            </span>
+                        `)
+                        .removeAttr('disabled')
+                        .removeClass(' spinner spinner-white spinner-left ');
+
+                        if(data.success){
+                            datatableHistorialVenta.destroy();
+                            alreadyReloadedHistorialMovimiento = false;
+                            $('#mdlHistorialVenta').trigger('shown.bs.modal');
+                        }
+                    })
+                    .catch(( error ) => {
+                        console.log(error);
+                        showMessage('danger', 'Administración', error.message);
+                    });
+                }
             });
         });
     };
@@ -1676,9 +1805,9 @@ var uxControl = function () {
                     title: '',
                     sortable: false,
                     textAlign: 'left',
-                    width: '60',
+                    width: '80',
                     template: function(row) {
-                        return permisoImpresion ? `
+                        let opciones = permisoImpresion ? `
                             <a href="javascript:;" class="btn-reimprimir-boleto btn btn-sm btn-icon btn-outline-secondary" data-venta-id="${e.data.venta_id}" data-boleto-id='${row.detalle_id}' data-boleto-folio="${row.detalle_folio}" title="Reimprimir boleto de pasajero">
                                 <span class="svg-icon svg-icon-md">
                                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -1691,6 +1820,8 @@ var uxControl = function () {
                                 </span>
                             </a>
                         ` : '';
+
+                        return e.data.detalle_estatus == 1 ? opciones : '<texto class="text-danger font-weight-bold">Cancelado</texto>';
                     },
                 }
             ],
@@ -1698,6 +1829,29 @@ var uxControl = function () {
 
         $(`#${childId}`).prepend( headDetalle );
 	};
+
+    var _previewCorteCancelaciones = (data)  => {
+        $('#tblDevolucion').html('');
+
+        let row = '',
+            totalDevolucion = 0;
+
+        $.each(data, function(index, item){
+            if(item.venta_estatus == 0) {
+                row += `
+                    <tr>
+                        <td>${item.venta_folio}</td>
+                        <td>${item.horario_salida}</td>
+                    </tr>
+                `;
+
+                totalDevolucion += parseFloat( item.venta_efectivo ) + parseFloat( item.venta_tarjeta );
+            }
+        });
+
+        $(row).appendTo('#tblDevolucion');
+        $('.lbl-entrada-devolucion').html(`${currency( totalDevolucion )}`);
+    };
 
     var _previewCorteCaja = function() {
         KTApp.block('#mdlCorteCaja .modal-content', {
@@ -1786,6 +1940,8 @@ var uxControl = function () {
                                         if (typeof raw.data !== 'undefined') {
                                             dataSet = raw.data;
                                         }
+
+                                        _previewCorteCancelaciones( dataSet );
             
                                         return dataSet;
                                     },
@@ -1812,6 +1968,9 @@ var uxControl = function () {
                             field: 'venta_folio',
                             title: 'Folio',
                             width: 80,
+                            template: (row) => {
+                                return row.venta_estatus == 1 ? row.venta_folio : `<texto class="text-danger font-weight-bold">${row.venta_folio}</texto>`;
+                            }
                         }, {
                             field: 'venta_fecha',
                             title: 'Fecha/Hora',
