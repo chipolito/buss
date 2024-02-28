@@ -16,5 +16,7 @@ router.post('/GeneraPdfCorte', ventaController.GeneraPdfCorte);
 router.post('/Reimpresion', ventaController.Reimpresion);
 router.delete('/MovimientoEfectivo', ventaController.DelMovimientoEfectivo);
 router.get('/ActualizarDisponibilidad/:horarioId', ventaController.ActualizarDisponibilidad);
+router.post('/ReservacionBoleto/', ventaController.ReservacionBoleto);
+router.post('/TerminarReservacionBoleto/', ventaController.TerminarReservacionBoleto);
 
 module.exports = router;

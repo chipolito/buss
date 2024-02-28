@@ -2452,8 +2452,8 @@ var KTOffcanvas = function(elementId, options) {
 
                 KTUtil.addEvent(the.overlay, 'click', function(e) {
                     //e.stopPropagation();
-                    e.preventDefault();
-                    Plugin.hide(the.target);
+                   // e.preventDefault();
+                    //Plugin.hide(the.target);
                 });
             }
 

@@ -58,18 +58,21 @@ var uxControl = function () {
         }
     );
 
-    const $tiempoRestante = document.querySelector("#tiempoRestante");
-
     let idInterval = null, 
         diferenciaTemporal = 0,
 		fechaFuturo = null;
+
+    var idClienteWeb = Math.floor((Math.random() * 100000000) + 1),
+        idReservaBoleto = 0;
+
+    var btnCancelarTodo;
 
     var _activarControles = () => {
         KTUtil.addEvent(btnPrecreate, 'click', function(){
             let salidaSeleccionada  = $("input[name='corrida_horario']:checked").data('detalle');
                                 
             if(salidaSeleccionada) {
-                let boletosDisponbles           = salidaSeleccionada.boleto_permitido - salidaSeleccionada.boleto_vendido,
+                let boletosDisponbles           = salidaSeleccionada.boleto_disponible,
                     boletosMemoria              = $objListaBoletos.repeaterVal(),
                     boletosPorVender            = 0;
 
@@ -98,6 +101,12 @@ var uxControl = function () {
 
         KTUtil.addEvent(btnValidar, 'click', function(e) {
             e.preventDefault();
+
+            KTApp.block('#card-boletos', {
+                overlayColor: '#000000',
+                state: 'danger',
+                message: 'Reservando boletos...'
+            });
 
             let dataSalida = $("input[name='corrida_horario']:checked").data('detalle');
 
@@ -141,7 +150,6 @@ var uxControl = function () {
                     terminar    = 0;
 
                 dataTickets.boletos.forEach(function(boleto, index) {
-                    console.log(boleto);
                     if((boleto.inputNombrePasajero.trim()).length == 0 )
                         terminar = 1;
 
@@ -227,12 +235,96 @@ var uxControl = function () {
 
                 $('.itemPagoEfectivo').click();
 
-                importeTotal == 0 ? $('.seccionCobro').addClass('d-none') : $('.seccionCobro').removeClass('d-none')
+                importeTotal == 0 ? $('.seccionCobro').addClass('d-none') : $('.seccionCobro').removeClass('d-none');
 
-                KTLayoutGeneralActions.openPanel();
+                let options = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id_horario: jsonSalesData.horario_id,
+                        fecha: new Date().toJSON().slice(0, 10),
+                        id_cliente: idClienteWeb,
+                        r_asientos: jsonSalesData.venta_ocupacion_real,
+                        r_lugares: jsonSalesData.venta_ocupacion_especial
+                    })
+                };
+
+                fetch('/Pos/ReservacionBoleto', options)
+                .then(response => response.json())
+                .then(data => {
+                    showMessage('dark', 'Administración', data.message);
+
+                    if(data.success){
+                        if(data.data.id_reserva > 0) {
+                            idReservaBoleto = data.data.id_reserva;
+                            KTLayoutGeneralActions.openPanel();
+                            iniciarTemporizador(10, 0);
+                        } else {
+                            showMessage('dark', 'Administración', 'No se pudo realizar la reserva de boletos, la disponibilidad de los boletos ha disminuido.');
+                        }
+                    }
+                }).catch(( error ) => {
+                    showMessage('danger', 'Administración', 'Se presentaron problemas al tratar de procesar la solicitud, inténtelo nuevamente.');
+                }).finally(() => {
+                    KTApp.unblock('#card-boletos');
+                });
             } else {
                 showMessage('warning', 'Administración', 'Seleccione una corrida y una hora de salida.');
             }
+        });
+
+        KTUtil.addEvent(btnCancelarTodo, 'click', function(e) {
+            Swal.fire({
+                title: "¿Estas seguro?",
+                text: `Confirma si deseas cancelar el proceso de venta`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "<i class='flaticon2-right-arrow icon-md'></i> Confirmar",
+                cancelButtonText: "Cancelar",
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-secondary"
+                },
+                allowOutsideClick: false
+            }).then(function(result) {
+                if (result.value) {
+                    KTApp.block('#kt_general_actions', {
+                        overlayColor: '#000000',
+                        state: 'danger',
+                        message: 'Cancelando venta...'
+                    });
+
+                    let options = {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            id_reserva: idReservaBoleto,
+                            estatus: 0
+                        })
+                    };
+
+                    fetch('/Pos/TerminarReservacionBoleto', options)
+                    .then(response => response.json())
+                    .then(data => {
+                        showMessage('dark', 'Administración', data.message);
+
+                        if(data.success){
+                            idReservaBoleto = 0;
+                            KTLayoutGeneralActions.closePanel() ;
+                            detenerTemporizador(10, 0);
+                        }
+                    }).catch(( error ) => {
+                        console.log(error);
+                        showMessage('danger', 'Administración', 'Se presentaron problemas al tratar de procesar la solicitud, inténtelo nuevamente.');
+                    }).finally(() => {
+                        KTApp.unblock('#kt_general_actions');
+                    });
+                }
+            });
         });
 
         let inputDetalleImporte = KTUtil.getById('txtDetalleImporte');
@@ -325,9 +417,20 @@ var uxControl = function () {
                     showMessage('dark', 'Venta exitosa', 'Se ha registrado la venta correctamente');
                     _resetForm();
 
-                    setTimeout(() => {
-                        location.reload();
-                    }, '1000');
+                    let options = {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            id_reserva: idReservaBoleto,
+                            estatus: 2
+                        })
+                    };
+
+                    fetch('/Pos/TerminarReservacionBoleto', options)
+                    .then(response => response.json())
+                    .then(data => { location.reload(); });
                 }
             })
             .catch(( error ) => {
@@ -512,7 +615,7 @@ var uxControl = function () {
                 }
 
                 if(tienePlazaEspecial > 0) {
-                    let boletosEspecialesDisponbles = salidaSeleccionada.boleto_especial_permitido - salidaSeleccionada.boleto_especial_vendido,
+                    let boletosEspecialesDisponbles = salidaSeleccionada.boleto_especial_disponible,
                     boletosMemoria              = $objListaBoletos.repeaterVal(),
                     boletosPorVender            = 0;
 
@@ -538,6 +641,12 @@ var uxControl = function () {
         });
 
         $(document).on('change', 'input[type=radio][name=corrida_horario]', function(){
+            KTApp.block('#card-boletos', {
+                overlayColor: '#000000',
+                state: 'danger',
+                message: 'Consultando disponibilidad...'
+            });
+
             let horarioId = this.value;
 
             let options = {
@@ -550,14 +659,24 @@ var uxControl = function () {
             fetch(`/Pos/ActualizarDisponibilidad/${horarioId}`, options)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
-                iniciarTemporizador(10, 0);
+                if(data.success) {
+                    $('.lbl-asientos-disponibles').html( `${data.data.d_asientos} Asientos | ${data.data.d_lugares} Plazas especiales disponibles` );
+
+                    let salidaSeleccionada  = $("input[name='corrida_horario']:checked").data('detalle');
+
+                    salidaSeleccionada.boleto_disponible = data.data.d_asientos;
+                    salidaSeleccionada.boleto_especial_disponible = data.data.d_lugares;
+
+                    $("input[name='corrida_horario']:checked").attr('data-detalle', salidaSeleccionada);
+
+                    KTApp.unblock('#card-boletos');
+                }
+                
             }).catch(( error ) => {
                 console.log(error);
                 showMessage('danger', 'Administración', 'Por favor recargue la página (F5), si el problema persiste solcite a soporte técnico.');
             });
         });
-
 
         const iniciarTemporizador = (minutos, segundos) => {
             if (fechaFuturo) {
@@ -575,9 +694,16 @@ var uxControl = function () {
                 if (tiempoRestante <= 0) {
                     clearInterval(idInterval);
                 } else {
-                    $tiempoRestante.textContent = milisegundosAMinutosYSegundos(tiempoRestante);
+                    $('.lbl-tiempo-disponible').html( milisegundosAMinutosYSegundos(tiempoRestante) );
                 }
             }, 50);
+        };
+
+        const detenerTemporizador = () => {
+            clearInterval(idInterval);
+            fechaFuturo = null;
+            diferenciaTemporal = 0;
+            $('.lbl-tiempo-disponible').html('00:00');
         };
 
         const milisegundosAMinutosYSegundos = (milisegundos) => {
@@ -1731,6 +1857,7 @@ var uxControl = function () {
             btnValidar      = KTUtil.getById('btnValidar');
             btnPrecreate    = KTUtil.getById('btnPrecreate');
             btnRegistrarMovimiento  = KTUtil.getById('btnRegistrarMovimiento');
+            btnCancelarTodo = KTUtil.getById('btnCancelarTodo');
 
             _activarControles();
             _cargarConfiguraciones();

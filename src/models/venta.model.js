@@ -714,7 +714,7 @@ class VentaModel {
         });
     }
 
-    ActualizarDisponibilidad(horarioId = 0) {
+    ActualizarDisponibilidad(horarioId = 0, fechaActual = '') {
         return new Promise((resolve, reject) => {
             connectToDB()
             .then(async pool => {
@@ -722,7 +722,7 @@ class VentaModel {
                     const result = await pool
                         .request()
                         .input('id_horario', mSql.Int, horarioId)
-                        .input('fecha', mSql.VarChar, '2024-02-27')
+                        .input('fecha', mSql.VarChar, fechaActual)
                         .output('d_asientos', mSql.Int)
                         .output('d_lugares', mSql.Int)
                         .execute('actualiza_disponibilidad');
@@ -739,6 +739,67 @@ class VentaModel {
             })
             .catch( error => {
                 logToFile('venta.model | ActualizarDisponibilidad | ' + error, 'disse-tickets.log', '\r\n');
+                resolve({success: false, data: [], message: 'Error de servidor de base de datos.'});
+            });
+        });
+    }
+
+    ReservacionBoleto( info ) {
+        return new Promise((resolve, reject) => {
+            connectToDB()
+            .then(async pool => {
+                try{
+                    const result = await pool
+                        .request()
+                        .input('id_horario', mSql.Int, info.id_horario)
+                        .input('fecha', mSql.VarChar, info.fecha)
+                        .input('id_cliente', mSql.Int, info.id_cliente)
+                        .input('r_asientos', mSql.Int, info.r_asientos)
+                        .input('r_lugares', mSql.Int, info.r_lugares)
+                        .output('id_reserva', mSql.Int)
+                        .execute('reserva_boletos');
+    
+                    resolve({ success: true, data: result.output, message: 'Boletos reservados correctamente' });
+                }
+                catch (error) {
+                    let strError = `venta.model | ReservacionBoleto | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
+                    logToFile(strError, 'disse-tickets.log', '\r\n');
+                    resolve({success: false, data: [], message: 'Error con la peticion al servidor de base de datos.'});
+                } finally {
+                    pool.close()
+                }
+            })
+            .catch( error => {
+                logToFile('venta.model | ReservacionBoleto | ' + error, 'disse-tickets.log', '\r\n');
+                resolve({success: false, data: [], message: 'Error de servidor de base de datos.'});
+            });
+        });
+    }
+
+    TerminarReservacionBoleto( info ) {
+        return new Promise((resolve, reject) => {
+            connectToDB()
+            .then(async pool => {
+                try{
+                    const result = await pool
+                        .request()
+                        .input('id_reserva', mSql.Int, info.id_reserva)
+                        .input('new_estatus', mSql.Int, info.estatus)
+                        .output('resultado', mSql.Int)
+                        .execute('termina_reserva');
+    
+                    resolve({ success: true, data: result.output, message: 'Reserva actualizada correctamente' });
+                }
+                catch (error) {
+                    let strError = `venta.model | TerminarReservacionBoleto | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
+                    logToFile(strError, 'disse-tickets.log', '\r\n');
+                    resolve({success: false, data: [], message: 'Error con la peticion al servidor de base de datos.'});
+                } finally {
+                    pool.close()
+                }
+            })
+            .catch( error => {
+                logToFile('venta.model | TerminarReservacionBoleto | ' + error, 'disse-tickets.log', '\r\n');
                 resolve({success: false, data: [], message: 'Error de servidor de base de datos.'});
             });
         });

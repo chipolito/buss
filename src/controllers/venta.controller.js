@@ -258,9 +258,22 @@ class VentaController {
     }
 
     ActualizarDisponibilidad(req, res) {
-        let horarioId = req.params.horarioId;
+        let horarioId = req.params.horarioId,
+            fechaActual = new Date().toJSON().slice(0, 10);
 
-        ventaModel.ActualizarDisponibilidad( horarioId )
+        ventaModel.ActualizarDisponibilidad( horarioId, fechaActual )
+        .then( response => { return res.status( 200 ).json( response ); } )
+        .catch( error => { return res.status( 500 ).json( { success: false, data: error, message: 'Error de sistema, contacte a soporte técnico' } ); } );
+    }
+
+    ReservacionBoleto(req, res) {
+        ventaModel.ReservacionBoleto( req.body )
+        .then( response => { return res.status( 200 ).json( response ); } )
+        .catch( error => { return res.status( 500 ).json( { success: false, data: error, message: 'Error de sistema, contacte a soporte técnico' } ); } );
+    }
+
+    TerminarReservacionBoleto(req, res) {
+        ventaModel.TerminarReservacionBoleto( req.body )
         .then( response => { return res.status( 200 ).json( response ); } )
         .catch( error => { return res.status( 500 ).json( { success: false, data: error, message: 'Error de sistema, contacte a soporte técnico' } ); } );
     }
