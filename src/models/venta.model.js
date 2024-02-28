@@ -684,7 +684,8 @@ class VentaModel {
                                 WHERE d.detalle_estatus = 1 AND d.venta_id = v.venta_id
                                 for json path
                             ) AS detalle_venta,
-                            (select configuracion_valor from configuracion where configuracion_clave = 'cnf_empresa' and sucursal_id = @sucursalId ) AS configuracion
+                            (select configuracion_valor from configuracion where configuracion_clave = 'cnf_empresa' and sucursal_id = @sucursalId ) AS configuracion,
+                            (select sucursal_nombre_corto from sucursal where sucursal_id = @sucursalId) AS sucursal_n_corto
                         FROM venta AS v
                         INNER JOIN usuario AS u ON v.usuario_id = u.usuario_id
                         INNER JOIN corrida AS c ON v.corrida_id = c.corrida_id

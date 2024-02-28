@@ -41,6 +41,11 @@
             margin-bottom: 0;
         }
 
+        .my-10 {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
         .mb-5 {
             margin-bottom: 5px;
         }
@@ -133,6 +138,7 @@
 
     <p class="fsp-10 mt-0"><b>Método de pago:</b> <text id="lblMetodoPago"></text></p>
 
+    <p class="fsp-10 my-10" align="justify">CUENTA CON 24 HORAS PARA FACTURAR A PARTIR DE LA FECHA Y HORA  DEL SERVICIO. YA SEA EN VENTANILLA O A TRAVES DEL PORTAL: </br> www.asa.gob.mx/transportacion</p>
 
     <table width="100%" cellspacing="0" cellpadding="0" border="0" class="fsp-10">
         <tbody>
@@ -179,7 +185,7 @@
                 $('#lblNombreEmpresa').html( configuracion.inputGeneralNombre );
                 $('#lblDomicilioEmpresa').html( `${configuracion.inputGeneralDir1} ${configuracion.inputGeneralDir2}` );
                 $('#lblRfcEmpresa').html( `RFC ${configuracion.inputGeneralRfc}` );
-                $('#lblLugarEmision').html( configuracion.inputGeneralSucursal == '01' ? 'AICM' : 'AIFA');
+                $('#lblLugarEmision').html( venta.sucursal_n_corto );
 
                 $('#lblFolio').html( venta.venta_folio );
                 $('#lblOrigen').html( venta.corrida_origen );
