@@ -261,9 +261,14 @@ class VentaController {
 
     ActualizarDisponibilidad(req, res) {
         let horarioId = req.params.horarioId,
-            fechaActual = new Date().toJSON().slice(0, 10);
+            today = new Date();
 
-        ventaModel.ActualizarDisponibilidad( horarioId, fechaActual )
+        let year = today.toLocaleString('es-mx', { year: 'numeric' }),
+            month = today.toLocaleString('es-mx', { month: '2-digit' }),
+            day = today.toLocaleString('es-mx', { day: '2-digit' }),
+            formattedDate = [year, month, day].join("-");
+
+        ventaModel.ActualizarDisponibilidad( horarioId, formattedDate )
         .then( response => { return res.status( 200 ).json( response ); } )
         .catch( error => { return res.status( 500 ).json( { success: false, data: error, message: 'Error de sistema, contacte a soporte técnico' } ); } );
     }

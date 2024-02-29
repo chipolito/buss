@@ -350,8 +350,10 @@
 
                                 if(item.venta_estatus == 0) {
                                     rowDevoluciones += `
-                                        <td>${ item.venta_estatus == 1 ? '#' + item.venta_folio : '<texto class="text-danger font-weight-bold">#'+ item.venta_folio +'</texto>'}</td>
-                                        <td>${ item.horario_salida }</td>
+                                        <tr>
+                                            <td>${ item.venta_estatus == 1 ? '#' + item.venta_folio : '<texto class="text-danger font-weight-bold">#'+ item.venta_folio +'</texto>'}</td>
+                                            <td>${ item.horario_salida }</td>
+                                        </tr>
                                     `;
 
                                     totalDevoluciones += parseFloat(item.venta_efectivo) + parseFloat(item.venta_tarjeta);

@@ -239,6 +239,13 @@ var uxControl = function () {
 
                 importeTotal == 0 ? $('.seccionCobro').addClass('d-none') : $('.seccionCobro').removeClass('d-none');
 
+                let today = new Date();
+
+                let year = today.toLocaleString('es-mx', { year: 'numeric' }),
+                    month = today.toLocaleString('es-mx', { month: '2-digit' }),
+                    day = today.toLocaleString('es-mx', { day: '2-digit' }),
+                    formattedDate = [year, month, day].join("-");
+
                 let options = {
                     method: 'POST',
                     headers: {
@@ -246,7 +253,7 @@ var uxControl = function () {
                     },
                     body: JSON.stringify({
                         id_horario: jsonSalesData.horario_id,
-                        fecha: new Date().toJSON().slice(0, 10),
+                        fecha: formattedDate,
                         id_cliente: idClienteWeb,
                         r_asientos: jsonSalesData.venta_ocupacion_real,
                         r_lugares: jsonSalesData.venta_ocupacion_especial
@@ -1821,7 +1828,7 @@ var uxControl = function () {
                             </a>
                         ` : '';
 
-                        return e.data.detalle_estatus == 1 ? opciones : '<texto class="text-danger font-weight-bold">Cancelado</texto>';
+                        return row.detalle_estatus == 1 ? opciones : '<texto class="text-danger font-weight-bold">Cancelado</texto>';
                     },
                 }
             ],
