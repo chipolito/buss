@@ -595,7 +595,9 @@
                 `
             });
 
-            $(document).on('click', '.popover .btnExit', alertLogout);
+            $('[data-form="userdata"]').on('inserted.bs.popover', function () {
+                $(document).on('click', '.popover .btnExit', alertLogout);
+            });
 
             $('#labelLetraUsuario').html( '<%= actualUser %>'.charAt(0).toUpperCase() );
         });
