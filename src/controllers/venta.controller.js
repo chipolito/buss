@@ -301,34 +301,38 @@ class VentaController {
             $('#boleto_id').val(boleto_id);
             $('#sucursal_id').val(sucursalId);
 
-            const browser = await puppeteer.launch({
-                executablePath: 'C://Program Files//Google//Chrome//Application//chrome.exe',
-                headless: 'new'
-            });
+            try{
+                const browser = await puppeteer.launch({
+                    executablePath: 'C://Program Files//Google//Chrome//Application//chrome.exe',
+                    headless: 'new'
+                });
 
-            const page = await browser.newPage();
+                const page = await browser.newPage();
 
-            await page.setContent($.html(), { waitUntil: 'networkidle0' });
+                await page.setContent($.html(), { waitUntil: 'networkidle0' });
 
-            await page.emulateMediaType('screen');
+                await page.emulateMediaType('screen');
 
-            await page.pdf({
-                path: `assets/formas/${strName}`,
-                margin: { top: '0px', right: '0px', bottom: '0px', left: '0px' },
-                printBackground: true,
-                width: impresora.size
-            });
+                await page.pdf({
+                    path: `assets/formas/${strName}`,
+                    margin: { top: '0px', right: '0px', bottom: '0px', left: '0px' },
+                    printBackground: true,
+                    width: impresora.size
+                });
 
-            await browser.close();
+                await browser.close();
 
-            const options = {
-                printer: impresora.name,
-                scale: 'noscale',
-                orientation: 'portrait',
-                monochrome: true
-            };
-            
-            print(`assets/formas/${strName}`, options).then( resolve(true) );
+                const options = {
+                    printer: impresora.name,
+                    scale: 'noscale',
+                    orientation: 'portrait',
+                    monochrome: true
+                };
+                
+                print(`assets/formas/${strName}`, options).then( resolve(true) );
+            } catch (error) {
+                resolve(false);
+            }
         });
     }
 

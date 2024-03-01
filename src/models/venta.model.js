@@ -499,7 +499,7 @@ class VentaModel {
                             u.usuario_propietario AS cajero,
                             c.corrida_origen,
                             c.corrida_destino,
-                            h.horario_salida,
+                            CAST(h.horario_salida as nvarchar(5)) AS horario_salida,
                             a.autobus_nombre,
                             (
                                 SELECT 
@@ -666,7 +666,7 @@ class VentaModel {
                             u.usuario_propietario AS cajero,
                             c.corrida_origen,
                             c.corrida_destino,
-                            h.horario_salida,
+                            CAST(h.horario_salida as nvarchar(5)) AS horario_salida,
                             a.autobus_nombre,
                             (
                                 SELECT 

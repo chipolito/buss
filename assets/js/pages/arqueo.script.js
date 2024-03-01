@@ -59,7 +59,7 @@ var uxControl = function () {
                     field: 'turno_web',
                     title: 'Origen',
                     template: function(row){
-                        return row.turno_web == 1 ? 'Aplicación web' : 'Terminal'
+                        return row.turno_web == 1 ? 'Venta web' : 'Terminal'
                     }
                 }, {
                     field: 'turno_venta_total',
@@ -151,7 +151,11 @@ var uxControl = function () {
                 showMessage('dark', 'Arqueo de caja', data.msg);
                 
                 if(data.success) {
-                    window.open(`http://localhost:3000/resources/formas/${data.file}`, "_blank");
+                    setTimeout(() => {
+
+                        window.open(`http://localhost:3000/resources/formas/${data.file}`, "_blank");
+
+                    }, 1000);
                 }
             });
         });

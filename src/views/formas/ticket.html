@@ -176,8 +176,7 @@
         .then(data => {
             if(data.success){
                 let venta           = data.data,
-                    strHora         = venta.horario_salida.split(':'),
-                    fechaCorrida    = new Date(`${venta.venta_fecha}T${parseInt(strHora[0]) < 10 ? '0' + strHora[0] : strHora[0]}:${strHora[1]}:00`),
+                    fechaCorrida    = new Date(`${venta.venta_fecha}T${venta.horario_salida}`),
                     fechaVenta      = new Date(`${venta.venta_fecha}T${venta.venta_hora}`),
                     configuracion   = JSON.parse( venta.configuracion );
 
@@ -201,13 +200,13 @@
                 $('#lblFechaCorrida').html( fechaCorrida.toLocaleDateString('es-MX', options) );
                 $('#lblFechaEmision').html(fechaVenta.toLocaleDateString('es-MX', {day: '2-digit', month: '2-digit', year: 'numeric',}));
 
-                $('#lblHoraEmision').html( `${fechaVenta.getHours()}:${(fechaVenta.getMinutes() < 10 ? '0' : '') + fechaVenta.getMinutes()}` );
+                $('#lblHoraEmision').html( `${venta.venta_hora}` );
                 $('#lblHoraCorrida').html(venta.horario_salida);
 
                 if(venta.venta_efectivo > 0){
                     $('#lblMetodoPago').html('Efectivo');
                 } else if(venta.venta_tarjeta > 0){
-                    $('#lblMetodoPago').html(`Tarjeta | ${venta.venta_tipo} / ${venta.venta_marca} | AUT: ${venta.venta_autorizacion} | OPER: ${venta.venta_operacion}`);
+                    $('#lblMetodoPago').html(`Tarjeta | ${venta.venta_tarjeta_tipo} / ${venta.venta_tarjeta_marca} | AUT: ${venta.venta_tarjeta_autorizacion} | OPER: ${venta.venta_tarjeta_operacion}`);
                 } else {
                     $('#lblMetodoPago').html('No aplica');
                 }

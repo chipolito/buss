@@ -107,12 +107,6 @@ var uxControl = function () {
             let dataSalida = $("input[name='corrida_horario']:checked").data('detalle');
 
             if(dataSalida){
-                KTApp.block('#card-boletos', {
-                    overlayColor: '#000000',
-                    state: 'danger',
-                    message: 'Reservando boletos...'
-                });
-
                 let dataCorrida = $('#inputCorrida').find(":selected").data();
 
                 let dataTickets = $objListaBoletos.repeaterVal();
@@ -140,11 +134,12 @@ var uxControl = function () {
                     sucursal: miTurno.sucursal
                 };
 
-                let horasS = dataSalida.llegada.split(':');
+                let horasS = dataSalida.llegada.split(':'),
+                    horaSalida = dataSalida.horario_salida.split(':');
 
                 $('.lblDetalleOrigen').html(`De ${dataCorrida.origen}`);
                 $('.lblDetalleDestino').html(`A ${dataCorrida.destino}`);
-                $('.lblDetalleSalida').html(`${dataSalida.horario_salida}`);
+                $('.lblDetalleSalida').html(`${horaSalida[0]}:${horaSalida[1]}`);
                 $('.lblDetalleLlegada').html(`${horasS[0].length == 1 ? '0' + horasS[0] : horasS[0]}:${horasS[1].length == 1 ? '0' + horasS[1] : horasS[1]}`);
                 $('.lblDetalleBoletos').html(`${dataTickets.boletos.length} Boletos`);
 
@@ -206,6 +201,12 @@ var uxControl = function () {
                     showMessage('warning', 'Administración', 'Ingrese todos los motivos de viajes.');
                     return;
                 }
+
+                KTApp.block('#card-boletos', {
+                    overlayColor: '#000000',
+                    state: 'danger',
+                    message: 'Reservando boletos...'
+                });
                 
                 let importeTotal = 0;
                 $('#tblDetalleBoletos').html('');
@@ -926,11 +927,10 @@ var uxControl = function () {
                         horario.llegada = '----';
 
                         if(tiempoEstimado.length > 0) {
-                            let horaSalida      = horario.horario_salida.split(':'),
-                                horaViaje       = tiempoEstimado.split(':'),
+                            let horaViaje       = tiempoEstimado.split(':'),
                                 tiempoLlegada   = new Date();
 
-                            tiempoLlegada.setHours(parseInt(horaSalida[0]) + parseInt(horaViaje[0]), parseInt(horaSalida[1]) + parseInt(horaViaje[1]), 0 );
+                            tiempoLlegada.setHours(parseInt(hrBase[0]) + parseInt(horaViaje[0]), parseInt(hrBase[1]) + parseInt(horaViaje[1]), 0 );
 
                             horario.llegada = `${tiempoLlegada.getHours()}:${tiempoLlegada.getMinutes()}`;
 
@@ -950,7 +950,7 @@ var uxControl = function () {
                                 <span class="option-label">
                                     <span class="option-head">
                                         <span class="option-focus">
-                                            Salida ${horario.horario_salida} HORAS
+                                            Salida ${hrBase[0]}:${hrBase[1]} HORAS
                                         </span>
                                     </span>
                                     <span class="option-body text-dark-75 pt-1">

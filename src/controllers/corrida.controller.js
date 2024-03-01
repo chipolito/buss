@@ -76,11 +76,9 @@ class CorridaController {
             if(response.success) {
                 response.data.forEach(function(corrida, index) {
                     let horarios = JSON.parse( corrida.corrida_horario ).sort((a, b) => {
-                        let horaA   = a.horario_salida.split(':'),
-                            fechaA  = `2023-01-01T${( parseInt(horaA[0]) < 10 ) ? '0' + horaA[0] : horaA[0] }:${horaA[1]}:00`;
+                        let fechaA  = `2023-01-01T${ a.horario_salida }`;
                             
-                        let horaB   = b.horario_salida.split(':'),
-                            fechaB  = `2023-01-01T${( parseInt(horaB[0]) < 10 ) ? '0' + horaB[0] : horaB[0] }:${horaB[1]}:00`;
+                        let fechaB  = `2023-01-01T${ b.horario_salida }`;
 
                         return new Date(fechaA).getTime() - new Date(fechaB).getTime();
                     });
