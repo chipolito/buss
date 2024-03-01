@@ -26,14 +26,14 @@ class AuxiliarModel{
                 }
                 catch (error) {
                     let strError = `auxiliar.model | GetPermisos | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
-                    logToFile(strError, 'disse-tickets.log', '\r\n');
+                    //logToFile(strError, 'disse-tickets.log', '\r\n');
                     resolve({success: false, data: [], message: 'Error con la peticion al servidor de base de datos.'});
                 } finally {
                     pool.close()
                 }
             })
             .catch( error => {
-                logToFile('auxiliar.model | GetPermisos | ' + error, 'disse-tickets.log', '\r\n');
+                //logToFile('auxiliar.model | GetPermisos | ' + error, 'disse-tickets.log', '\r\n');
                 resolve({success: false, data: [], message: 'Error de servidor de base de datos.'});
             });
         });
@@ -61,14 +61,14 @@ class AuxiliarModel{
                 }
                 catch (error) {
                     let strError = `auxiliar.model | GetAutobuses | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
-                    logToFile(strError, 'disse-tickets.log', '\r\n');
+                    //logToFile(strError, 'disse-tickets.log', '\r\n');
                     resolve({success: false, data: [], message: 'Error con la peticion al servidor de base de datos.'});
                 } finally {
                     pool.close()
                 }
             })
             .catch( error => {
-                logToFile('auxiliar.model | GetAutobuses | ' + error, 'disse-tickets.log', '\r\n');
+                //logToFile('auxiliar.model | GetAutobuses | ' + error, 'disse-tickets.log', '\r\n');
                 resolve({success: false, data: [], message: 'Error de servidor de base de datos.'});
             });
         });
@@ -97,14 +97,14 @@ class AuxiliarModel{
                 }
                 catch (error) {
                     let strError = `auxiliar.model | GetConfiguracion | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
-                    logToFile(strError, 'disse-tickets.log', '\r\n');
+                    //logToFile(strError, 'disse-tickets.log', '\r\n');
                     resolve({success: false, data: [], message: 'Error con la peticion al servidor de base de datos.'});
                 } finally {
                     pool.close()
                 }
             })
             .catch( error => {
-                logToFile('auxiliar.model | GetConfiguracion | ' + error, 'disse-tickets.log', '\r\n');
+                //logToFile('auxiliar.model | GetConfiguracion | ' + error, 'disse-tickets.log', '\r\n');
                 resolve({success: false, data: [], message: 'Error de servidor de base de datos.'});
             });
         });
@@ -146,14 +146,14 @@ class AuxiliarModel{
                 }
                 catch (error) {
                     let strError = `auxiliar.model | SetAuditoria | Error con la peticion al servidor de base de datos: ${JSON.stringify( error )}`;
-                    logToFile(strError, 'disse-tickets.log', '\r\n');
+                    //logToFile(strError, 'disse-tickets.log', '\r\n');
                     resolve({success: false, message: 'Error con la peticion al servidor de base de datos.'});
                 } finally {
                     pool.close()
                 }
             })
             .catch( error => {
-                logToFile('auxiliar.model | SetAuditoria | ' + error, 'disse-tickets.log', '\r\n');
+                //logToFile('auxiliar.model | SetAuditoria | ' + error, 'disse-tickets.log', '\r\n');
                 resolve({success: false, message: 'Error de servidor de base de datos.'});
             });            
         });

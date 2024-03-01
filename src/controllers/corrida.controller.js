@@ -12,7 +12,8 @@ class CorridaController {
         .then( async response => { 
             if( response.success ) {
                 let horarios = JSON.parse( data.inputHorario );
-                horarios.forEach(async function(horario, index) {
+
+                await CorridaController.asyncForEach(horarios, async (horario) => {
                     await CorridaController.SetHorario(horario, response.corrida_id);
                 });
 
@@ -24,7 +25,7 @@ class CorridaController {
                     sucursal_id: data.sucursalId
                 };
     
-                setAuditoria(toAuditoria);
+                await setAuditoria(toAuditoria);
             }
 
             return res.status( 201 ).json( response );
@@ -41,7 +42,8 @@ class CorridaController {
         .then( async response => { 
             if( response.success) {
                 let horarios    = JSON.parse( data.inputHorario );
-                horarios.forEach(async function(horario, index) {
+
+                await CorridaController.asyncForEach(horarios, async (horario) => {
                     if( horario.horario_id == 0  ) {
                         await CorridaController.SetHorario(horario, data.inputIdCorrida);
                     } else {
@@ -50,7 +52,7 @@ class CorridaController {
                 });
 
                 let inputEliminar = JSON.parse( data.inputEliminar );
-                inputEliminar.forEach(async function(horario_id, index) {
+                await CorridaController.asyncForEach(inputEliminar, async (horario_id) => {
                     await CorridaController.DelHorario(horario_id);
                 });
 
@@ -62,7 +64,7 @@ class CorridaController {
                     sucursal_id: data.sucursalId
                 };
     
-                setAuditoria(toAuditoria);
+                await setAuditoria(toAuditoria);
             }
             
             return res.status( 200 ).json( response );
@@ -148,6 +150,12 @@ class CorridaController {
             await corridaModel.SetHorario( sqlCmd );
             resolve(true);
         });
+    }
+
+    static async asyncForEach(array, callback) {
+        for (let index = 0; index < array.length; index++) {
+          await callback(array[index], index, array);
+        }
     }
 }
 

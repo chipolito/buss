@@ -82,11 +82,8 @@ var uxControl = function () {
 
                             _resetearForm();
 
-                            if(datatable) {
-                                setTimeout(() => {
-                                    datatable.reload();
-                                }, 1500);
-                            }
+                            if(datatable) 
+                                datatable.reload();
                         }
                     })
                     .catch(( error ) => {
